@@ -1,0 +1,62 @@
+
+lesmseg.txt (under construction)
+
+
++-----------------------------------------------------------------------------+
+|                                                                             |
+|                                                                             |
+|                 ---==---   GDPLib versjon 1.0   ---==---                    |
+|                                                                             |
+|                                                                             |
++-----------------------------------------------------------------------------+
+
+
+Innhold
+-------
+
+1. Introduksjon
+2. Kravspesifisering og design
+3. Bruksanvisning
+
+
+1. Introduksjon
+---------------
+
+
+
+2. Kravspesifisering og design
+------------------------------
+
+src -+
+     |
+     +- gdpl.h
+     |    char gdpl_kontroller_filnavn[]
+     |
+     +- person.c
+     |
+     |
+     +- par.c
+     |
+     |
+     +- konkuranse.c
+     |
+     |
+     +- kontroller.c
+     |    int gdpl_kontroller_sett_filnavn(const char *)
+     |    int gdpl_kontroller_les_fra_fil()
+     |    int gdpl_kontroller_skriv_til_fil()
+     
+     |
+     +-test.c
+         int gdpl_test()
+     
+     
+     
+
+
+
+3. Bruksanvisning
+-----------------
+
+
+
