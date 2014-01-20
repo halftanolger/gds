@@ -18,14 +18,18 @@
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 ******************************************************************************
 **
-** Description
-** This file defines functions related to the competition entity. 
-** 
+** Beskrivelse
+**   Denne fila definerer alle funksjonene som er relatert til 
+**   konkurranseobjektet.
+**
+** GDPL_competition_create_empty_node() 
+**   Oppretter en ny tom GDPL_competition_data_node, og returnerer denne.
 **
 **
 **
 ******************************************************************************/
 
+#include <stdlib.h>
 #include "gdpl.h"
 
 struct GDPL_competition_data_node *GDPL_controller_competition_list_root_ptr;
@@ -34,21 +38,21 @@ struct GDPL_competition_data_node *GDPL_controller_competition_list_selected_ptr
 
 
 /* 
- * Function 
+ * Funksjon 
  *  struct competition_data_node* GDPL_competition_create_empty_node()
  *  
- * Description 
- *  Create a new competition data node, initialize all to zero
- *  and return it to the caler.
+ * Beskrivelse
+ *  Oppretter en ny konkurranse data node, initialiserer denne til null 
+ *  og returnerer den.
  *   
- * Parameters  
- *  nop
+ * Parametre  
+ *  Ingen
  * 
- * Return 
- *  0 - failure.
- *  anything else - allocated memory for the new node.
+ * Returnerer 
+ *  0 - indikerer feil.
+ *  alt annet - peker til ny tom node.
  *  
- * Examples of Usage 
+ * Eksempel på bruk
  *  struct competition_data_node *ptr = 0;
  *  ptr = GDPL_competition_create_empty_node();
  *  if (ptr == 0) 'handle failure'
@@ -59,7 +63,7 @@ struct GDPL_competition_data_node* GDPL_competition_create_empty_node()
 
 	const char* signature = "GDPL_competition_create_empty_node()";
 
-    	GDPL_util_log(DEBUG, signature, "Enter method.");
+    GDPL_util_log(DEBUG, signature, "Enter method.");
 
 	struct GDPL_competition_data_node *new_node;
   	new_node =  (struct GDPL_competition_data_node*)
@@ -73,11 +77,11 @@ struct GDPL_competition_data_node* GDPL_competition_create_empty_node()
 
 	new_node->id = 0;
 	new_node->year = 0;
-        new_node->person_list_root_ptr = 0;
+    new_node->person_list_root_ptr = 0;
 	new_node->couple_list_root_ptr = 0;
   	new_node->next = 0;
 
-    	GDPL_util_log(DEBUG, signature, "Exit method.");
+    GDPL_util_log(DEBUG, signature, "Exit method.");
   	return new_node;
 
 }

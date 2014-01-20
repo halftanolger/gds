@@ -18,15 +18,18 @@
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 ******************************************************************************
 **
-** Description
+** Beskrivelse
+**   Denne fila beskriver alle testene som kan kjøres mot biblioteket, også
+**   kalt for 'test suite'. Test basert utvikling, aka 'test driven developmen'
+**   er av mange ansett som en god måte å drive utvikling på. Jeg har prøvd å 
+**   lage et rimelig komplett test sett, men det er vanskelig å teste alt.
 **
-** The development of this library is so called test driven. Therefor every
-** public function has several tests related to it. These test functions are
-** defined in this file. Reading the tests, may help you understading how to
-** utilize the library.
+**   Det å lese gjennom testsettet kan gi et godt innblikk i hvordan biblioteket
+**   er tenkt brukt av et klient program.
 **
-** The main function here is GDPL_test(). If you call this one, and it return
-** zero, everything should be fine. If not, you are in for a debug session.
+**   Hovedfunksjonen heter GDPL_test(). Denne kjører alle testene, og forteller
+**   hvor mange som eventuelt feilet. Hvis denne returnerer null, så er alt 
+**   i ordren. Hvis ikke, returnerer funksjonen antall tester som feilet.
 **
 ******************************************************************************/
 
@@ -42,7 +45,7 @@ int GDPL_test_GDPL_controller_set_filename_c();
 int GDPL_test_GDPL_controller_read_from_file_a();
 int GDPL_test_GDPL_controller_read_from_file_b();
 
-
+/* Intern hjelpefunksjon. */
 int GDPL_run_test(int (*function_ptr)()) 
 {
 	return (*function_ptr)();
@@ -50,19 +53,20 @@ int GDPL_run_test(int (*function_ptr)())
 
 
 /* 
- * Function 
+ * Funksjon
  *  int GDPL_test() 
  *  
- * Description 
- *  Runs the GDPLib test suite. 
+ * Beskrivelse 
+ *  Kjører 'test settet' til GDPLib. 
  * 
- * Parameters  
- * 
- * Return 
+ * Parametre
+ *  Ingen
+ *
+ * Returnerer
  *  0 - ok
- *  any thing else - one or more test failed.  
+ *  alt annet - antall tester som feilet.
  * 
- * Examples of Usage
+ * Eksempel på bruk
  *  int r;
  *  r = GDPL_test();
  *  if (r > 0) 'find out why'
@@ -71,18 +75,19 @@ int GDPL_run_test(int (*function_ptr)())
 int GDPL_test() 
 {
 
-	const char* signature = "test()";
+	const char* signature = "GDPL_test()";
 
 	int r, number_of_tests, number_of_tests_ok, number_of_tests_failed;
 
+	/* En tabell med pekere til testfunksjoner. */
 	int (*function_ptr_array[])() = { 
 
 		GDPL_test_GDPL_controller_set_filename_a,
 		GDPL_test_GDPL_controller_set_filename_b,
 		GDPL_test_GDPL_controller_set_filename_c,
 
-                GDPL_test_GDPL_controller_read_from_file_a,
-                GDPL_test_GDPL_controller_read_from_file_b
+        GDPL_test_GDPL_controller_read_from_file_a,
+        GDPL_test_GDPL_controller_read_from_file_b
 
  	};
 
@@ -90,21 +95,14 @@ int GDPL_test()
 	number_of_tests_ok = 0;
 	number_of_tests_failed = 0;
 	
-	GDPL_util_log(INFO, signature, "Running %d tests.", number_of_tests);
+	GDPL_util_log(INFO, signature, "GDPLib test suite. Running %d tests.", number_of_tests);
 	for (r = 0; r < number_of_tests; r++) {
 		if (GDPL_run_test( function_ptr_array[r] ) == 0) 
 			number_of_tests_ok++;
         	else
 			number_of_tests_failed++;
 	}
-	GDPL_util_log(INFO, signature, "%d ok, %d failed",
-		number_of_tests_ok,number_of_tests_failed);
-
-	if (number_of_tests_failed > 0)
-		GDPL_util_log(WARNING, signature, 
-			" === THERE ARE %d FAILED %s ===",
-			number_of_tests_failed, 
-			number_of_tests_failed == 1?"TEST":"TESTS");
+	GDPL_util_log(INFO, signature, "GDPLib test suite, done. %d ok, %d failed", number_of_tests_ok,number_of_tests_failed);
 
 	return number_of_tests_failed;
 }
@@ -118,7 +116,7 @@ int GDPL_test()
 
 
 /* 
- * Test description
+ * Testbeskrivelse
  * 
  *  If the data file do not exist; create the file, and initiate the 
  *  controllers data. I.e. create the root node for the competition list, 
@@ -182,7 +180,7 @@ int GDPL_test_GDPL_controller_read_from_file_a()
 
 
 /* 
- * Test description
+ * Testbeskrivelse
  * 
  *  If the data file do exist; create the file, and initiate the 
  *  controllers data. TODO: beskriv hva som skal initieres ...
@@ -204,7 +202,7 @@ int GDPL_test_GDPL_controller_read_from_file_b()
 
 
 /* 
- * Test description
+ * Testbeskrivelse
  * 
  *  If GDPL_controller_set_filename() gets a null pointer as argument,
  *  the data file should get its default name, gdp.dat.
@@ -228,7 +226,7 @@ int GDPL_test_GDPL_controller_set_filename_a()
 }
 
 /* 
- * Test description
+ * Testbeskrivelse
  * 
  *  If GDPL_controller_set_filename() gets a filename as argument,
  *  the data file should get its name from that string.
@@ -254,7 +252,7 @@ int GDPL_test_GDPL_controller_set_filename_b()
 }
 
 /* 
- * Test description
+ * Testbeskrivelse
  * 
  *  If GDPL_controller_set_filename() gets a filename as argument,
  *  and the filename length > GDPL_MAX_DATA_FILENAME_LENGTH, the 

@@ -2,15 +2,13 @@
 #ifndef _GDPL_H_
 #define _GDPL_H_
 
-
 #define GDPL_MAX_DATA_FILENAME_LENGTH  255
 
-
 /*
- * Error codes. If a library function return anything but zero, it will
- * be one of these codes. You can use this number as an index to the
- * string array GDPL_controller_error_codes[] to get the actual error
- * message.
+ * Feil koder. Alle funksjonene, som er ment å bli brukt eksternt, 
+ * returnerer en feilkode ulik null, om de feiler. Disse feilkodene
+ * kan benyttes til å hente ei feilmelding fra denne tabellen 
+ * GDPL_controller_error_codes[] 
  */
 #define ERROR_FILENAME_TO_LONG           1
 #define ERROR_FILENAME_TO_SHORT          2
@@ -57,9 +55,6 @@ extern struct GDPL_competition_data_node *GDPL_controller_competition_list_root_
 extern struct GDPL_competition_data_node *GDPL_controller_competition_list_selected_ptr;
 
 
-/* 
- * Functions declaration. 
- */
 
 
 /* Controller */
