@@ -20,16 +20,16 @@
 **
 ** Beskrivelse
 **   Denne fila beskriver alle testene som kan kjøres mot biblioteket, også
-**   kalt for 'test suite'. Test basert utvikling, aka 'test driven developmen'
+**   kalt for 'test suite'. Testbasert utvikling, aka 'test driven development'
 **   er av mange ansett som en god måte å drive utvikling på. Jeg har prøvd å 
-**   lage et rimelig komplett test sett, men det er vanskelig å teste alt.
+**   lage et rimelig komplett testsett, men det er vanskelig å teste alt.
 **
 **   Det å lese gjennom testsettet kan gi et godt innblikk i hvordan biblioteket
 **   er tenkt brukt av et klient program.
 **
 **   Hovedfunksjonen heter GDPL_test(). Denne kjører alle testene, og forteller
-**   hvor mange som eventuelt feilet. Hvis denne returnerer null, så er alt 
-**   i ordren. Hvis ikke, returnerer funksjonen antall tester som feilet.
+**   hvor mange som eventuelt feilet. Hvis denne returnerer null er alt 
+**   i ordren.
 **
 ******************************************************************************/
 
@@ -86,10 +86,10 @@ int GDPL_test()
 		GDPL_test_GDPL_controller_set_filename_b,
 		GDPL_test_GDPL_controller_set_filename_c,
 
-        GDPL_test_GDPL_controller_read_from_file_a,
-        GDPL_test_GDPL_controller_read_from_file_b
+		GDPL_test_GDPL_controller_read_from_file_a,
+		GDPL_test_GDPL_controller_read_from_file_b
 
- 	};
+	};
 
 	number_of_tests = 5;
 	number_of_tests_ok = 0;
@@ -99,7 +99,7 @@ int GDPL_test()
 	for (r = 0; r < number_of_tests; r++) {
 		if (GDPL_run_test( function_ptr_array[r] ) == 0) 
 			number_of_tests_ok++;
-        	else
+		else
 			number_of_tests_failed++;
 	}
 	GDPL_util_log(INFO, signature, "GDPLib test suite, done. %d ok, %d failed", number_of_tests_ok,number_of_tests_failed);
@@ -139,15 +139,15 @@ int GDPL_test_GDPL_controller_read_from_file_a()
 	GDPL_util_log(DEBUG, signature, "Create temporary filename %s", random_filename);
 	 
 	GDPL_controller_set_filename(random_filename);
-        GDPL_controller_read_from_file();
+	GDPL_controller_read_from_file();
 
 	/* Clean up test case. */
 	GDPL_util_log(DEBUG, signature, "Remove temporary file %s", random_filename);
 	remove(random_filename); 
 
 	/* Post condition is to be that the filename is an existing file,
-           and that competition_list_root_ptr points to a root node, and
-           that competition_list_selected_ptr point to zero. */  
+	and that competition_list_root_ptr points to a root node, and
+	that competition_list_selected_ptr point to zero. */  
 
 	if (GDPL_controller_competition_list_root_ptr == 0) {
 		GDPL_util_log(DEBUG, signature, "Test a FAILED");
@@ -221,7 +221,7 @@ int GDPL_test_GDPL_controller_set_filename_a()
 	} else {
 		GDPL_util_log(DEBUG, signature, "Test FAILED");
 		return 1;
-        }
+	}
 		
 }
 
@@ -247,7 +247,7 @@ int GDPL_test_GDPL_controller_set_filename_b()
 	} else {
 		GDPL_util_log(DEBUG, signature, "Test FAILED");
 		return 1;
-        }
+	}
 
 }
 
@@ -276,7 +276,7 @@ int GDPL_test_GDPL_controller_set_filename_c()
 	} else {
 		GDPL_util_log(DEBUG, signature, "Test FAILED");
 		return 1;
-        }
+	}
 
 }
 

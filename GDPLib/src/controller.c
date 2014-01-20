@@ -38,14 +38,14 @@ char* GDPL_controller_gdplib_name = "GDPLib";
 
 char* GDPL_controller_gdplib_version = "0.1";
 
-char *GDPL_controller_error_codes[] = { "ERROR 0:",                        
-	                                "ERROR 1: The filename is to long, max 256.", 
- 	                                "ERROR 2: The filename is to short, min 10.",
- 	                                "ERROR 3: The filename is not set.",
- 	                                "ERROR 4: Can not create the data file."
+char *GDPL_controller_error_codes[] = { "ERROR 0:",
+										"ERROR 1: The filename is to long, max 256.", 
+										"ERROR 2: The filename is to short, min 10.",
+										"ERROR 3: The filename is not set.",
+										"ERROR 4: Can not create the data file."
 
 
-	                              };
+										};
 
 char GDPL_controller_data_file_name[GDPL_MAX_DATA_FILENAME_LENGTH];
    
@@ -81,13 +81,13 @@ int GDPL_controller_set_filename(const char *filename)
 		strcpy(GDPL_controller_data_file_name, "gdp.dat");	
 	} else {
 		if (strlen(filename) > 255) {
-     		GDPL_util_log(ERROR, signature, GDPL_controller_error_codes[ERROR_FILENAME_TO_LONG]);
-		    GDPL_util_log(DEBUG, signature, "Exit method.");
+			GDPL_util_log(ERROR, signature, GDPL_controller_error_codes[ERROR_FILENAME_TO_LONG]);
+			GDPL_util_log(DEBUG, signature, "Exit method.");
 			return ERROR_FILENAME_TO_LONG;	
 		}
 		if (strlen(filename) < 10) {
-     		GDPL_util_log(ERROR, signature, GDPL_controller_error_codes[ERROR_FILENAME_TO_SHORT]);
-		    GDPL_util_log(DEBUG, signature, "Exit method.");
+			GDPL_util_log(ERROR, signature, GDPL_controller_error_codes[ERROR_FILENAME_TO_SHORT]);
+			GDPL_util_log(DEBUG, signature, "Exit method.");
 			return ERROR_FILENAME_TO_SHORT;	
 		}
 		strcpy(GDPL_controller_data_file_name, filename);
@@ -95,9 +95,9 @@ int GDPL_controller_set_filename(const char *filename)
 	
 	char msg[GDPL_MAX_DATA_FILENAME_LENGTH + 16];
 	sprintf(msg,"data file = %s",GDPL_controller_data_file_name);
-    GDPL_util_log(DEBUG, signature, msg);
+	GDPL_util_log(DEBUG, signature, msg);
 
-    GDPL_util_log(DEBUG, signature, "Exit method.");
+	GDPL_util_log(DEBUG, signature, "Exit method.");
 	return 0;
 
 }
@@ -131,17 +131,17 @@ int GDPL_controller_read_from_file()
 
 	const char* signature = "GDPL_controller_read_from_file";
 
-    GDPL_util_log(DEBUG, signature, "Enter method.");
+	GDPL_util_log(DEBUG, signature, "Enter method.");
 
 	char *datafilename = GDPL_controller_data_file_name;
 	
 	if (datafilename == 0) {
-     	GDPL_util_log(ERROR, signature, GDPL_controller_error_codes[ERROR_FILENAME_IS_NOT_SET]);
-		return ERROR_FILENAME_IS_NOT_SET;			
+		GDPL_util_log(ERROR, signature, GDPL_controller_error_codes[ERROR_FILENAME_IS_NOT_SET]);
+		return ERROR_FILENAME_IS_NOT_SET;
 	}
 
 	FILE *file;
- 	file = fopen(datafilename,"r"); 
+	file = fopen(datafilename,"r"); 
 
 	if (file == 0) {
 	
@@ -168,8 +168,8 @@ int GDPL_controller_read_from_file()
 		fclose(file);
 		file = 0;
 
-    	GDPL_util_log(DEBUG, signature, "Exit method.");
-		return 0;	
+		GDPL_util_log(DEBUG, signature, "Exit method.");
+		return 0;
 		
 	} else {
 
@@ -182,10 +182,10 @@ int GDPL_controller_read_from_file()
 
 	}
 		
-    	GDPL_util_log(DEBUG, signature, "Exit method.");
+	GDPL_util_log(DEBUG, signature, "Exit method.");
 	return 0;
+	
 }
-
 
 
 int GDPL_controller_save_to_file()
