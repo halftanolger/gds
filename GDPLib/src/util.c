@@ -37,7 +37,8 @@
  *  void GDPL_util_log(enum GDPL_log_type type, const char* signature, char* message, ...)
  *  
  * Beskrivelse
- *  Skriv et melding til loggen.
+ *  Skriv ei melding til stdout, med tidsangivelse. Den globale variabelen 
+ *  GDPL_log_level fungerer som en nivåregulator mht hva som skal logges. 
  * 
  * Parametre  
  *  type - DEBUG, INFO, WARNING, ERROR
