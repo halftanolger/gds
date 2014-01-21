@@ -1,7 +1,7 @@
-/* 
+ï»¿/* 
 ** This file is part of the GDPLib project.
 ** 
-** Copyright (C) Halftan Sætherskar (halftan@saetherskar.no)
+** Copyright (C) Halftan SÃ¦therskar (halftan@saetherskar.no)
 ** 
 ** This program is free software; you can redistribute it and/or
 ** modify it under the terms of the GNU General Public License
@@ -16,94 +16,63 @@
 ** You should have received a copy of the GNU General Public License
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-******************************************************************************
-**
-** Beskrivelse
-**  Denne fila beskriver interfacet til funksjonene i GDPLib
-**
-**  int GDPL_controller_set_filename(const char *filename) 
-**		Angi navn til datafil. Om du angir tallet null, vil det bli
-**      opprettet ei datafil med navnet 'gds.dat'.
-**
-**  int GDPL_controller_read_from_file() 
-**		Les inn data fra datafil.
-**
-**
-**
 ******************************************************************************/
 
 #ifndef _GDPL_H_
 #define _GDPL_H_
 
-#define GDPL_MAX_DATA_FILENAME_LENGTH  255
+#include <stdio.h>
 
-/*
- * Feilkoder. Alle funksjonene, som er ment å bli brukt eksternt, 
- * returnerer en feilkode ulik null, om de feiler. Disse feilkodene
- * kan benyttes til å hente ei feilmelding fra tabellen 
- * GDPL_controller_error_codes[] 
- */
-#define ERROR_FILENAME_TO_LONG           1
-#define ERROR_FILENAME_TO_SHORT          2
-#define ERROR_FILENAME_IS_NOT_SET        3
-#define ERROR_CAN_NOT_CREATE_DATAFILE    4
-#define ERROR_CAN_NOT_ALLOCATE_MEMORY    5
+#define FEILKODE_FEIL                        0
+#define FEILKODE_DATAFILNAVN_FOR_LANGT       1
+#define FEILKODE_DATAFILNAVN_FOR_KORT        2
+#define FEILKODE_DATAFILNAVN_IKKE_DEFINERT   3
+#define FEILKODE_KAN_IKKE_OPPRETTE_DATAFIL   4
+#define FEILKODE_KAN_LESE_FRA_DATAFIL        5
+#define FEILKODE_KAN_SKRIVE_TIL_DATAFIL      6
+#define FEILKODE_KAN_IKKE_ALLOKERE_MINNE     7
 
-enum GDPL_log_type {DEBUG, INFO, WARNING, ERROR};
+#define GDPL_MAX_PERSONNAVN_LENGDE           1024
+#define GDPL_MIN_PERSONNAVN_LENGDE           1
+#define GDPL_MAX_FILNAVN_LENGDE              1024
+#define GDPL_MIN_FILNAVN_LENGDE              8
 
-enum GDPL_log_type GDPL_log_level;
+typedef enum GDPL_log_type_enum {DEBUG, INFO, WARNING, ERROR} GDPL_log_type;
 
-struct GDPL_couple_data_node {
+typedef struct GDPL_par_data_node_struct {
 	int id;
-	int male_id;
-	int female_id;
+	int herre_person_id;
+	int dame_person_id;
 	int start_nr;
-	char start_time[16];
-	char finish_time[16];
-	double assignment_score;	
-	struct GDPL_person_data_node *next;
-};
+	char start_tid[16];
+	char maal_tid[16];
+	double oppgave_poeng;	
+	struct GDPL_par_data_node_struct *neste;
+} GDPL_par_data_node;
 
-struct GDPL_person_data_node {
+typedef struct GDPL_person_data_node_struct {
 	int id;
-	char fname[64];
-	char lname[64];
-	struct GDPL_person_data_node *next;
-};
+	char fnavn[GDPL_MAX_PERSONNAVN_LENGDE];
+	char enavn[GDPL_MAX_PERSONNAVN_LENGDE];
+	struct GDPL_person_data_node_struct *neste;
+} GDPL_person_data_node;
 
-struct GDPL_competition_data_node {
+typedef struct GDPL_konkurranse_data_node_struct {
 	int id;
-	int year;
-	struct GDPL_person_data_node *person_list_root_ptr;
-	struct GDPL_couple_data_node *couple_list_root_ptr;
-	struct GDPL_competition_data_node *next;
-};
+	int aar;
+	struct GDPL_person_data_node_struct *person_liste_root_ptr;
+	struct GDPL_par_data_node_sctruct *par_liste_root_ptr;
+	struct GDPL_konkurranse_data_node_struct *neste;
+} GDPL_konkurranse_data_node;
 
-extern char* GDPL_controller_gdplib_name;
-extern char* GDPL_controller_gdplib_version;
-extern char* GDPL_controller_error_codes[];
-extern char GDPL_controller_data_file_name[];
-extern struct GDPL_competition_data_node *GDPL_controller_competition_list_root_ptr;
-extern struct GDPL_competition_data_node *GDPL_controller_competition_list_selected_ptr;
+/* Funksjoner */
 
-/* Controller */
-
-int GDPL_controller_set_filename(const char *filename);
-
-int GDPL_controller_save_to_file();
-
-int GDPL_controller_read_from_file();
-
-/* Competition */
-
-struct GDPL_competition_data_node* GDPL_competition_create_empty_node(); 
-
-/* Util */
-
-void GDPL_util_log(enum GDPL_log_type, const char*, char*, ...);
-
-/* Test */
-
+void GDPL_log(GDPL_log_type, const char*, const char*, ...);
+int GDPL_init(GDPL_log_type nivaa, FILE * stream); 
 int GDPL_test();
+int GDPL_kontroller_angi_filnavn(const char *filnavn);
+int GDPL_kontroller_les_fra_fil();
+int GDPL_kontroller_skriv_til_fil();
+GDPL_konkurranse_data_node* GDPL_konkurranse_opprett_node(); 
 
 #endif //GDPL_H
