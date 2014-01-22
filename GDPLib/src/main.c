@@ -28,7 +28,7 @@ int main (int argc, char *argv[])
 {
   const char* signatur = "main(int,char)";
 
-  GDPL_init(INFO, stdout);
+  GDPL_init(DEBUG, stdout);
 
   GDPL_log(DEBUG, signatur, "Hello world - %s %s", gdpl_kontroller_gdplib_navn, gdpl_kontroller_gdplib_versjon);
 

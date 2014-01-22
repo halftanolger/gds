@@ -30,14 +30,17 @@ const char* gdpl_kontroller_gdplib_navn = "GDPLib";
 const char* gdpl_kontroller_gdplib_versjon = "1.0";
 
 const char *gdpl_kontroller_feilkoder[] = { 
-  "FEILKODE 0: Generell feil.",
-  "FEILKODE 1: Filnavnet er for langt.", 
-  "FEILKODE 2: Filnavnet er for kort.",
-  "FEILKODE 3: Filnavnet er ikke definert.",
-  "FEILKODE 4: Kan ikke opprette datafil.",
-  "FEILKODE 5: Kan lese fra datafil.",
-  "FEILKODE 6: Kan skrive til datafil.",
-  "FEILKODE 7: Kan allokere minne."
+  "",
+  "FEILKODE 01: Filnavnet er for langt.", 
+  "FEILKODE 02: Filnavnet er for kort.",
+  "FEILKODE 03: Filnavnet er ikke definert.",
+  "FEILKODE 04: Kan ikke opprette datafil.",
+  "FEILKODE 05: Kan ikke lese fra datafil.",
+  "FEILKODE 06: Kan ikke skrive til datafil.",
+  "FEILKODE 07: Kan ikke allokere minne.",
+  "FEILKODE 08: Id eksisterer allerede.",
+  "FEILKODE 09: Id eksisterer ikke.",
+  "FEILKODE 10: Generell feil."
 
 };
 
@@ -111,7 +114,7 @@ int GDPL_kontroller_angi_filnavn(const char *filnavn)
 
     if (strlen(filnavn) > GDPL_MAX_FILNAVN_LENGDE) {
 
-	  int feilkode = FEILKODE_DATAFILNAVN_FOR_LANGT;
+      int feilkode = FEILKODE_DATAFILNAVN_FOR_LANGT;
       GDPL_log(ERROR, signatur, gdpl_kontroller_feilkoder[feilkode]);
       GDPL_log(DEBUG, signatur, "Slutt funksjon.");
       return feilkode;
@@ -119,12 +122,12 @@ int GDPL_kontroller_angi_filnavn(const char *filnavn)
     }
 
     if (strlen(filnavn) < GDPL_MIN_FILNAVN_LENGDE) {
-	  
-	  int feilkode = FEILKODE_DATAFILNAVN_FOR_KORT;
+  
+      int feilkode = FEILKODE_DATAFILNAVN_FOR_KORT;
       GDPL_log(ERROR, signatur, gdpl_kontroller_feilkoder[feilkode]);
       GDPL_log(DEBUG, signatur, "Slutt funksjon.");
       return feilkode;
-	  
+  
     }
 
     strcpy(gdpl_kontroller_datafilnavn, filnavn);
@@ -178,7 +181,7 @@ int GDPL_kontroller_les_fra_fil()
     GDPL_log(ERROR, signatur, gdpl_kontroller_feilkoder[feilkode]);
     GDPL_log(DEBUG, signatur, "Slutt funksjon.");
     return feilkode;
-	
+
   }
 
   FILE *file;
@@ -191,22 +194,22 @@ int GDPL_kontroller_les_fra_fil()
     GDPL_log(DEBUG, signatur, "Fila %s eksisterer ikke. Prøver å opprette den.", gdpl_kontroller_datafilnavn);
     file = fopen(gdpl_kontroller_datafilnavn,"w");
     if (file == 0) {
-	
+
       int feilkode = FEILKODE_KAN_IKKE_OPPRETTE_DATAFIL;
       GDPL_log(ERROR, signatur, gdpl_kontroller_feilkoder[feilkode]);
       GDPL_log(DEBUG, signatur, "Slutt funksjon.");
       return feilkode;
-	  
+  
     }
 
     GDPL_konkurranse_data_node *new_node = GDPL_konkurranse_opprett_node(); 
     if(new_node == 0) {
-	
+
       int feilkode = FEILKODE_FEIL;
       GDPL_log(ERROR, signatur, gdpl_kontroller_feilkoder[feilkode]);
       GDPL_log(DEBUG, signatur, "Slutt funksjon.");
       return feilkode;
-	  
+  
     }
 
     gdpl_kontroller_konkurranseliste_root_ptr = new_node;
@@ -231,25 +234,6 @@ int GDPL_kontroller_les_fra_fil()
   GDPL_log(DEBUG, signatur, "Slutt funksjon.");
   return 0;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 /* ----------------------------------------------------------------------------
  * Funksjon
@@ -278,7 +262,7 @@ int GDPL_kontroller_les_fra_fil()
 void GDPL_log(GDPL_log_type type, const char* signatur, const char* melding, ...) 
 {
   time_t rawtime;
-  struct tm * timeinfo; 	
+  struct tm * timeinfo; 
   va_list ap;
   char *p, *sval;
   char type_str[16] = "";
