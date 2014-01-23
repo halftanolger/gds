@@ -26,55 +26,53 @@ extern const char *gdpl_kontroller_feilkoder[];
 /* ----------------------------------------------------------------------------
  *
  * Funksjon 
- *  GDPL_konkurranse_data_node* GDPL_konkurranse_opprett_node()
+ *  int GDPL_konkurranse_opprett_node(GDPL_konkurranse_data_node**)
  *  
  * ----------------------------------------------------------------------------
  *
  * Beskrivelse
- *  Oppretter en ny konkurranse data node, initialiserer denne til null 
- *  og returnerer den.
+ *  Oppretter en ny konkurranse-data-node og initialiserer denne.
  *   
  * Parametre  
- *  Ingen
+ *  Peker til peker til node.
  * 
  * Returnerer 
- *  0 - indikerer feil.
- *  alt annet - peker til ny tom node.
+ *  0 - ok
+ *  alt annet - feil. Den returnerte verdien kan brukes som indeks til 
+ *  gdpl_kontroller_feilkoder[] for å hente ut ei feilmelding.
  *  
  * Eksempel på bruk
- *  GDPL_konkurranse_data_node *ptr = 0;
- *  ptr = GDPL_konkurranse_opprett_node();
- *  if (ptr == 0) 'handle failure'
+ *  GDPL_konkurranse_data_node *ptr;
+ *  int fk = GDPL_konkurranse_opprett_node(&ptr);
+ *  if (fk != 0) 'handle failure'
  *
  * ----------------------------------------------------------------------------
  */ 
-GDPL_konkurranse_data_node* GDPL_konkurranse_opprett_node()
+int GDPL_konkurranse_opprett_node(GDPL_konkurranse_data_node **new_node)
 {
-  const char* signatur = "GDPL_konkurranse_opprett_node()";
+  const char* signatur = "GDPL_konkurranse_opprett_node(GDPL_konkurranse_data_node**)";
 
   GDPL_log(DEBUG, signatur, "Start funksjon.");
 
-  GDPL_konkurranse_data_node *new_node;
-  new_node = (GDPL_konkurranse_data_node*)
+  
+  *new_node = (GDPL_konkurranse_data_node*)
                malloc (sizeof (GDPL_konkurranse_data_node));
 
-  if (new_node == 0) {
-
+  if (*new_node == 0) {
     int feilkode = FEILKODE_KAN_IKKE_ALLOKERE_MINNE;
     GDPL_log(ERROR, signatur, gdpl_kontroller_feilkoder[feilkode]);
     GDPL_log(DEBUG, signatur, "Slutt funksjon.");
-    return 0; /* Returner en nullpeker. */
-
+    return feilkode;
   }
 
-  new_node->id = 0;
-  new_node->aar = 0;
-  new_node->person_liste_root_ptr = 0;
-  new_node->par_liste_root_ptr = 0;
-  new_node->neste = 0;
+  (*new_node)->id = 0;
+  (*new_node)->aar = 0;
+  (*new_node)->person_liste_root_ptr = 0;
+  (*new_node)->par_liste_root_ptr = 0;
+  (*new_node)->neste = 0;
 
   GDPL_log(DEBUG, signatur, "Slutt funksjon.");
-  return new_node;
+  return 0;
 }
 
 /* ----------------------------------------------------------------------------
@@ -154,9 +152,16 @@ int GDPL_konkurranse_legg_til(GDPL_konkurranse_data_node data, GDPL_konkurranse_
   }
   
   /* Legg inn noden sist i lista. */
+
+  GDPL_konkurranse_data_node *new_node;
   
-  GDPL_konkurranse_data_node *new_node = GDPL_konkurranse_opprett_node();
-  
+  int feilkode = GDPL_konkurranse_opprett_node(&new_node);
+  if (feilkode != 0) {
+    GDPL_log(ERROR, signatur, gdpl_kontroller_feilkoder[feilkode]);  
+    GDPL_log(DEBUG, signatur, "Slutt funksjon.");  
+    return feilkode;  
+  }
+    
   new_node->id = data.id;
   new_node->aar = data.aar;
   new_node->person_liste_root_ptr = data.person_liste_root_ptr;
@@ -261,6 +266,85 @@ int GDPL_konkurranse_fjern_fra(GDPL_konkurranse_data_node data, GDPL_konkurranse
   runner2->neste = runner->neste;
   
   free(runner);
+  
+  GDPL_log(DEBUG, signatur, "Slutt funksjon.");
+  return 0;
+}
+
+/* ----------------------------------------------------------------------------
+ *
+ * Funksjon 
+ *  int GDPL_konkurranse_hent(int id, GDPL_konkurranse_data_node*,
+ *                              GDPL_konkurranse_data_node*)
+ *  
+ * ----------------------------------------------------------------------------
+ *
+ * Beskrivelse
+ *  Hent en konkurranse-node fra konkurranse-lista, gitt en id.
+ *   
+ * Parametre  
+ *  int                          - id til den noden som skal hentes.
+ *  GDPL_konkurranse_data_node*  - noden som hentes fra lista.
+ *  GDPL_konkurranse_data_node*  - peker til root-node i konkurranselista.
+ * 
+ * Returnerer 
+ *  0 - ok
+ *  alt annet - feil. Den returnerte verdien kan brukes som indeks til 
+ *  gdpl_kontroller_feilkoder[] for å hente ut ei feilmelding.
+ *  
+ * Eksempel på bruk
+ *  int id;
+ *  GDPL_konkurranse_data_node *node;
+ *  GDPL_konkurranse_data_node *root;
+ *  int feilnr;
+ *  feilnr = GDPL_konkurranse_hent(id,node,root);
+ *  if (feilnr != 0) 'handle failure'
+ *
+ * ----------------------------------------------------------------------------
+ */ 
+int GDPL_konkurranse_hent(int id, GDPL_konkurranse_data_node **data, GDPL_konkurranse_data_node *root)
+{
+  const char* signatur = "GDPL_konkurranse_hent(int,GDPL_konkurranse_data_node,GDPL_konkurranse_data_node*)";
+
+  GDPL_log(DEBUG, signatur, "Start funksjon.");
+  
+  /* Litt inputparameter-sjekking. */
+  
+  if (root == 0) {
+    GDPL_log(DEBUG, signatur, "root == 0, I'm out of here ...");
+    GDPL_log(DEBUG, signatur, "Slutt funksjon.");
+    return FEILKODE_FEIL;  
+  }
+
+  if (*data != 0) {
+    GDPL_log(DEBUG, signatur, "data != 0, I'm out of here ...");
+    GDPL_log(DEBUG, signatur, "Slutt funksjon.");
+    return FEILKODE_FEIL;  
+  }
+  
+  /* Sjekk om id finnes i lista. */
+  int id_eksisterer = 0;
+  GDPL_konkurranse_data_node *runner = root;
+  
+  while (runner->neste != 0) {
+    if (id == runner->id) {
+      id_eksisterer = 1;
+      break;
+    }
+    runner = runner->neste;
+  }
+  if (id == runner->id) {
+    id_eksisterer = 1;
+  }
+  
+  if (id_eksisterer != 1) {
+    int feilkode = FEILKODE_ID_EKSISTERER_IKKE;
+    GDPL_log(DEBUG, signatur, gdpl_kontroller_feilkoder[feilkode]);
+    GDPL_log(DEBUG, signatur, "Slutt funksjon.");  
+    return feilkode;
+  }
+    
+  *data = runner;
   
   GDPL_log(DEBUG, signatur, "Slutt funksjon.");
   return 0;

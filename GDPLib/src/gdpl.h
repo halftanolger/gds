@@ -34,7 +34,6 @@
 #define FEILKODE_ID_EKSISTERER_IKKE          9
 #define FEILKODE_FEIL                        10
 
-
 #define GDPL_MAX_PERSONNAVN_LENGDE           1024
 #define GDPL_MIN_PERSONNAVN_LENGDE           1
 #define GDPL_MAX_FILNAVN_LENGDE              1024
@@ -73,12 +72,21 @@ typedef struct GDPL_konkurranse_data_node_struct {
 void GDPL_log(GDPL_log_type, const char*, const char*, ...);
 int GDPL_init(GDPL_log_type nivaa, FILE * stream); 
 int GDPL_test();
+
 int GDPL_kontroller_angi_filnavn(const char *filnavn);
 int GDPL_kontroller_les_fra_fil();
 int GDPL_kontroller_skriv_til_fil();
+
+int GDPL_konkurranse_opprett_node(GDPL_konkurranse_data_node **new_node);
 int GDPL_konkurranse_legg_til(GDPL_konkurranse_data_node data, GDPL_konkurranse_data_node *root);
 int GDPL_konkurranse_fjern_fra(GDPL_konkurranse_data_node data, GDPL_konkurranse_data_node *root);
 int GDPL_konkurranse_antall_i_liste(int *antall, GDPL_konkurranse_data_node *root);
-GDPL_konkurranse_data_node* GDPL_konkurranse_opprett_node(); 
+int GDPL_konkurranse_hent(int id, GDPL_konkurranse_data_node **data, GDPL_konkurranse_data_node *root);
+
+int GDPL_person_opprett_node(GDPL_person_data_node **new_node);
+int GDPL_person_legg_til(GDPL_person_data_node data, GDPL_person_data_node *root);
+int GDPL_person_fjern_fra(GDPL_person_data_node data, GDPL_person_data_node *root);
+int GDPL_person_antall_i_liste(int *antall, GDPL_person_data_node *root);
+int GDPL_person_hent(int id, GDPL_person_data_node **data, GDPL_person_data_node *root);
 
 #endif //GDPL_H

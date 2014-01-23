@@ -69,8 +69,6 @@ GDPL_konkurranse_data_node *gdpl_kontroller_konkurranseliste_root_ptr;
  */
 GDPL_konkurranse_data_node *gdpl_kontroller_konkurranseliste_valgt_ptr;
 
-
-
 /* ----------------------------------------------------------------------------
  *
  * Funksjon
@@ -202,14 +200,12 @@ int GDPL_kontroller_les_fra_fil()
   
     }
 
-    GDPL_konkurranse_data_node *new_node = GDPL_konkurranse_opprett_node(); 
-    if(new_node == 0) {
-
-      int feilkode = FEILKODE_FEIL;
+    GDPL_konkurranse_data_node *new_node; 
+    int feilkode = GDPL_konkurranse_opprett_node(&new_node);
+	if (feilkode != 0) {
       GDPL_log(ERROR, signatur, gdpl_kontroller_feilkoder[feilkode]);
       GDPL_log(DEBUG, signatur, "Slutt funksjon.");
       return feilkode;
-  
     }
 
     gdpl_kontroller_konkurranseliste_root_ptr = new_node;
