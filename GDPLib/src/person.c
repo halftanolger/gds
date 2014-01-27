@@ -66,8 +66,8 @@ int GDPL_person_opprett_node(GDPL_person_data_node **new_node)
   }
 
   (*new_node)->id = 0;
-  strcpy((*new_node)->fnavn,"");
-  strcpy((*new_node)->enavn,"");
+  (*new_node)->fnavn = 0;
+  (*new_node)->enavn = 0;
   (*new_node)->neste = 0;
 
   GDPL_log(DEBUG, signatur, "Slutt funksjon.");
@@ -122,21 +122,47 @@ int GDPL_person_legg_til(GDPL_person_data_node data, GDPL_person_data_node *root
     return FEILKODE_FEIL;  
   }
   
-  if (strlen(data.fnavn) == 0) {
-    GDPL_log(DEBUG, signatur, "strlen(data.fnavn) == 0, I'm out of here ...");
+  if (data.fnavn == 0) {
+    GDPL_log(DEBUG, signatur, "data.fnavn == 0, I'm out of here ...");
     GDPL_log(DEBUG, signatur, "Slutt funksjon.");
     return FEILKODE_FEIL;  
   }
 
-  if (strlen(data.enavn) == 0) {
-    GDPL_log(DEBUG, signatur, "strlen(data.enavn) == 0, I'm out of here ...");
+  if (strlen(data.fnavn) > GDPL_MAX_PERSONNAVN_LENGDE) {
+    GDPL_log(DEBUG, signatur, "data.fnavn for langt, I'm out of here ...");
     GDPL_log(DEBUG, signatur, "Slutt funksjon.");
     return FEILKODE_FEIL;  
   }
   
+  if (strlen(data.fnavn) < GDPL_MIN_PERSONNAVN_LENGDE) {
+    GDPL_log(DEBUG, signatur, "data.fnavn for kort, I'm out of here ...");
+    GDPL_log(DEBUG, signatur, "Slutt funksjon.");
+    return FEILKODE_FEIL;  
+  }
+    
+  if (data.enavn == 0) {
+    GDPL_log(DEBUG, signatur, "data.enavn == 0, I'm out of here ...");
+    GDPL_log(DEBUG, signatur, "Slutt funksjon.");
+    return FEILKODE_FEIL;  
+  }
+  
+  if (strlen(data.enavn) > GDPL_MAX_PERSONNAVN_LENGDE) {
+    GDPL_log(DEBUG, signatur, "data.lnavn for langt, I'm out of here ...");
+    GDPL_log(DEBUG, signatur, "Slutt funksjon.");
+    return FEILKODE_FEIL;  
+  }
+  
+  if (strlen(data.enavn) < GDPL_MIN_PERSONNAVN_LENGDE) {
+    GDPL_log(DEBUG, signatur, "data.lnavn for kort, I'm out of here ...");
+    GDPL_log(DEBUG, signatur, "Slutt funksjon.");
+    return FEILKODE_FEIL;  
+  }
+	
   /* Sjekk om ny id finnes fra før i lista. */
   int id_eksisterer = 0;
   GDPL_person_data_node *runner = root;
+  
+     GDPL_log(DEBUG, signatur, "debug abc1");	
   
   while (runner->neste != 0) {
     if (data.id == runner->id) {
@@ -148,6 +174,10 @@ int GDPL_person_legg_til(GDPL_person_data_node data, GDPL_person_data_node *root
   if (data.id == runner->id) {
     id_eksisterer = 1;
   }
+
+    
+   GDPL_log(DEBUG, signatur, "debug abc2");	
+
   
   if (id_eksisterer != 0) {
     int feilkode = FEILKODE_ID_EKSISTERER;
@@ -155,6 +185,8 @@ int GDPL_person_legg_til(GDPL_person_data_node data, GDPL_person_data_node *root
     GDPL_log(DEBUG, signatur, "Slutt funksjon.");  
     return feilkode;
   }
+  
+
   
   /* Legg inn noden sist i lista. */
   
@@ -167,9 +199,11 @@ int GDPL_person_legg_til(GDPL_person_data_node data, GDPL_person_data_node *root
     return feilkode;  
   }
   
-  new_node->id = data.id;
-  strcpy(new_node->fnavn,data.fnavn);
-  strcpy(new_node->enavn,data.enavn);
+  
+  
+  new_node->id = data.id;  
+  new_node->fnavn = strdup(data.fnavn);
+  new_node->enavn = strdup(data.enavn);
       
   if (root->neste == 0) {
     root->neste = new_node;
@@ -268,6 +302,8 @@ int GDPL_person_fjern_fra(GDPL_person_data_node data, GDPL_person_data_node *roo
 
   runner2->neste = runner->neste;
   
+  free(runner->fnavn);
+  free(runner->enavn);
   free(runner);
   
   GDPL_log(DEBUG, signatur, "Slutt funksjon.");

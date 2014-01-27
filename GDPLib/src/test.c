@@ -45,11 +45,11 @@ int GDPL_test_konkurranse_fjern_fra_b();
 int GDPL_test_konkurranse_fjern_fra_c();
 int GDPL_test_konkurranse_fjern_fra_d();
 
-int GDPL_test_person_legg_til_a();
-int GDPL_test_person_legg_til_b();
-int GDPL_test_person_legg_til_c();
-int GDPL_test_person_legg_til_d();
-int GDPL_test_person_legg_til_e();
+extern int GDPL_test_person_legg_til_a();
+extern int GDPL_test_person_legg_til_b();
+extern int GDPL_test_person_legg_til_c();
+extern int GDPL_test_person_legg_til_d();
+extern int GDPL_test_person_legg_til_e();
 
 
 /* 
@@ -93,29 +93,29 @@ int GDPL_test()
   */
   int (*function_ptr_array[])() = { 
     
-    GDPL_test_kontroller_angi_filnavn_a,   /* Filnavn ikke angitt, i.e. null peker. */
-    GDPL_test_kontroller_angi_filnavn_b,   /* Filnavn for kort. */
-    GDPL_test_kontroller_angi_filnavn_c,   /* Filnavn for langt. */
-    GDPL_test_kontroller_angi_filnavn_d,   /* Filnavn ok. */
+    GDPL_test_kontroller_angi_filnavn_a,   /* 1  Filnavn ikke angitt, i.e. null peker. */
+    GDPL_test_kontroller_angi_filnavn_b,   /* 2  Filnavn for kort. */
+    GDPL_test_kontroller_angi_filnavn_c,   /* 3  Filnavn for langt. */
+    GDPL_test_kontroller_angi_filnavn_d,   /* 4  Filnavn ok. */
 
-    GDPL_test_kontroller_les_fra_fil_a,    /* Fil eksisterer ikke. */
-    GDPL_test_kontroller_les_fra_fil_b,    /* Fil eksisterer. */
+    GDPL_test_kontroller_les_fra_fil_a,    /* 5  Fil eksisterer ikke. */
+    GDPL_test_kontroller_les_fra_fil_b,    /* 6  Fil eksisterer. */
 
-    GDPL_test_konkurranse_legg_til_a,      /* Liste root ptr ikke satt. */
-    GDPL_test_konkurranse_legg_til_b,      /* Ny node mangler id. */
-    GDPL_test_konkurranse_legg_til_c,      /* Ny node mangler aar. */
-    GDPL_test_konkurranse_legg_til_d,      /* Ny node har id som finnes i lista. */
+    GDPL_test_konkurranse_legg_til_a,      /* 7  Liste root ptr ikke satt. */
+    GDPL_test_konkurranse_legg_til_b,      /* 8  Ny node mangler id. */
+    GDPL_test_konkurranse_legg_til_c,      /* 9  Ny node mangler aar. */
+    GDPL_test_konkurranse_legg_til_d,      /* 10 Ny node har id som finnes i lista. */
 
-    GDPL_test_konkurranse_fjern_fra_a,     /* Liste root ptr ikke satt. */
-    GDPL_test_konkurranse_fjern_fra_b,     /* Node mangler id. */	
-    GDPL_test_konkurranse_fjern_fra_c,     /* Node har id som ikke finnes i lista. */
-    GDPL_test_konkurranse_fjern_fra_d,     /* Fjern node lagt inn av GDPL_test_konkurranse_legg_til_d*/
+    GDPL_test_konkurranse_fjern_fra_a,     /* 11 Liste root ptr ikke satt. */
+    GDPL_test_konkurranse_fjern_fra_b,     /* 12 Node mangler id. */	
+    GDPL_test_konkurranse_fjern_fra_c,     /* 13 Node har id som ikke finnes i lista. */
+    GDPL_test_konkurranse_fjern_fra_d,     /* 14 Fjern node lagt inn av GDPL_test_konkurranse_legg_til_d*/
 
-    GDPL_test_person_legg_til_a,           /* Liste root ptr ikke satt. */
-    GDPL_test_person_legg_til_b,           /* Ny node mangler id. */
-    GDPL_test_person_legg_til_c,           /* Ny node mangler fornavn. */
-    GDPL_test_person_legg_til_d,           /* Ny node mangler etternavn. */	
-    GDPL_test_person_legg_til_e            /* Ny node har id som finnes i lista. */
+    GDPL_test_person_legg_til_a,           /* 15 Liste root ptr ikke satt. */
+    GDPL_test_person_legg_til_b,           /* 16 Ny node mangler id. */
+    GDPL_test_person_legg_til_c,           /* 17 Ny node mangler fornavn. */
+    GDPL_test_person_legg_til_d,           /* 18 Ny node mangler etternavn. */	
+    GDPL_test_person_legg_til_e            /* 19 Ny node har id som finnes i lista. */
 	
 	
   };
@@ -581,320 +581,5 @@ int GDPL_test_konkurranse_fjern_fra_d()
   return 0;  
 }
 	
-/* ----------------------------------------------------------------------------
- * Testbeskrivelse
- * 
- *  Liste root ptr ikke satt. 
- * 
- * ----------------------------------------------------------------------------
- */ 
-int GDPL_test_person_legg_til_a() 
-{
-  const char* signatur = "GDPL_test_person_legg_til_a()";
-
-  GDPL_person_data_node node;
-  GDPL_person_data_node *root;
-  
-  root =  0;
-  node.id = 1;
-  strcpy(node.fnavn,"Ola");
-  strcpy(node.enavn,"Nordmann");
-  
-  if (GDPL_person_legg_til(node,root) == 0) {
-    GDPL_log(INFO, signatur, "Test feilet");
-    return 1;
-  } 
-    
-  GDPL_log(INFO, signatur, "Test ok");
-  return 0;  
-}
-
-/* ----------------------------------------------------------------------------
- * Testbeskrivelse
- * 
- *  Ny node mangler id.
- * 
- * ----------------------------------------------------------------------------
- */ 
-int GDPL_test_person_legg_til_b() 
-{
-  const char* signatur = "GDPL_test_person_legg_til_b()";
-  
-  /* Sett opp en valgt konkurranse. */
-  
-  GDPL_konkurranse_data_node *root_konkurranse; 
-  GDPL_konkurranse_data_node *valgt_konkurranse = 0;
-  GDPL_konkurranse_data_node node_konkurranse;
-  
-  node_konkurranse.id = 123;
-  node_konkurranse.aar = 2014;
-    
-  if (GDPL_konkurranse_opprett_node(&root_konkurranse) != 0) {
-    GDPL_log(DEBUG, signatur, "Klarer ikke å opprette en konkurranse!");
-    GDPL_log(INFO, signatur, "Test feilet");
-    return 1;  
-  }
- 
-  if (GDPL_konkurranse_legg_til(node_konkurranse, root_konkurranse) != 0) {
-    GDPL_log(DEBUG, signatur, "Klarer ikke å opprette en konkurranse!");
-    GDPL_log(INFO, signatur, "Test feilet");
-    return 1;  
-  }
-    
-  if (GDPL_konkurranse_hent(123, &valgt_konkurranse, root_konkurranse) != 0) {
-    GDPL_log(DEBUG, signatur, "Klarer ikke å hente en konkurranse!");
-    GDPL_log(INFO, signatur, "Test feilet");
-    return 1;    
-  }
-
-  /* Kjør test. */
-  
-  GDPL_person_data_node *root = valgt_konkurranse->person_liste_root_ptr;
-  
-  GDPL_person_data_node node;
-  node.id = 0;
-  strcpy(node.fnavn, "Ola");
-  strcpy(node.enavn, "Nordmann");
-  
-  if (GDPL_person_legg_til(node,root) == 0) {  
-    free(valgt_konkurranse);
-    free(root_konkurranse);
-    GDPL_log(INFO, signatur, "Test feilet");
-    return 1;
-  } 
-  
-  free(valgt_konkurranse);
-  free(root_konkurranse);
-    
-  GDPL_log(INFO, signatur, "Test ok");
-  return 0;  
-}
-
-/* ----------------------------------------------------------------------------
- * Testbeskrivelse
- * 
- *  Ny node mangler fornavn.
- * 
- * ----------------------------------------------------------------------------
- */ 
-int GDPL_test_person_legg_til_c() 
-{
-  const char* signatur = "GDPL_test_person_legg_til_c()";
-
-  /* Sett opp en valgt konkurranse. */
-  
-  GDPL_konkurranse_data_node *root_konkurranse; 
-  GDPL_konkurranse_data_node *valgt_konkurranse = 0;
-  GDPL_konkurranse_data_node node_konkurranse;
-  
-  node_konkurranse.id = 123;
-  node_konkurranse.aar = 2014;
-  
-  if (GDPL_konkurranse_opprett_node(&root_konkurranse) != 0) {
-    GDPL_log(DEBUG, signatur, "Klarer ikke å opprette en konkurranse!");
-    GDPL_log(INFO, signatur, "Test feilet");
-    return 1;  
-  }
-    
-  if (GDPL_konkurranse_legg_til(node_konkurranse, root_konkurranse) != 0) {
-    GDPL_log(DEBUG, signatur, "Klarer ikke å opprette en konkurranse!");
-    GDPL_log(INFO, signatur, "Test feilet");
-    return 1;  
-  }
-    
-  if (GDPL_konkurranse_hent(123, &valgt_konkurranse, root_konkurranse) != 0) {
-    GDPL_log(DEBUG, signatur, "Klarer ikke å hente en konkurranse!");
-    GDPL_log(INFO, signatur, "Test feilet");
-    return 1;    
-  }
-
-  /* Kjør test. */
-  
-  GDPL_person_data_node *root = valgt_konkurranse->person_liste_root_ptr;
-  
-  GDPL_person_data_node node;
-  node.id = 1;
-  strcpy(node.fnavn, "");
-  strcpy(node.enavn, "Nordmann");
-  
-  if (GDPL_person_legg_til(node,root) == 0) {  
-    free(valgt_konkurranse);
-    free(root_konkurranse);
-    GDPL_log(INFO, signatur, "Test feilet");
-    return 1;
-  } 
-  
-  free(valgt_konkurranse);
-  free(root_konkurranse);
-    
-  GDPL_log(INFO, signatur, "Test ok");
-  return 0;  
-}
-
-/* ----------------------------------------------------------------------------
- * Testbeskrivelse
- * 
- *  Ny node mangler etternavn.
- * 
- * ----------------------------------------------------------------------------
- */ 
-int GDPL_test_person_legg_til_d() 
-{
-  const char* signatur = "GDPL_test_person_legg_til_d()";
-
-  /* Sett opp en valgt konkurranse. */
-  
-  GDPL_konkurranse_data_node *root_konkurranse; 
-  GDPL_konkurranse_data_node *valgt_konkurranse = 0;
-  GDPL_konkurranse_data_node node_konkurranse;
-  
-  node_konkurranse.id = 123;
-  node_konkurranse.aar = 2014;
-  
-  if (GDPL_konkurranse_opprett_node(&root_konkurranse) != 0) {
-    GDPL_log(DEBUG, signatur, "Klarer ikke å opprette en konkurranse!");
-    GDPL_log(INFO, signatur, "Test feilet");
-    return 1;  
-  }
-  
-  if (GDPL_konkurranse_legg_til(node_konkurranse, root_konkurranse) != 0) {
-    GDPL_log(DEBUG, signatur, "Klarer ikke å opprette en konkurranse!");
-    GDPL_log(INFO, signatur, "Test feilet");
-    return 1;  
-  }
-    
-  if (GDPL_konkurranse_hent(123, &valgt_konkurranse, root_konkurranse) != 0) {
-    GDPL_log(DEBUG, signatur, "Klarer ikke å hente en konkurranse!");
-    GDPL_log(INFO, signatur, "Test feilet");
-    return 1;    
-  }
-
-  /* Kjør test. */
-  
-  GDPL_person_data_node *root = valgt_konkurranse->person_liste_root_ptr;
-  
-  GDPL_person_data_node node;
-  node.id = 1;
-  strcpy(node.fnavn, "Ola");
-  strcpy(node.enavn, "");
-  
-  if (GDPL_person_legg_til(node,root) == 0) {  
-    free(valgt_konkurranse);
-    free(root_konkurranse);
-    GDPL_log(INFO, signatur, "Test feilet");
-    return 1;
-  } 
-  
-  free(valgt_konkurranse);
-  free(root_konkurranse);
-    
-  GDPL_log(INFO, signatur, "Test ok");
-  return 0;  
-}
-
-/* ----------------------------------------------------------------------------
- * Testbeskrivelse
- * 
- *  Ny node har id som finnes i lista.
- * 
- * ----------------------------------------------------------------------------
- */ 
-int GDPL_test_person_legg_til_e() 
-{
-  const char* signatur = "GDPL_test_person_legg_til_e()";
-
-  /* Sett opp en valgt konkurranse. */
-  
-  GDPL_konkurranse_data_node *root_konkurranse; 
-  GDPL_konkurranse_data_node *valgt_konkurranse = 0;
-  GDPL_konkurranse_data_node node_konkurranse;
-  
-  node_konkurranse.id = 123;
-  node_konkurranse.aar = 2014;
-  
-  if (GDPL_konkurranse_opprett_node(&root_konkurranse) != 0) {
-    GDPL_log(DEBUG, signatur, "Klarer ikke å opprette en konkurranse!");
-    GDPL_log(INFO, signatur, "Test feilet");
-    return 1;  
-  }
-    
-  if (GDPL_konkurranse_legg_til(node_konkurranse, root_konkurranse) != 0) {
-    GDPL_log(DEBUG, signatur, "Klarer ikke å opprette en konkurranse!");
-    GDPL_log(INFO, signatur, "Test feilet");
-    return 1;  
-  }
-    
-  if (GDPL_konkurranse_hent(123, &valgt_konkurranse, root_konkurranse) != 0) {
-    GDPL_log(DEBUG, signatur, "Klarer ikke å hente en konkurranse!");
-    GDPL_log(INFO, signatur, "Test feilet");
-    return 1;    
-  }
-
-  /* Kjør test. */
-  
-  GDPL_person_data_node *root = valgt_konkurranse->person_liste_root_ptr;
-  
-  GDPL_person_data_node node;
-  node.id = 1;
-  strcpy(node.fnavn, "Ola");
-  strcpy(node.enavn, "Nordmann");
-  
-  if (GDPL_person_legg_til(node,root) != 0) {  
-    free(valgt_konkurranse);
-    free(root_konkurranse);
-    GDPL_log(INFO, signatur, "Test feilet");
-    return 1;
-  } 
-
-  int antall;
-  if (GDPL_person_antall_i_liste(&antall,root) != 0) {
-    free(valgt_konkurranse);
-    free(root_konkurranse);  
-    GDPL_log(DEBUG, signatur, "Klarer ikke å hente ut antall!");
-    GDPL_log(INFO, signatur, "Test feilet");
-    return 1;      
-  }
-  
-  if (antall != 1) {
-    free(valgt_konkurranse);
-    free(root_konkurranse);  
-    GDPL_log(DEBUG, signatur, "antall != 1");
-    GDPL_log(INFO, signatur, "Test feilet");
-    return 1;        
-  }
-    
-  GDPL_person_data_node *p;	
-  if (GDPL_person_hent(1,&p,root) != 0) {
-    free(valgt_konkurranse);
-    free(root_konkurranse);  
-    GDPL_log(DEBUG, signatur, "Klarer ikke å hente ut person-node!");
-    GDPL_log(INFO, signatur, "Test feilet");
-    return 1;      
-  }
-  
-  if (strcmp(p->fnavn,"Ola") != 0) {
-    free(valgt_konkurranse);
-    free(root_konkurranse);  
-    GDPL_log(DEBUG, signatur, "strcmp(p->fnavn,\"Ola\") != 0");
-    GDPL_log(INFO, signatur, "Test feilet");
-    return 1;        
-  }
-		
-  if (GDPL_person_legg_til(node,root) == 0) {  
-    free(valgt_konkurranse);
-    free(root_konkurranse);
-    GDPL_log(INFO, signatur, "Test feilet");
-    return 1;
-  } 
-  
-  free(valgt_konkurranse);
-  free(root_konkurranse);    
-  GDPL_log(INFO, signatur, "Test ok");
-  return 0;  
-}
-	
-
-
-
 
 

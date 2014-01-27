@@ -54,8 +54,8 @@ typedef struct GDPL_par_data_node_struct {
 
 typedef struct GDPL_person_data_node_struct {
 	int id;
-	char fnavn[GDPL_MAX_PERSONNAVN_LENGDE];
-	char enavn[GDPL_MAX_PERSONNAVN_LENGDE];
+	char *fnavn;
+	char *enavn;
 	struct GDPL_person_data_node_struct *neste;
 } GDPL_person_data_node;
 
