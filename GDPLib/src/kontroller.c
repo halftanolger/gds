@@ -40,9 +40,16 @@ const char *gdpl_kontroller_feilkoder[] = {
   "FEILKODE 07: Kan ikke allokere minne.",
   "FEILKODE 08: Id eksisterer allerede.",
   "FEILKODE 09: Id eksisterer ikke.",
-  "FEILKODE 10: Generell feil."
-
+  "FEILKODE 10: Generell feil.",  
+  "FEILKODE 11: Oppgitt verdi for max antall par, er for lavt.",
+  "FEILKODE 12: Oppgitt verdi for max antall par, er for høyt."
+  
 };
+
+/*
+ * Definerer max antall par.
+ */
+int gdpl_max_antall_par;
 
 /*
  * Denne variabelen holder på datafilnavnet.
@@ -68,6 +75,133 @@ GDPL_konkurranse_data_node *gdpl_kontroller_konkurranseliste_root_ptr;
  * Peker på det valgte rennet, i konkurranselista.
  */
 GDPL_konkurranse_data_node *gdpl_kontroller_konkurranseliste_valgt_ptr;
+
+
+
+/* ----------------------------------------------------------------------------
+ *
+ * Funksjon
+ *  int GDPL_kontroller_hent_par_nummer(int *par_nummer, int type)
+ *
+ * ----------------------------------------------------------------------------  
+ *
+ * Beskrivelse
+ *   Trekk et tilfeldig valgt par-nummer, blant de som er 
+ *   ledige i settet [1, gdpl_max_antall_par]. Om gdpl_max_antall_par == -1 
+ *   skal det returneres ei feilmelding.
+ *
+ * Parametre  
+ *   par_nummer - peker til int hvor det trukne par-nummeret skal plasseres.
+ *   type - 0 herrer, 1 damer. 
+ * 
+ * Returnerer
+ *  0 - ok
+ *  alt annet - feil. Den returnerte verdien kan brukes som indeks til 
+ *  gdpl_kontroller_feilkoder[] for å hente ut ei feilmelding.
+ * 
+ * Eksempel på bruk
+ * 
+ * ----------------------------------------------------------------------------
+ */ 
+int GDPL_kontroller_hent_par_nummer(int *par_nummer, int type) {
+
+	int tabell[300][2];
+}
+
+
+/* ----------------------------------------------------------------------------
+ *
+ * Funksjon
+ *  int GDPL_kontroller_angi_max_antall_par(int antall)
+ *
+ * ----------------------------------------------------------------------------  
+ *
+ * Beskrivelse
+ * 
+ * Parametre  
+ * 
+ * Returnerer
+ *  0 - ok
+ *  alt annet - feil. Den returnerte verdien kan brukes som indeks til 
+ *  gdpl_kontroller_feilkoder[] for å hente ut ei feilmelding.
+ * 
+ * Eksempel på bruk
+ * 
+ * ----------------------------------------------------------------------------
+ */ 
+int GDPL_kontroller_angi_max_antall_par(int antall)
+{
+  const char* signatur = "GDPL_kontroller_angi_max_antall_par(int)";
+
+  GDPL_log(DEBUG, signatur, "Start funksjon.");
+
+  if (antall < 1) {
+      int feilkode = FEILKODE_MAX_ANTALL_PAR_FOR_LAVT;
+      GDPL_log(ERROR, signatur, gdpl_kontroller_feilkoder[feilkode]);
+      GDPL_log(DEBUG, signatur, "Slutt funksjon.");
+      return feilkode;    
+  } 
+
+  if (antall > 300) {
+      int feilkode = FEILKODE_MAX_ANTALL_PAR_FOR_STORT;
+      GDPL_log(ERROR, signatur, gdpl_kontroller_feilkoder[feilkode]);
+      GDPL_log(DEBUG, signatur, "Slutt funksjon.");
+      return feilkode;    
+  } 
+
+  gdpl_max_antall_par = antall;
+      
+  GDPL_log(DEBUG, signatur, "Max antall par er nå satt til '%d'", gdpl_max_antall_par);
+  GDPL_log(DEBUG, signatur, "Slutt funksjon.");
+  return 0;
+}
+
+/* ----------------------------------------------------------------------------
+ *
+ * Funksjon
+ *  int GDPL_kontroller_hent_max_antall_par(int *antall)
+ *
+ * ----------------------------------------------------------------------------  
+ *
+ * Beskrivelse
+ * 
+ * Parametre  
+ * 
+ * Returnerer
+ *  0 - ok
+ *  alt annet - feil. Den returnerte verdien kan brukes som indeks til 
+ *  gdpl_kontroller_feilkoder[] for å hente ut ei feilmelding.
+ * 
+ * Eksempel på bruk
+ * 
+ * ----------------------------------------------------------------------------
+ */ 
+int GDPL_kontroller_hent_max_antall_par(int *antall)
+{
+  const char* signatur = "GDPL_kontroller_hent_max_antall_par(int)";
+
+  GDPL_log(DEBUG, signatur, "Start funksjon.");
+
+  if (antall == 0) {
+    int feilkode = FEILKODE_FEIL;
+	GDPL_log(DEBUG, signatur, "antall == 0, i.e. pekeren er ikke initiert!");
+    GDPL_log(ERROR, signatur, gdpl_kontroller_feilkoder[feilkode]);
+    GDPL_log(DEBUG, signatur, "Slutt funksjon.");
+    return feilkode;  
+  }
+  
+  *antall = gdpl_max_antall_par;
+      
+  GDPL_log(DEBUG, signatur, "Slutt funksjon.");
+  return 0;
+}
+
+
+
+
+
+
+
 
 /* ----------------------------------------------------------------------------
  *
@@ -111,21 +245,17 @@ int GDPL_kontroller_angi_filnavn(const char *filnavn)
     /* Angi oppgitt filnavn, såfremt det ikke er for langt eller kort. */  
 
     if (strlen(filnavn) > GDPL_MAX_FILNAVN_LENGDE) {
-
       int feilkode = FEILKODE_DATAFILNAVN_FOR_LANGT;
       GDPL_log(ERROR, signatur, gdpl_kontroller_feilkoder[feilkode]);
       GDPL_log(DEBUG, signatur, "Slutt funksjon.");
-      return feilkode;
-  
+      return feilkode;  
     }
 
-    if (strlen(filnavn) < GDPL_MIN_FILNAVN_LENGDE) {
-  
+    if (strlen(filnavn) < GDPL_MIN_FILNAVN_LENGDE) {  
       int feilkode = FEILKODE_DATAFILNAVN_FOR_KORT;
       GDPL_log(ERROR, signatur, gdpl_kontroller_feilkoder[feilkode]);
       GDPL_log(DEBUG, signatur, "Slutt funksjon.");
-      return feilkode;
-  
+      return feilkode;  
     }
 
     strcpy(gdpl_kontroller_datafilnavn, filnavn);
@@ -351,7 +481,15 @@ int GDPL_init(GDPL_log_type nivaa, FILE * stream)
 {
   const char* signatur = "GDPL_init";
   
+  /* Initier gdpl_max_antall_par til -1,
+     noe som indikerer at denne ikke er satt. */
+  gdpl_max_antall_par = -1;
+  
+  /* Sett locale til 'norsk bokmål', 
+     noe som bør fikse øæå -problematikk. */
   setlocale(LC_ALL,"nb_NO.utf8");
+  
+  /* Sett loggnivå og loggdestinasjon ihht inputparametre. */
   gdpl_log_nivaa = nivaa;
   gdpl_log_stream = stream; 
 

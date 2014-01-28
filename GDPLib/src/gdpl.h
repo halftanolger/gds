@@ -33,6 +33,8 @@
 #define FEILKODE_ID_EKSISTERER               8
 #define FEILKODE_ID_EKSISTERER_IKKE          9
 #define FEILKODE_FEIL                        10
+#define FEILKODE_MAX_ANTALL_PAR_FOR_LAVT     11
+#define FEILKODE_MAX_ANTALL_PAR_FOR_STORT    12
 
 #define GDPL_MAX_PERSONNAVN_LENGDE           1024
 #define GDPL_MIN_PERSONNAVN_LENGDE           1
@@ -76,6 +78,9 @@ int GDPL_test();
 int GDPL_kontroller_angi_filnavn(const char *filnavn);
 int GDPL_kontroller_les_fra_fil();
 int GDPL_kontroller_skriv_til_fil();
+int GDPL_kontroller_angi_max_antall_par(int antall);
+int GDPL_kontroller_hent_max_antall_par(int *antall);
+int GDPL_kontroller_hent_par_nummer(int *par_nummer, int type);
 
 int GDPL_konkurranse_opprett_node(GDPL_konkurranse_data_node **new_node);
 int GDPL_konkurranse_legg_til(GDPL_konkurranse_data_node data, GDPL_konkurranse_data_node *root);
