@@ -76,7 +76,7 @@ int GDPL_test_par_legg_til_b()
   
   node_konkurranse.id = 123;
   node_konkurranse.aar = 2014;
- 
+  
   /* Opprett root-konkurranse-node */ 
   if (GDPL_konkurranse_opprett_node(&root_konkurranse) != 0) {
     GDPL_log(DEBUG, signatur, "Klarer ikke å opprette en konkurranse!");
@@ -99,7 +99,7 @@ int GDPL_test_par_legg_til_b()
   }
   
   /* Opprett en root-par-node i den valgte konkurransen. */
-  GDPL_par_data_node *root = valgt_konkurranse->par_liste_root_ptr;
+  GDPL_par_data_node *root;
   if (GDPL_par_opprett_node(&root) != 0) {
     GDPL_log(DEBUG, signatur, "Klarer ikke å opprette et root par!");
     GDPL_log(INFO, signatur, "Test feilet");

@@ -89,4 +89,10 @@ int GDPL_person_fjern_fra(GDPL_person_data_node data, GDPL_person_data_node *roo
 int GDPL_person_antall_i_liste(int *antall, GDPL_person_data_node *root);
 int GDPL_person_hent(int id, GDPL_person_data_node **data, GDPL_person_data_node *root);
 
+int GDPL_par_opprett_node(GDPL_par_data_node **new_node);
+int GDPL_par_legg_til(GDPL_par_data_node data, GDPL_par_data_node *root);
+int GDPL_par_fjern_fra(GDPL_par_data_node data, GDPL_par_data_node *root);
+int GDPL_par_antall_i_liste(int *antall, GDPL_par_data_node *root);
+int GDPL_par_hent(int id, GDPL_par_data_node **data, GDPL_par_data_node *root);
+
 #endif //GDPL_H
