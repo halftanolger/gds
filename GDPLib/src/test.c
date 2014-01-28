@@ -51,6 +51,9 @@ extern int GDPL_test_person_legg_til_c();
 extern int GDPL_test_person_legg_til_d();
 extern int GDPL_test_person_legg_til_e();
 
+extern int GDPL_test_par_legg_til_a();
+extern int GDPL_test_par_legg_til_b();
+
 
 /* 
  * Intern hjelpefunksjon. 
@@ -95,34 +98,37 @@ int GDPL_test()
   */
   int (*function_ptr_array[])() = { 
     
-    GDPL_test_kontroller_angi_filnavn_a,   /* 1  Filnavn ikke angitt, i.e. null peker. */
-    GDPL_test_kontroller_angi_filnavn_b,   /* 2  Filnavn for kort. */
-    GDPL_test_kontroller_angi_filnavn_c,   /* 3  Filnavn for langt. */
-    GDPL_test_kontroller_angi_filnavn_d,   /* 4  Filnavn ok. */
+    GDPL_test_kontroller_angi_filnavn_a, /* 1  Filnavn ikke angitt, i.e. null peker. */
+    GDPL_test_kontroller_angi_filnavn_b, /* 2  Filnavn for kort. */
+    GDPL_test_kontroller_angi_filnavn_c, /* 3  Filnavn for langt. */
+    GDPL_test_kontroller_angi_filnavn_d, /* 4  Filnavn ok. */
 
-    GDPL_test_kontroller_les_fra_fil_a,    /* 5  Fil eksisterer ikke. */
-    GDPL_test_kontroller_les_fra_fil_b,    /* 6  Fil eksisterer. */
+    GDPL_test_kontroller_les_fra_fil_a,  /* 5  Fil eksisterer ikke. */
+    GDPL_test_kontroller_les_fra_fil_b,  /* 6  Fil eksisterer. */
 
-    GDPL_test_konkurranse_legg_til_a,      /* 7  Liste root ptr ikke satt. */
-    GDPL_test_konkurranse_legg_til_b,      /* 8  Ny node mangler id. */
-    GDPL_test_konkurranse_legg_til_c,      /* 9  Ny node mangler aar. */
-    GDPL_test_konkurranse_legg_til_d,      /* 10 Ny node har id som finnes i lista. */
+    GDPL_test_konkurranse_legg_til_a,    /* 7  Liste root ptr ikke satt. */
+    GDPL_test_konkurranse_legg_til_b,    /* 8  Ny node mangler id. */
+    GDPL_test_konkurranse_legg_til_c,    /* 9  Ny node mangler aar. */
+    GDPL_test_konkurranse_legg_til_d,    /* 10 Ny node har id som finnes i lista. */
 
-    GDPL_test_konkurranse_fjern_fra_a,     /* 11 Liste root ptr ikke satt. */
-    GDPL_test_konkurranse_fjern_fra_b,     /* 12 Node mangler id. */	
-    GDPL_test_konkurranse_fjern_fra_c,     /* 13 Node har id som ikke finnes i lista. */
-    GDPL_test_konkurranse_fjern_fra_d,     /* 14 Fjern node lagt inn av GDPL_test_konkurranse_legg_til_d*/
+    GDPL_test_konkurranse_fjern_fra_a,   /* 11 Liste root ptr ikke satt. */
+    GDPL_test_konkurranse_fjern_fra_b,   /* 12 Node mangler id. */	
+    GDPL_test_konkurranse_fjern_fra_c,   /* 13 Node har id som ikke finnes i lista. */
+    GDPL_test_konkurranse_fjern_fra_d,   /* 14 Fjern node lagt inn av GDPL_test_konkurranse_legg_til_d*/
 
-    GDPL_test_person_legg_til_a,           /* 15 Liste root ptr ikke satt. */
-    GDPL_test_person_legg_til_b,           /* 16 Ny node mangler id. */
-    GDPL_test_person_legg_til_c,           /* 17 Ny node mangler fornavn. */
-    GDPL_test_person_legg_til_d,           /* 18 Ny node mangler etternavn. */	
-    GDPL_test_person_legg_til_e            /* 19 Ny node har id som finnes i lista. */
+    GDPL_test_person_legg_til_a,         /* 15 Liste root ptr ikke satt. */
+    GDPL_test_person_legg_til_b,         /* 16 Ny node mangler id. */
+    GDPL_test_person_legg_til_c,         /* 17 Ny node mangler fornavn. */
+    GDPL_test_person_legg_til_d,         /* 18 Ny node mangler etternavn. */	
+    GDPL_test_person_legg_til_e,         /* 19 Ny node har id som finnes i lista. */
+
+    GDPL_test_par_legg_til_a,            /* 20 Liste root ptr ikke satt. */
+    GDPL_test_par_legg_til_b             /* 21 Ny node mangler id. */
 	
 	
   };
 
-  antall_tester = 19;
+  antall_tester = 21;
   antall_tester_ok = 0; 
   antall_tester_feil = 0;
   

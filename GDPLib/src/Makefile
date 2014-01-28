@@ -4,7 +4,7 @@ CFLAGS = -I.
 
 DEPS = gdpl.h
 
-OBJ =   main.o kontroller.o konkurranse.o person.o test.o test_person.o test_konkurranse.o test_kontroller.o
+OBJ =   main.o kontroller.o konkurranse.o person.o par.o test.o test_person.o test_konkurranse.o test_kontroller.o test_par.o
 
 %.o: %.c $(DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS)
