@@ -1,4 +1,4 @@
-
+﻿
 lesmseg.txt (under construction)
 
 
@@ -22,24 +22,26 @@ Innhold
 1. Introduksjon
 ---------------
 
-Dette er et C -bibliotek som skal implementere kjernefunksjonalitet til et 
-'Gubberenn Dataprogram'. 
+Dette er et C -bibliotek som implementerer kjernefunksjonaliteten 
+til et 'Gubberenn Dataprogram'. Dette er slikt som:
 
-- CRUD (Create, read, update, delete) selve konkurransen(e). 
-- CRUD (Create, read, update, delete) persondata.
-- CRUD (Create, read, update, delete) par-data.
+ * CRUD (Create, read, update, delete) konkurransen(e). 
+ 
+ * CRUD (Create, read, update, delete) persondata.
+ 
+ * CRUD (Create, read, update, delete) par-data.
 
-- tilfeldig par-nummer-trekking.
+ * tilfeldig par-nummer-trekking ifm påmelding.
   
-- generering av startliste.
+ * generering av startliste med starttider.
 
-- registrering av slutt-tid.
+ * registrering av slutt-tid pr par.
 
-- beregning av tidspoeng.
+ * beregning av tidspoeng pr par.
 
-- registrering av oppgavepoeng.
+ * registrering av oppgavepoeng pr par.
 
-- generering av resultatliste.
+ * generering av resultatliste for en konkurranse.
 
 
 2. Kravspesifisering og design
@@ -58,10 +60,47 @@ src -+
      +- kontroller.c     
      |
      +- test.c
-         
+
+Interfacet til biblioteket er definert i fila gdpl.h	 
+	 
      
 3. Bruksanvisning
 -----------------
 
+Brukeren av biblioteket vil være et program som implementerer et bruker-
+grensesnitt. En normal kronologisk bruk av biblioteket kan være som følger:
+
+3.1 Bruksanvisning - Initiering
+-------------------------------
+
+3.1.1)
+Initier biblioteket mht lognivå og loggmedium.
+
+int GDPL_init(GDPL_log_type nivaa, FILE * stream); 
+
+3.1.2)
+Angi hvilken datafil som skal benyttes. Om man her angir en nullpeker, 
+vil biblioteket benytte ei default datafil.
+
+int GDPL_kontroller_angi_filnavn(const char *filnavn);
+
+3.1.3)
+Les data fra datafil. 
+
+int GDPL_kontroller_les_fra_fil();
+
+
+3.2 Bruksanvisning - Registrering av deltakere og par
+-----------------------------------------------------
+
+3.2.1)
+Siden programmet skal velge et tilfeldig par-nummer, for en deltaker som
+registrerer seg, må vi på forhand estimere hvor mange par vi tror kommmer til 
+å delta. 
+
+int GDPL_kontroller_angi_max_antall_par(int antall);
+
+
+int GDPL_kontroller_hent_par_nummer(int *par_nummer, int type);
 
 
