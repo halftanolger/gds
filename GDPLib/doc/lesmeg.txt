@@ -22,6 +22,24 @@ Innhold
 1. Introduksjon
 ---------------
 
+Dette er et C -bibliotek som skal implementere kjernefunksjonalitet til et 
+'Gubberenn Dataprogram'. 
+
+- CRUD (Create, read, update, delete) selve konkurransen(e). 
+- CRUD (Create, read, update, delete) persondata.
+- CRUD (Create, read, update, delete) par-data.
+
+- tilfeldig par-nummer-trekking.
+  
+- generering av startliste.
+
+- registrering av slutt-tid.
+
+- beregning av tidspoeng.
+
+- registrering av oppgavepoeng.
+
+- generering av resultatliste.
 
 
 2. Kravspesifisering og design
@@ -30,31 +48,18 @@ Innhold
 src -+
      |
      +- gdpl.h
-     |    char gdpl_kontroller_filnavn[]
      |
      +- person.c
      |
-     |
      +- par.c
-     |
      |
      +- konkuranse.c
      |
+     +- kontroller.c     
      |
-     +- kontroller.c
-     |    int gdpl_kontroller_sett_filnavn(const char *)
-     |    int gdpl_kontroller_les_fra_fil()
-     |    int gdpl_kontroller_skriv_til_fil()
+     +- test.c
+         
      
-     |
-     +-test.c
-         int gdpl_test()
-     
-     
-     
-
-
-
 3. Bruksanvisning
 -----------------
 
