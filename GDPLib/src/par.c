@@ -438,11 +438,15 @@ int GDPL_par_antall_i_liste(int *antall, GDPL_par_data_node *root)
   int teller = 0;
   GDPL_par_data_node *runner = root;
   
-  while (runner->neste != 0) {
+  while (runner != 0) {
     teller++;
     runner = runner->neste;
   }
-  
+    
+  if (root->neste != 0) {
+	teller--; /* Ikke tell med root-noden. */
+  }	
+	
   *antall = teller;
   
   GDPL_log(DEBUG, signatur, "Slutt funksjon.");

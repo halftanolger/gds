@@ -1,7 +1,7 @@
-/* 
+Ôªø/* 
 ** This file is part of the GDPLib project.
 ** 
-** Copyright (C) Halftan SÊtherskar (halftan@saetherskar.no)
+** Copyright (C) Halftan S√¶therskar (halftan@saetherskar.no)
 ** 
 ** This program is free software; you can redistribute it and/or
 ** modify it under the terms of the GNU General Public License
@@ -21,17 +21,147 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <assert.h>
 #include "gdpl.h"
 
 extern GDPL_konkurranse_data_node *gdpl_kontroller_konkurranseliste_root_ptr;
 extern GDPL_konkurranse_data_node *gdpl_kontroller_konkurranseliste_valgt_ptr;
 extern char gdpl_kontroller_datafilnavn[GDPL_MAX_FILNAVN_LENGDE];
 
+
+/* ----------------------------------------------------------------------------
+ * Hjelpemetode.
+ *
+ *   Sett opp en konkurranse; helt opp til det punktet hvor man begynner √• 
+ *   registrere deltakere.
+ *
+ * ----------------------------------------------------------------------------
+ */ 
+int GDPL_test_kontroller_sett_opp_konkurranse(int antall_par)
+{
+  const char* signatur = "GDPL_test_kontroller_sett_opp_konkurranse()";
+  
+  GDPL_konkurranse_data_node *root_konkurranse = 0; 
+  GDPL_konkurranse_data_node *valgt_konkurranse = 0;
+  GDPL_konkurranse_data_node node_konkurranse;
+  
+  node_konkurranse.id = 1;
+  node_konkurranse.aar = 2014;
+  
+  /* Opprett root-konkurranse-node */ 
+  assert(GDPL_konkurranse_opprett_node(&root_konkurranse) == 0);
+ 
+  /* Opprett en konkurranse i konkurranse-lista */ 
+  assert (GDPL_konkurranse_legg_til(node_konkurranse, root_konkurranse) == 0);
+    
+  /* Hent ut en konkurranse, og initier 'valgt_konkurranse' med denne. */	
+  assert (GDPL_konkurranse_hent(1, &valgt_konkurranse, root_konkurranse) == 0);
+  
+  /* Opprett en root-par-node i den valgte konkurransen. */
+  GDPL_par_data_node *root_par;
+  assert (GDPL_par_opprett_node(&root_par) == 0);
+      
+  /* Opprett en root-person-node i den valgte konkurransen. */
+  GDPL_person_data_node *root_person;
+  assert (GDPL_person_opprett_node(&root_person) == 0);
+  
+  /* Angi antatt antall par i konkurransen. Dette er n√∏dvendig siden vi skal
+     trekke tilfeldige par-nummer. */
+    
+  assert (GDPL_kontroller_angi_max_antall_par(antall_par) == 0);
+  
+  /* Opprett ei liste med 'antall_par' tomme par. */
+    
+  GDPL_par_data_node node;    
+  
+  node.id = 0;
+  node.herre_person_id = 0;
+  node.dame_person_id = 0;
+  node.start_nr = 0;
+  strcpy(node.start_tid,"00:00:00");
+  strcpy(node.maal_tid,"00:00:00");
+  node.oppgave_poeng = 0;
+  
+  int index ;  
+  for( index = 1; index <= antall_par; index++) {
+    node.id = index;
+	node.start_nr = index;	
+    assert (GDPL_par_legg_til(node,root_par) == 0);			
+  } 
+
+  valgt_konkurranse->person_liste_root_ptr = root_person;
+  valgt_konkurranse->par_liste_root_ptr = root_par;
+  
+  gdpl_kontroller_konkurranseliste_root_ptr = root_konkurranse;
+  gdpl_kontroller_konkurranseliste_valgt_ptr = valgt_konkurranse;
+    
+  GDPL_log(INFO, signatur, "Hjelpemetode ok");
+  return 0;
+  
+}
+
+
+
+
+
+
 /* ----------------------------------------------------------------------------
  * Testbeskrivelse
  *
- *   Datafila eksisterer ikke pÂ filsystemet. Fila mÂ da opprettes, og 
- *   interne datastrukturer mÂ initieres.
+ *   Trekk tilfeldig par-nummer. 
+ *
+ * ----------------------------------------------------------------------------
+ */ 
+int GDPL_test_kontroller_hent_par_nummer_a()
+{
+  const char* signatur = "GDPL_test_kontroller_hent_par_nummer_a()";
+
+  int antall_par = 10;
+  
+  /* Klargj√∏r for testtilfellet. */    
+  assert (GDPL_test_kontroller_sett_opp_konkurranse(antall_par) == 0);   
+  assert (gdpl_kontroller_konkurranseliste_valgt_ptr->par_liste_root_ptr != 0);
+  
+  GDPL_par_data_node *root_par = gdpl_kontroller_konkurranseliste_valgt_ptr->par_liste_root_ptr;
+  
+  antall_par = 0;
+  
+  assert (GDPL_par_antall_i_liste(&antall_par, root_par) == 0);  
+  GDPL_log(DEBUG, signatur, "Antall par %d", antall_par);
+     
+  /* Kj√∏r test. */
+  
+  GDPL_par_data_node *par_node;  
+  int par_id = 0;
+
+  int runder;
+  for(runder = 1; runder <=antall_par; runder++) {  
+    par_node = 0;
+    assert (GDPL_kontroller_hent_par_nummer(&par_id, 0) == 0);      
+    assert (GDPL_par_hent(par_id, &par_node, root_par) == 0);    
+    par_node->herre_person_id = 1;
+  }
+
+  for(runder = 1; runder <=antall_par; runder++) {  
+    par_node = 0;
+    assert (GDPL_kontroller_hent_par_nummer(&par_id, 1) == 0);      
+    assert (GDPL_par_hent(par_id, &par_node, root_par) == 0);    
+    par_node->dame_person_id = 1;
+  }
+        
+  GDPL_log(INFO, signatur, "Test ok");
+  return 0;
+}
+
+
+
+
+
+/* ----------------------------------------------------------------------------
+ * Testbeskrivelse
+ *
+ *   Datafila eksisterer ikke p√• filsystemet. Fila m√• da opprettes, og 
+ *   interne datastrukturer m√• initieres.
  *
  * ----------------------------------------------------------------------------
  */ 
@@ -39,7 +169,7 @@ int GDPL_test_kontroller_les_fra_fil_a()
 {
   const char* signatur = "GDPL_test_kontroller_les_fra_fil_a()";
 
-  /* Klargj¯r for testtilfellet. */
+  /* Klargj√∏r for testtilfellet. */
   
   int tilfeldig_tall, seed;
   char tilfeldig_filnavn[128];
@@ -47,7 +177,7 @@ int GDPL_test_kontroller_les_fra_fil_a()
   srand(seed);
   tilfeldig_tall = rand();
   sprintf(tilfeldig_filnavn,"%d_tempfil.dat",tilfeldig_tall);
-  GDPL_log(DEBUG, signatur, "Opprettet temoprÊrt filnavn: %s", tilfeldig_filnavn);
+  GDPL_log(DEBUG, signatur, "Opprettet temopr√¶rt filnavn: %s", tilfeldig_filnavn);
  
   GDPL_kontroller_angi_filnavn(tilfeldig_filnavn);
   GDPL_kontroller_les_fra_fil();
@@ -63,7 +193,7 @@ int GDPL_test_kontroller_les_fra_fil_a()
   fp = 0;
   remove(tilfeldig_filnavn); 
 
-  /* Test, konkurranseliste_root_ptr skal vÊre initiert. */
+  /* Test, konkurranseliste_root_ptr skal v√¶re initiert. */
   
   if (gdpl_kontroller_konkurranseliste_root_ptr == 0) {
     GDPL_log(INFO, signatur, "Test feilet");
@@ -97,8 +227,8 @@ int GDPL_test_kontroller_les_fra_fil_a()
 /* ---------------------------------------------------------------------------- 
  * Testbeskrivelse
  * 
- *   Datafila eksisterer pÂ filsystemet. Fila mÂ lese, og 
- *   interne datastrukturer mÂ initieres ihht innhold i fila.
+ *   Datafila eksisterer p√• filsystemet. Fila m√• lese, og 
+ *   interne datastrukturer m√• initieres ihht innhold i fila.
  * 
  * ----------------------------------------------------------------------------
  */ 

@@ -22,7 +22,8 @@
 #include <string.h>
 #include <stdarg.h>
 #include <locale.h>
-#include <time.h>     
+#include <time.h>  
+#include <assert.h>  
 #include "gdpl.h"
 
 const char* gdpl_kontroller_gdplib_navn = "GDPLib";
@@ -42,7 +43,8 @@ const char *gdpl_kontroller_feilkoder[] = {
   "FEILKODE 09: Id eksisterer ikke.",
   "FEILKODE 10: Generell feil.",  
   "FEILKODE 11: Oppgitt verdi for max antall par, er for lavt.",
-  "FEILKODE 12: Oppgitt verdi for max antall par, er for høyt."
+  "FEILKODE 12: Oppgitt verdi for max antall par, er for høyt.",
+  "FEILKODE 13: Oppgitt verdi for max antall par, er ikke angitt."
   
 };
 
@@ -88,7 +90,9 @@ GDPL_konkurranse_data_node *gdpl_kontroller_konkurranseliste_valgt_ptr;
  * Beskrivelse
  *   Trekk et tilfeldig valgt par-nummer, blant de som er 
  *   ledige i settet [1, gdpl_max_antall_par]. Om gdpl_max_antall_par == -1 
- *   skal det returneres ei feilmelding.
+ *   skal det returneres ei feilmelding. Man må angi som et parameter til 
+ *   funksjonen, om man ønsker å trekke et par-nummer for ei dame, eller en 
+ *   herre. 
  *
  * Parametre  
  *   par_nummer - peker til int hvor det trukne par-nummeret skal plasseres.
@@ -103,9 +107,70 @@ GDPL_konkurranse_data_node *gdpl_kontroller_konkurranseliste_valgt_ptr;
  * 
  * ----------------------------------------------------------------------------
  */ 
-int GDPL_kontroller_hent_par_nummer(int *par_nummer, int type) {
+int GDPL_kontroller_hent_par_nummer(int *par_id, int type) {
 
-	int tabell[300][2];
+  const char* signatur = "GDPL_kontroller_hent_par_nummer(int*, int)";
+
+  /* Først litt sjekking. */
+    
+  assert (gdpl_max_antall_par != -1);  
+  assert (type == 0 || type == 1);
+  assert (par_id != 0);
+  
+  /* Trekk et tilfeldig par-nummer, blant de som er ledige, 
+     for den angitte typen; damer eller herrer. */ 
+	   
+  int tabell[GDPL_MAX_ANTALL_PAR];
+	
+  int index = 0;	
+  for (index = 0; index < GDPL_MAX_ANTALL_PAR; index++) {
+    tabell[index] = -1;
+  }
+  	
+  GDPL_konkurranse_data_node *vkp = gdpl_kontroller_konkurranseliste_valgt_ptr;	    
+  GDPL_par_data_node *runner = (GDPL_par_data_node *)vkp->par_liste_root_ptr;
+  
+  assert (runner != 0);
+  assert (runner->neste != 0);
+      
+  runner = runner->neste;	
+		
+  /* Finn hvilke par som er ledig, gitt typen. */ 
+  index = 0;  
+  do {  	  
+    GDPL_log(DEBUG, signatur, "id=%d herre_person_id=%d dame_person_id=%d start_nr=%d",
+	           runner->id, runner->herre_person_id,	runner->dame_person_id,	runner->start_nr);
+		
+	if (type == 0 && runner->herre_person_id == 0) { /* Ledig herre plass. */
+	  tabell[index++] = runner->id;		
+	} else if (type == 1 && runner->dame_person_id == 0) { /* Ledig dame plass. */	  
+	  tabell[index++] = runner->id;		
+	}
+	
+    runner = runner->neste;	
+  } while (runner != 0);
+
+  /* Ok, nå har vi oversikt over ledige par. */
+  index = 0;  
+  while (index < GDPL_MAX_ANTALL_PAR) {
+	
+	if (tabell[index] == -1) 
+	  break;
+		
+    GDPL_log(DEBUG, signatur, "ledig par id=%d (for type = %s)",
+	           tabell[index], type==0?"herre":"dame");	
+	index++;	
+  }
+	
+  /* Velg et tilfeldig par i settet. */	
+  int seed;  
+  seed = time(NULL);
+  srand(seed);  
+  *par_id = tabell[rand() % index];
+  
+  GDPL_log(DEBUG, signatur, "Par-node med id=%d er ledig for %s -registrering.",*par_id, type == 0?"herre":"dame");
+  GDPL_log(DEBUG, signatur, "Slutt funksjon.");
+  return 0;
 }
 
 
@@ -142,7 +207,7 @@ int GDPL_kontroller_angi_max_antall_par(int antall)
       return feilkode;    
   } 
 
-  if (antall > 300) {
+  if (antall > GDPL_MAX_ANTALL_PAR) {
       int feilkode = FEILKODE_MAX_ANTALL_PAR_FOR_STORT;
       GDPL_log(ERROR, signatur, gdpl_kontroller_feilkoder[feilkode]);
       GDPL_log(DEBUG, signatur, "Slutt funksjon.");

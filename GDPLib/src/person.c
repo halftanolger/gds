@@ -439,10 +439,14 @@ int GDPL_person_antall_i_liste(int *antall, GDPL_person_data_node *root)
     
   int teller = 0;
   GDPL_person_data_node *runner = root;
-  
+	
   while (runner->neste != 0) {
     teller++;
     runner = runner->neste;
+  }
+  
+  if (root->neste != 0) {
+	teller--; /* Ikke tell med root-noden. */
   }
   
   *antall = teller;

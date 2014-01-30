@@ -13,7 +13,7 @@ test: $(OBJ)
 	gcc -o $@ $^ $(CFLAGS)
 
 clean:
-	rm -f *.o *~ core test 
+	rm -f *.o *~ core test test.exe.stackdump
 
 
 

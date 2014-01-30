@@ -35,11 +35,13 @@
 #define FEILKODE_FEIL                        10
 #define FEILKODE_MAX_ANTALL_PAR_FOR_LAVT     11
 #define FEILKODE_MAX_ANTALL_PAR_FOR_STORT    12
+#define FEILKODE_MAX_ANTALL_IKKE_ANGITT      13
 
 #define GDPL_MAX_PERSONNAVN_LENGDE           1024
 #define GDPL_MIN_PERSONNAVN_LENGDE           1
 #define GDPL_MAX_FILNAVN_LENGDE              1024
 #define GDPL_MIN_FILNAVN_LENGDE              8
+#define GDPL_MAX_ANTALL_PAR                  200
 
 typedef enum GDPL_log_type_enum {DEBUG, INFO, WARNING, ERROR} GDPL_log_type;
 
@@ -64,8 +66,8 @@ typedef struct GDPL_person_data_node_struct {
 typedef struct GDPL_konkurranse_data_node_struct {
 	int id;
 	int aar;
-	struct GDPL_person_data_node_struct *person_liste_root_ptr;
-	struct GDPL_par_data_node_sctruct *par_liste_root_ptr;
+	GDPL_person_data_node *person_liste_root_ptr;
+	GDPL_par_data_node *par_liste_root_ptr;
 	struct GDPL_konkurranse_data_node_struct *neste;
 } GDPL_konkurranse_data_node;
 
