@@ -94,13 +94,52 @@ int GDPL_kontroller_les_fra_fil();
 -----------------------------------------------------
 
 3.2.1)
-Siden programmet skal velge et tilfeldig par-nummer, for en deltaker som
-registrerer seg, må vi på forhand estimere hvor mange par vi tror kommmer til 
-å delta. 
+Siden programmet skal velge et tilfeldig par-nummer for en deltaker,
+må vi på forhand estimere hvor mange par vi tror kommmer til å delta. 
 
-int GDPL_kontroller_angi_max_antall_par(int antall);
+int GDPL_kontroller_angi_max_antall_par(int antall)
+
+3.2.2)
+Registrer en deltaker.
+
+int GDPL_kontroller_registrer_deltaker(GDPL_person_data_node data, int type)
+
+3.2.3)
+Trekk et tilfeldig par-nummer for denne deltakeren.
+
+int GDPL_kontroller_hent_par_id(int *par_id, int type)
+
+3.2.4)
+Oppdater det aktuelle par-objektet med den aktuelle brukeren.
+
+int GDPL_kontroller_oppdater_par(int par_id, int person_id, int type)
 
 
-int GDPL_kontroller_hent_par_nummer(int *par_nummer, int type);
+Nå gjentas punktene 3.2.2 til 3.2.4 så lenge som nødvendig.
+
+
+3.3 Bruksanvisning - Generer av startliste
+------------------------------------------
+
+3.3.1)
+Opprett ei startliste, hvor man angir når tid man skal begynne å starte, 
+samt intervallene mellom hvert par.
+
+int GDPL_kontroller_opprett_startliste( char *startid, char* intervall)
+
+
+3.4 Bruksanvisning - Registrer resultater
+-----------------------------------------
+
+int GDPL_kontroller_registrer_tid( int par_id, char *tid)
+
+int GDPL_kontroller_registrer_oppgavepoeng( int par_id, double poeng)
+
+3.4 Bruksanvisning - Generer resultatliste
+------------------------------------------
+
+int GDPL_kontroller_opprett_resultatliste()
+
+
 
 
