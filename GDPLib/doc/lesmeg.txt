@@ -70,8 +70,8 @@ Interfacet til biblioteket er definert i fila gdpl.h
 Brukeren av biblioteket vil være et program som implementerer et bruker-
 grensesnitt. En normal kronologisk bruk av biblioteket kan være som følger:
 
-3.1 Bruksanvisning - Initiering
--------------------------------
+3.1 Initiering
+--------------
 
 3.1.1)
 Initier biblioteket mht lognivå og loggmedium.
@@ -90,8 +90,8 @@ Les data fra datafil.
 int GDPL_kontroller_les_fra_fil();
 
 
-3.2 Bruksanvisning - Registrering av deltakere og par
------------------------------------------------------
+3.2 Registrering av deltakere og par
+------------------------------------
 
 3.2.1)
 Siden programmet skal velge et tilfeldig par-nummer for en deltaker,
@@ -115,11 +115,15 @@ Oppdater det aktuelle par-objektet med den aktuelle brukeren.
 int GDPL_kontroller_oppdater_par(int par_id, int person_id, int type)
 
 
-Nå gjentas punktene 3.2.2 til 3.2.4 så lenge som nødvendig.
+Nå gjentas punktene 3.2.2 til 3.2.4 så lenge som nødvendig. 'På slutten' kan 
+man droppe å bruke den tilfeldige par-nummer-generatoren, og mer eller mindre 
+manuelt fylle opp de siste plassene. På slutten må man uansett trikse litt, 
+for å få fylt opp alle parene. Somregel må et par betså av to damer eller to 
+herrer.
 
 
-3.3 Bruksanvisning - Generer av startliste
-------------------------------------------
+3.3 Generer ei startliste
+-------------------------
 
 3.3.1)
 Opprett ei startliste, hvor man angir når tid man skal begynne å starte, 
@@ -128,18 +132,28 @@ samt intervallene mellom hvert par.
 int GDPL_kontroller_opprett_startliste( char *startid, char* intervall)
 
 
-3.4 Bruksanvisning - Registrer resultater
------------------------------------------
+3.4 Registrer resultater
+------------------------
+
+3.4.1)
+Registrer innkomst tid. Programmet beregner anvendt tid per par, samt middel-
+tiden totalt i konkurransen. Tidspoeng beregnes utfra avvik fra middeltid.
 
 int GDPL_kontroller_registrer_tid( int par_id, char *tid)
 
+
+3.4.2)
+Registrer oppgavepoeng.
+
 int GDPL_kontroller_registrer_oppgavepoeng( int par_id, double poeng)
 
-3.4 Bruksanvisning - Generer resultatliste
-------------------------------------------
+
+3.4 Generer resultatliste
+-------------------------
 
 int GDPL_kontroller_opprett_resultatliste()
 
 
 
+- The End -
 
