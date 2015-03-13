@@ -19,13 +19,18 @@
 ******************************************************************************/
 
 #include <QtWidgets>
+#include <QDebug>
 #include "gdpmainwindows.h"
 
 #include <stdio.h>
 #include "gdpl.h"
 
+
+
 extern const char* gdpl_kontroller_gdplib_navn;
 extern const char* gdpl_kontroller_gdplib_versjon;
+
+int test_gdplib();
 
 int main(int argc, char **argv)
 {
@@ -34,13 +39,86 @@ int main(int argc, char **argv)
     appWin->show();
     appWin->setFocus();
 
-
-    const char* signatur = "main(int,char)";
-    GDPL_init(GDPL_DEBUG, stdout);
-    GDPL_log(GDPL_DEBUG, signatur, "Hello world - %s %s", gdpl_kontroller_gdplib_navn, gdpl_kontroller_gdplib_versjon);
-    GDPL_test();
-
+    test_gdplib();
 
     int r = app.exec();
     return r;
+}
+
+
+int test_gdplib() {
+
+    //
+    // GDPLib testing
+    //
+    // Siden dette er et C-bibliotek, er det mye nitty-gritty-stuff som må gjøres for
+    // å få noe til å skje. Hensiten med denne oversikten er bare å vise hvordan man
+    // kan bruke biblioteket, og hvordan de ulike funksjonene henger sammen.
+    //
+    //
+
+    int error_nr = 0;
+
+
+    //
+    // Punkt 1.
+    //
+    // Initier logging
+    //
+
+    const char* signatur = "test_gdplib()";
+    error_nr = GDPL_init(GDPL_DEBUG, stdout);
+
+    if (error_nr > 0) {
+        qWarning() << "Systemfeil. GDPL_init(..) returnerte > 0";
+        return error_nr;
+    }
+
+    GDPL_log(GDPL_DEBUG, signatur, "Hello world - %s %s", gdpl_kontroller_gdplib_navn, gdpl_kontroller_gdplib_versjon);
+
+
+    //
+    // Punkt 2.
+    //
+    // Angi hvilken datafil vi ønsker å bruke.
+    //
+
+    error_nr = GDPL_kontroller_angi_filnavn("c:/tmp/gdpdata.dat");
+    if (error_nr > 0) {
+        qWarning() << "Systemfeil. GDPL_kontroller_angi_filnavn(..) returnerte > 0";
+        return error_nr;
+    }
+
+
+    //
+    // Punkt 3.
+    //
+    // Initier datastrukturen til biblioteket ved
+    // å lese fra den valgte datafila.
+    //
+    //
+
+    error_nr = GDPL_kontroller_les_fra_fil();
+    if (error_nr > 0) {
+        qWarning() << "Systemfeil. GDPL_kontroller_angi_filnavn(..) returnerte > 0";
+        return error_nr;
+    }
+
+
+
+    //GDPL_kontroller_angi_max_antall_par(50);
+
+
+
+    GDPL_konkurranse_data_node *root_konkurranse = 0;
+    GDPL_konkurranse_data_node *valgt_konkurranse = 0;
+    GDPL_konkurranse_data_node node_konkurranse;
+
+    node_konkurranse.id = 1;
+    node_konkurranse.aar = 2015;
+
+
+    return 0;
+
+
 }
