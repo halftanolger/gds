@@ -1,7 +1,7 @@
-/* 
+ï»¿/* 
 ** This file is part of the GDPLib project.
 ** 
-** Copyright (C) Halftan Sætherskar (halftan@saetherskar.no)
+** Copyright (C) Halftan SÃ¦therskar (halftan@saetherskar.no)
 ** 
 ** This program is free software; you can redistribute it and/or
 ** modify it under the terms of the GNU General Public License
@@ -49,11 +49,11 @@ int GDPL_test_par_legg_til_a()
   
   /* root er null, dette skal feile. */
   if (GDPL_par_legg_til(node,root) == 0) {
-    GDPL_log(INFO, signatur, "Test feilet");
+    GDPL_log(GDPL_INFO, signatur, "Test feilet");
     return 1;
   } 
 
-  GDPL_log(INFO, signatur, "Test ok");
+  GDPL_log(GDPL_INFO, signatur, "Test ok");
   return 0;  
 }
 
@@ -79,34 +79,34 @@ int GDPL_test_par_legg_til_b()
   
   /* Opprett root-konkurranse-node */ 
   if (GDPL_konkurranse_opprett_node(&root_konkurranse) != 0) {
-    GDPL_log(DEBUG, signatur, "Klarer ikke å opprette en konkurranse!");
-    GDPL_log(INFO, signatur, "Test feilet");
+    GDPL_log(GDPL_DEBUG, signatur, "Klarer ikke Ã¥ opprette en konkurranse!");
+    GDPL_log(GDPL_INFO, signatur, "Test feilet");
     return 1;  
   }
  
   /* Opprett en konkurranse i konkurranse-lista */ 
   if (GDPL_konkurranse_legg_til(node_konkurranse, root_konkurranse) != 0) {
-    GDPL_log(DEBUG, signatur, "Klarer ikke å opprette en konkurranse!");
-    GDPL_log(INFO, signatur, "Test feilet");
+    GDPL_log(GDPL_DEBUG, signatur, "Klarer ikke Ã¥ opprette en konkurranse!");
+    GDPL_log(GDPL_INFO, signatur, "Test feilet");
     return 1;  
   }
     
   /* Hent ut en konkurranse, og initier 'valgt_konkurranse' med denne. */	
   if (GDPL_konkurranse_hent(123, &valgt_konkurranse, root_konkurranse) != 0) {
-    GDPL_log(DEBUG, signatur, "Klarer ikke å hente en konkurranse!");
-    GDPL_log(INFO, signatur, "Test feilet");
+    GDPL_log(GDPL_DEBUG, signatur, "Klarer ikke Ã¥ hente en konkurranse!");
+    GDPL_log(GDPL_INFO, signatur, "Test feilet");
     return 1;    
   }
   
   /* Opprett en root-par-node i den valgte konkurransen. */
   GDPL_par_data_node *root;
   if (GDPL_par_opprett_node(&root) != 0) {
-    GDPL_log(DEBUG, signatur, "Klarer ikke å opprette et root par!");
-    GDPL_log(INFO, signatur, "Test feilet");
+    GDPL_log(GDPL_DEBUG, signatur, "Klarer ikke Ã¥ opprette et root par!");
+    GDPL_log(GDPL_INFO, signatur, "Test feilet");
     return 1;  
   }
       
-  /* Alt er nå satt opp, kjør test. */
+  /* Alt er nÃ¥ satt opp, kjÃ¸r test. */
   
   GDPL_par_data_node node;
   node.id = 0;
@@ -117,7 +117,7 @@ int GDPL_test_par_legg_til_b()
 	free(root);
     free(valgt_konkurranse);
     free(root_konkurranse);
-    GDPL_log(INFO, signatur, "Test feilet");
+    GDPL_log(GDPL_INFO, signatur, "Test feilet");
     return 1;
   } 
   
@@ -125,7 +125,7 @@ int GDPL_test_par_legg_til_b()
   free(valgt_konkurranse);
   free(root_konkurranse);
     
-  GDPL_log(INFO, signatur, "Test ok");
+  GDPL_log(GDPL_INFO, signatur, "Test ok");
   return 0;  
 }
 

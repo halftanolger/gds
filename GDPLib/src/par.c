@@ -1,7 +1,7 @@
-/* 
+ï»¿/* 
 ** This file is part of the GDPLib project.
 ** 
-** Copyright (C) Halftan Sætherskar (halftan@saetherskar.no)
+** Copyright (C) Halftan SÃ¦therskar (halftan@saetherskar.no)
 ** 
 ** This program is free software; you can redistribute it and/or
 ** modify it under the terms of the GNU General Public License
@@ -40,9 +40,9 @@ extern const char *gdpl_kontroller_feilkoder[];
  * Returnerer 
  *  0 - ok
  *  alt annet - feil. Den returnerte verdien kan brukes som indeks til 
- *  gdpl_kontroller_feilkoder[] for å hente ut ei feilmelding.
+ *  gdpl_kontroller_feilkoder[] for Ã¥ hente ut ei feilmelding.
  *  
- * Eksempel på bruk
+ * Eksempel pÃ¥ bruk
  *  GDPL_par_data_node *ptr;
  *  int fk = GDPL_par_opprett_node(&ptr);
  *  if (fk != 0) 'handle failure'
@@ -53,15 +53,15 @@ int GDPL_par_opprett_node(GDPL_par_data_node **new_node)
 {
   const char* signatur = "GDPL_par_opprett_node(GDPL_par_data_node**)";
 
-  GDPL_log(DEBUG, signatur, "Start funksjon.");
+  GDPL_log(GDPL_DEBUG, signatur, "Start funksjon.");
   
   *new_node = (GDPL_par_data_node*)
                malloc (sizeof (GDPL_par_data_node));
 
   if (*new_node == 0) {
     int feilkode = FEILKODE_KAN_IKKE_ALLOKERE_MINNE;
-    GDPL_log(ERROR, signatur, gdpl_kontroller_feilkoder[feilkode]);
-    GDPL_log(DEBUG, signatur, "Slutt funksjon.");
+    GDPL_log(GDPL_ERROR, signatur, gdpl_kontroller_feilkoder[feilkode]);
+    GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
     return feilkode;
   }
 
@@ -73,7 +73,7 @@ int GDPL_par_opprett_node(GDPL_par_data_node **new_node)
   strcpy((*new_node)->start_tid,"00:00:00");  
   strcpy((*new_node)->maal_tid,"00:00:00");  
       
-  GDPL_log(DEBUG, signatur, "Slutt funksjon.");
+  GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
   return 0;
 }
 
@@ -94,9 +94,9 @@ int GDPL_par_opprett_node(GDPL_par_data_node **new_node)
  * Returnerer 
  *  0 - ok
  *  alt annet - feil. Den returnerte verdien kan brukes som indeks til 
- *  gdpl_kontroller_feilkoder[] for å hente ut ei feilmelding.
+ *  gdpl_kontroller_feilkoder[] for Ã¥ hente ut ei feilmelding.
  *  
- * Eksempel på bruk
+ * Eksempel pÃ¥ bruk
  *  GDPL_par_data_node node;
  *  GDPL_par_data_node *root;
  *  int feilnr;
@@ -109,62 +109,62 @@ int GDPL_par_legg_til(GDPL_par_data_node data, GDPL_par_data_node *root)
 {
   const char* signatur = "GDPL_par_legg_til(GDPL_par_data_node,GDPL_par_data_node*)";
 
-  GDPL_log(DEBUG, signatur, "Start funksjon.");
+  GDPL_log(GDPL_DEBUG, signatur, "Start funksjon.");
   
   /* Litt inputparameter-sjekking. */
   
   if (root == 0) {
-    GDPL_log(DEBUG, signatur, "root == 0, I'm out of here ...");
-    GDPL_log(DEBUG, signatur, "Slutt funksjon.");
+    GDPL_log(GDPL_DEBUG, signatur, "root == 0, I'm out of here ...");
+    GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
     return FEILKODE_FEIL;  
   }
 
   if (data.id == 0) {
-    GDPL_log(DEBUG, signatur, "data.id == 0, I'm out of here ...");
-    GDPL_log(DEBUG, signatur, "Slutt funksjon.");
+    GDPL_log(GDPL_DEBUG, signatur, "data.id == 0, I'm out of here ...");
+    GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
     return FEILKODE_FEIL;  
   }
   
 /*  
   if (data.fnavn == 0) {
-    GDPL_log(DEBUG, signatur, "data.fnavn == 0, I'm out of here ...");
-    GDPL_log(DEBUG, signatur, "Slutt funksjon.");
+    GDPL_log(GDPL_DEBUG, signatur, "data.fnavn == 0, I'm out of here ...");
+    GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
     return FEILKODE_FEIL;  
   }
 
   if (strlen(data.fnavn) > GDPL_MAX_PERSONNAVN_LENGDE) {
-    GDPL_log(DEBUG, signatur, "data.fnavn for langt, I'm out of here ...");
-    GDPL_log(DEBUG, signatur, "Slutt funksjon.");
+    GDPL_log(GDPL_DEBUG, signatur, "data.fnavn for langt, I'm out of here ...");
+    GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
     return FEILKODE_FEIL;  
   }
   
   if (strlen(data.fnavn) < GDPL_MIN_PERSONNAVN_LENGDE) {
-    GDPL_log(DEBUG, signatur, "data.fnavn for kort, I'm out of here ...");
-    GDPL_log(DEBUG, signatur, "Slutt funksjon.");
+    GDPL_log(GDPL_DEBUG, signatur, "data.fnavn for kort, I'm out of here ...");
+    GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
     return FEILKODE_FEIL;  
   }
     
   if (data.enavn == 0) {
-    GDPL_log(DEBUG, signatur, "data.enavn == 0, I'm out of here ...");
-    GDPL_log(DEBUG, signatur, "Slutt funksjon.");
+    GDPL_log(GDPL_DEBUG, signatur, "data.enavn == 0, I'm out of here ...");
+    GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
     return FEILKODE_FEIL;  
   }
   
   if (strlen(data.enavn) > GDPL_MAX_PERSONNAVN_LENGDE) {
-    GDPL_log(DEBUG, signatur, "data.lnavn for langt, I'm out of here ...");
-    GDPL_log(DEBUG, signatur, "Slutt funksjon.");
+    GDPL_log(GDPL_DEBUG, signatur, "data.lnavn for langt, I'm out of here ...");
+    GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
     return FEILKODE_FEIL;  
   }
   
   if (strlen(data.enavn) < GDPL_MIN_PERSONNAVN_LENGDE) {
-    GDPL_log(DEBUG, signatur, "data.lnavn for kort, I'm out of here ...");
-    GDPL_log(DEBUG, signatur, "Slutt funksjon.");
+    GDPL_log(GDPL_DEBUG, signatur, "data.lnavn for kort, I'm out of here ...");
+    GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
     return FEILKODE_FEIL;  
   }
 	
 */	
 	
-  /* Sjekk om ny id finnes fra før i lista. */
+  /* Sjekk om ny id finnes fra fÃ¸r i lista. */
   int id_eksisterer = 0;
   GDPL_par_data_node *runner = root;
         
@@ -181,8 +181,8 @@ int GDPL_par_legg_til(GDPL_par_data_node data, GDPL_par_data_node *root)
   
   if (id_eksisterer != 0) {
     int feilkode = FEILKODE_ID_EKSISTERER;
-    GDPL_log(DEBUG, signatur, gdpl_kontroller_feilkoder[feilkode]);
-    GDPL_log(DEBUG, signatur, "Slutt funksjon.");  
+    GDPL_log(GDPL_DEBUG, signatur, gdpl_kontroller_feilkoder[feilkode]);
+    GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
     return feilkode;
   }
     
@@ -192,8 +192,8 @@ int GDPL_par_legg_til(GDPL_par_data_node data, GDPL_par_data_node *root)
   
   int feilkode = GDPL_par_opprett_node(&new_node);
   if (feilkode != 0) {
-    GDPL_log(ERROR, signatur, gdpl_kontroller_feilkoder[feilkode]);  
-    GDPL_log(DEBUG, signatur, "Slutt funksjon.");  
+    GDPL_log(GDPL_ERROR, signatur, gdpl_kontroller_feilkoder[feilkode]);
+    GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
     return feilkode;  
   }
     
@@ -207,7 +207,7 @@ int GDPL_par_legg_til(GDPL_par_data_node data, GDPL_par_data_node *root)
 	  
   if (root->neste == 0) {
     root->neste = new_node;
-    GDPL_log(DEBUG, signatur, "Slutt funksjon.");
+    GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
     return 0;
   }
 
@@ -217,7 +217,7 @@ int GDPL_par_legg_til(GDPL_par_data_node data, GDPL_par_data_node *root)
   }  
   runner->neste = new_node;
   
-  GDPL_log(DEBUG, signatur, "Slutt funksjon.");
+  GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
   return 0;
 }
 
@@ -239,9 +239,9 @@ int GDPL_par_legg_til(GDPL_par_data_node data, GDPL_par_data_node *root)
  * Returnerer 
  *  0 - ok
  *  alt annet - feil. Den returnerte verdien kan brukes som indeks til 
- *  gdpl_kontroller_feilkoder[] for å hente ut ei feilmelding.
+ *  gdpl_kontroller_feilkoder[] for Ã¥ hente ut ei feilmelding.
  *  
- * Eksempel på bruk
+ * Eksempel pÃ¥ bruk
  *  GDPL_par_data_node node;
  *  GDPL_par_data_node *root;
  *  int feilnr;
@@ -254,19 +254,19 @@ int GDPL_par_fjern_fra(GDPL_par_data_node data, GDPL_par_data_node *root)
 {
   const char* signatur = "GDPL_par_fjern_fra(GDPL_par_data_node,GDPL_par_data_node*)";
 
-  GDPL_log(DEBUG, signatur, "Start funksjon.");
+  GDPL_log(GDPL_DEBUG, signatur, "Start funksjon.");
   
   /* Litt inputparameter-sjekking. */
   
   if (root == 0) {
-    GDPL_log(DEBUG, signatur, "root == 0, I'm out of here ...");
-    GDPL_log(DEBUG, signatur, "Slutt funksjon.");
+    GDPL_log(GDPL_DEBUG, signatur, "root == 0, I'm out of here ...");
+    GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
     return FEILKODE_FEIL;  
   }
 
   if (data.id == 0) {
-    GDPL_log(DEBUG, signatur, "data.id == 0, I'm out of here ...");
-    GDPL_log(DEBUG, signatur, "Slutt funksjon.");
+    GDPL_log(GDPL_DEBUG, signatur, "data.id == 0, I'm out of here ...");
+    GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
     return FEILKODE_FEIL;  
   }
   
@@ -287,8 +287,8 @@ int GDPL_par_fjern_fra(GDPL_par_data_node data, GDPL_par_data_node *root)
   
   if (id_eksisterer != 1) {
     int feilkode = FEILKODE_ID_EKSISTERER_IKKE;
-    GDPL_log(DEBUG, signatur, gdpl_kontroller_feilkoder[feilkode]);
-    GDPL_log(DEBUG, signatur, "Slutt funksjon.");  
+    GDPL_log(GDPL_DEBUG, signatur, gdpl_kontroller_feilkoder[feilkode]);
+    GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
     return feilkode;
   }
   
@@ -304,7 +304,7 @@ int GDPL_par_fjern_fra(GDPL_par_data_node data, GDPL_par_data_node *root)
   
   free(runner);
   
-  GDPL_log(DEBUG, signatur, "Slutt funksjon.");
+  GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
   return 0;
 }
 
@@ -327,9 +327,9 @@ int GDPL_par_fjern_fra(GDPL_par_data_node data, GDPL_par_data_node *root)
  * Returnerer 
  *  0 - ok
  *  alt annet - feil. Den returnerte verdien kan brukes som indeks til 
- *  gdpl_kontroller_feilkoder[] for å hente ut ei feilmelding.
+ *  gdpl_kontroller_feilkoder[] for Ã¥ hente ut ei feilmelding.
  *  
- * Eksempel på bruk
+ * Eksempel pÃ¥ bruk
  *  int id;
  *  GDPL_par_data_node *node;
  *  GDPL_par_data_node *root;
@@ -343,19 +343,19 @@ int GDPL_par_hent(int id, GDPL_par_data_node **data, GDPL_par_data_node *root)
 {
   const char* signatur = "GDPL_par_hent(int,GDPL_par_data_node,GDPL_par_data_node*)";
 
-  GDPL_log(DEBUG, signatur, "Start funksjon.");
+  GDPL_log(GDPL_DEBUG, signatur, "Start funksjon.");
   
   /* Litt inputparameter-sjekking. */
   
   if (root == 0) {
-    GDPL_log(DEBUG, signatur, "root == 0, I'm out of here ...");
-    GDPL_log(DEBUG, signatur, "Slutt funksjon.");
+    GDPL_log(GDPL_DEBUG, signatur, "root == 0, I'm out of here ...");
+    GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
     return FEILKODE_FEIL;  
   }
 
   if (*data != 0) {
-    GDPL_log(DEBUG, signatur, "data != 0, I'm out of here ...");
-    GDPL_log(DEBUG, signatur, "Slutt funksjon.");
+    GDPL_log(GDPL_DEBUG, signatur, "data != 0, I'm out of here ...");
+    GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
     return FEILKODE_FEIL;  
   }
   
@@ -376,14 +376,14 @@ int GDPL_par_hent(int id, GDPL_par_data_node **data, GDPL_par_data_node *root)
   
   if (id_eksisterer != 1) {
     int feilkode = FEILKODE_ID_EKSISTERER_IKKE;
-    GDPL_log(DEBUG, signatur, gdpl_kontroller_feilkoder[feilkode]);
-    GDPL_log(DEBUG, signatur, "Slutt funksjon.");  
+    GDPL_log(GDPL_DEBUG, signatur, gdpl_kontroller_feilkoder[feilkode]);
+    GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
     return feilkode;
   }
     
   *data = runner;
   
-  GDPL_log(DEBUG, signatur, "Slutt funksjon.");
+  GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
   return 0;
 }
 
@@ -404,9 +404,9 @@ int GDPL_par_hent(int id, GDPL_par_data_node **data, GDPL_par_data_node *root)
  * Returnerer 
  *  0 - ok
  *  alt annet - feil. Den returnerte verdien kan brukes som indeks til 
- *  gdpl_kontroller_feilkoder[] for å hente ut ei feilmelding.
+ *  gdpl_kontroller_feilkoder[] for Ã¥ hente ut ei feilmelding.
  *  
- * Eksempel på bruk
+ * Eksempel pÃ¥ bruk
  *  int antall;
  *  GDPL_par_data_node *root;
  *  int feilnr;
@@ -419,19 +419,19 @@ int GDPL_par_antall_i_liste(int *antall, GDPL_par_data_node *root)
 {
   const char* signatur = "GDPL_par_antall_i_liste(int *antall,GDPL_par_data_node*)";
 
-  GDPL_log(DEBUG, signatur, "Start funksjon.");
+  GDPL_log(GDPL_DEBUG, signatur, "Start funksjon.");
   
   /* Litt inputparameter-sjekking. */
   
   if (root == 0) {
-    GDPL_log(DEBUG, signatur, "root == 0, I'm out of here ...");
-    GDPL_log(DEBUG, signatur, "Slutt funksjon.");
+    GDPL_log(GDPL_DEBUG, signatur, "root == 0, I'm out of here ...");
+    GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
     return FEILKODE_FEIL;  
   }
 
   if (antall == 0) {
-    GDPL_log(DEBUG, signatur, "antall == 0, I'm out of here ...");
-    GDPL_log(DEBUG, signatur, "Slutt funksjon.");
+    GDPL_log(GDPL_DEBUG, signatur, "antall == 0, I'm out of here ...");
+    GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
     return FEILKODE_FEIL;  
   }
     
@@ -449,6 +449,6 @@ int GDPL_par_antall_i_liste(int *antall, GDPL_par_data_node *root)
 	
   *antall = teller;
   
-  GDPL_log(DEBUG, signatur, "Slutt funksjon.");
+  GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
   return 0;
 }

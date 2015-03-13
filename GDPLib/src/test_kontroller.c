@@ -95,7 +95,7 @@ int GDPL_test_kontroller_sett_opp_konkurranse(int antall_par)
   gdpl_kontroller_konkurranseliste_root_ptr = root_konkurranse;
   gdpl_kontroller_konkurranseliste_valgt_ptr = valgt_konkurranse;
     
-  GDPL_log(INFO, signatur, "Hjelpemetode ok");
+  GDPL_log(GDPL_INFO, signatur, "Hjelpemetode ok");
   return 0;
   
 }
@@ -127,7 +127,7 @@ int GDPL_test_kontroller_hent_par_nummer_a()
   antall_par = 0;
   
   assert (GDPL_par_antall_i_liste(&antall_par, root_par) == 0);  
-  GDPL_log(DEBUG, signatur, "Antall par %d", antall_par);
+  GDPL_log(GDPL_DEBUG, signatur, "Antall par %d", antall_par);
      
   /* Kjør test. */
   
@@ -149,7 +149,7 @@ int GDPL_test_kontroller_hent_par_nummer_a()
     par_node->dame_person_id = 1;
   }
         
-  GDPL_log(INFO, signatur, "Test ok");
+  GDPL_log(GDPL_INFO, signatur, "Test ok");
   return 0;
 }
 
@@ -177,7 +177,7 @@ int GDPL_test_kontroller_les_fra_fil_a()
   srand(seed);
   tilfeldig_tall = rand();
   sprintf(tilfeldig_filnavn,"%d_tempfil.dat",tilfeldig_tall);
-  GDPL_log(DEBUG, signatur, "Opprettet temoprært filnavn: %s", tilfeldig_filnavn);
+  GDPL_log(GDPL_DEBUG, signatur, "Opprettet temoprært filnavn: %s", tilfeldig_filnavn);
  
   GDPL_kontroller_angi_filnavn(tilfeldig_filnavn);
   GDPL_kontroller_les_fra_fil();
@@ -186,7 +186,7 @@ int GDPL_test_kontroller_les_fra_fil_a()
   
   FILE *fp = fopen(tilfeldig_filnavn,"r");
   if (fp == 0) {
-    GDPL_log(INFO, signatur, "Test feilet.");
+    GDPL_log(GDPL_INFO, signatur, "Test feilet.");
     return 1;
   }
   fclose(fp);
@@ -196,31 +196,31 @@ int GDPL_test_kontroller_les_fra_fil_a()
   /* Test, konkurranseliste_root_ptr skal være initiert. */
   
   if (gdpl_kontroller_konkurranseliste_root_ptr == 0) {
-    GDPL_log(INFO, signatur, "Test feilet");
+    GDPL_log(GDPL_INFO, signatur, "Test feilet");
     return 1;
   }
   if (gdpl_kontroller_konkurranseliste_root_ptr->id != 0) {
-    GDPL_log(INFO, signatur, "Test feilet");
+    GDPL_log(GDPL_INFO, signatur, "Test feilet");
     return 1;
   }
   if (gdpl_kontroller_konkurranseliste_root_ptr->aar != 0) {
-    GDPL_log(INFO, signatur, "Test feilet");
+    GDPL_log(GDPL_INFO, signatur, "Test feilet");
     return 1;
   }
   if (gdpl_kontroller_konkurranseliste_root_ptr->person_liste_root_ptr != 0) {
-    GDPL_log(INFO, signatur, "Test feilet");
+    GDPL_log(GDPL_INFO, signatur, "Test feilet");
     return 1;
   }
   if (gdpl_kontroller_konkurranseliste_root_ptr->par_liste_root_ptr != 0) {
-    GDPL_log(INFO, signatur, "Test feilet");
+    GDPL_log(GDPL_INFO, signatur, "Test feilet");
     return 1;
   }
   if (gdpl_kontroller_konkurranseliste_root_ptr->neste != 0) {
-    GDPL_log(INFO, signatur, "Test feilet");
+    GDPL_log(GDPL_INFO, signatur, "Test feilet");
     return 1;
   }
 
-  GDPL_log(INFO, signatur, "Test ok");
+  GDPL_log(GDPL_INFO, signatur, "Test ok");
   return 0;
 }
 
@@ -238,7 +238,7 @@ int GDPL_test_kontroller_les_fra_fil_b()
 
   //TODO: alt ...
   
-  //GDPL_log(INFO, signatur, "Test feilet - siden den ikke er implementer ...");
+  //GDPL_log(GDPL_INFO, signatur, "Test feilet - siden den ikke er implementer ...");
   
   return 0;
 }
@@ -256,15 +256,15 @@ int GDPL_test_kontroller_angi_filnavn_a()
 
   int feilkode = GDPL_kontroller_angi_filnavn(0);
   if (feilkode != 0) {
-    GDPL_log(INFO, signatur, "Test feilet");
+    GDPL_log(GDPL_INFO, signatur, "Test feilet");
     return 1;  
   }
   
   if (strcmp("gdp.dat",gdpl_kontroller_datafilnavn) == 0) {
-    GDPL_log(INFO, signatur, "Test ok");
+    GDPL_log(GDPL_INFO, signatur, "Test ok");
     return 0;
   } else {
-    GDPL_log(INFO, signatur, "Test feilet");
+    GDPL_log(GDPL_INFO, signatur, "Test feilet");
     return 1;
   }
 
@@ -297,11 +297,11 @@ int GDPL_test_kontroller_angi_filnavn_b()
   int b = FEILKODE_DATAFILNAVN_FOR_KORT;
 
   if (a != b) {
-    GDPL_log(INFO, signatur, "Test feilet");
+    GDPL_log(GDPL_INFO, signatur, "Test feilet");
     return 1;
   } 
 
-  GDPL_log(INFO, signatur, "Test ok");
+  GDPL_log(GDPL_INFO, signatur, "Test ok");
   return 0;	
 }
 
@@ -325,11 +325,11 @@ int GDPL_test_kontroller_angi_filnavn_c()
   int b = FEILKODE_DATAFILNAVN_FOR_LANGT;
 
   if (a != b) {
-    GDPL_log(INFO, signatur, "Test feilet");
+    GDPL_log(GDPL_INFO, signatur, "Test feilet");
     return 1;
   } 
 
-  GDPL_log(INFO, signatur, "Test ok");
+  GDPL_log(GDPL_INFO, signatur, "Test ok");
   return 0;	
 }
 
@@ -345,11 +345,11 @@ int GDPL_test_kontroller_angi_filnavn_d()
   const char* signatur = "GDPL_test_kontroller_angi_filnavn_d()";
 
   if (GDPL_kontroller_angi_filnavn("mydata.dat") != 0) {
-    GDPL_log(INFO, signatur, "Test feilet");
+    GDPL_log(GDPL_INFO, signatur, "Test feilet");
     return 1;
   } 
 
-  GDPL_log(INFO, signatur, "Test ok");
+  GDPL_log(GDPL_INFO, signatur, "Test ok");
   return 0;
 }
 

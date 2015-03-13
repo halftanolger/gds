@@ -21,6 +21,10 @@
 #ifndef _GDPL_H_
 #define _GDPL_H_
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include <stdio.h>
 
 #define FEILKODE_DATAFILNAVN_FOR_LANGT       1
@@ -43,7 +47,9 @@
 #define GDPL_MIN_FILNAVN_LENGDE              8
 #define GDPL_MAX_ANTALL_PAR                  200
 
-typedef enum GDPL_log_type_enum {DEBUG, INFO, WARNING, ERROR} GDPL_log_type;
+
+enum GDPL_log_type_enum {GDPL_DEBUG, GDPL_INFO, GDPL_WARNING, GDPL_ERROR};
+typedef enum GDPL_log_type_enum GDPL_log_type;
 
 typedef struct GDPL_par_data_node_struct {
 	int id;
@@ -101,5 +107,9 @@ int GDPL_par_legg_til(GDPL_par_data_node data, GDPL_par_data_node *root);
 int GDPL_par_fjern_fra(GDPL_par_data_node data, GDPL_par_data_node *root);
 int GDPL_par_antall_i_liste(int *antall, GDPL_par_data_node *root);
 int GDPL_par_hent(int id, GDPL_par_data_node **data, GDPL_par_data_node *root);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif //GDPL_H

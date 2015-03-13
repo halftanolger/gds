@@ -91,7 +91,7 @@ int GDPL_test()
   int antall_tester_ok; 
   int antall_tester_feil;
 
-  GDPL_log(DEBUG, signatur, "Start funksjon.");
+  GDPL_log(GDPL_DEBUG, signatur, "Start funksjon.");
   
  /* 
   * Dette er en tabell med pekere til testfunksjoner. Enhver testfunksjon skal
@@ -143,10 +143,10 @@ int GDPL_test()
       antall_tester_feil++;
   }
   
-  GDPL_log(INFO, signatur, "GDPLib testsett består av %d tester. [%d ok, %d ikke ok]", 
+  GDPL_log(GDPL_INFO, signatur, "GDPLib testsett består av %d tester. [%d ok, %d ikke ok]",
                              antall_tester, antall_tester_ok, antall_tester_feil);
 
-  GDPL_log(DEBUG, signatur, "Slutt funksjon.");
+  GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
   return antall_tester_feil;
 }
 

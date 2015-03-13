@@ -46,11 +46,11 @@ int GDPL_test_konkurranse_legg_til_a()
   node.aar = 2014;
   
   if (GDPL_konkurranse_legg_til(node,root) == 0) {
-    GDPL_log(INFO, signatur, "Test feilet");
+    GDPL_log(GDPL_INFO, signatur, "Test feilet");
     return 1;
   } 
     
-  GDPL_log(INFO, signatur, "Test ok");
+  GDPL_log(GDPL_INFO, signatur, "Test ok");
   return 0;  
 }
 
@@ -73,11 +73,11 @@ int GDPL_test_konkurranse_legg_til_b()
   node.aar = 2014;
   
   if (GDPL_konkurranse_legg_til(node,root) == 0) {
-    GDPL_log(INFO, signatur, "Test feilet");
+    GDPL_log(GDPL_INFO, signatur, "Test feilet");
     return 1;
   } 
     
-  GDPL_log(INFO, signatur, "Test ok");
+  GDPL_log(GDPL_INFO, signatur, "Test ok");
   return 0;  
 }
 
@@ -99,21 +99,21 @@ int GDPL_test_konkurranse_legg_til_c()
   node.aar = 0;
   
   if (GDPL_konkurranse_opprett_node(&root) != 0) {
-    GDPL_log(DEBUG, signatur, "Klarer ikke å opprette en konkurranse root peker!");
-    GDPL_log(INFO, signatur, "Test feilet");
+    GDPL_log(GDPL_DEBUG, signatur, "Klarer ikke å opprette en konkurranse root peker!");
+    GDPL_log(GDPL_INFO, signatur, "Test feilet");
     return 1;  
   }
   
   if (GDPL_konkurranse_legg_til(node,root) == 0) {
 	free(root);
-    GDPL_log(DEBUG, signatur, "Uups. Klarte å opprette en ny node som manler aar!");
-    GDPL_log(INFO, signatur, "Test feilet");
+    GDPL_log(GDPL_DEBUG, signatur, "Uups. Klarte å opprette en ny node som manler aar!");
+    GDPL_log(GDPL_INFO, signatur, "Test feilet");
     return 1;
   } 
     
   free(root);
 	
-  GDPL_log(INFO, signatur, "Test ok");
+  GDPL_log(GDPL_INFO, signatur, "Test ok");
   return 0;  
 }
 
@@ -136,34 +136,34 @@ int GDPL_test_konkurranse_legg_til_d()
   node.aar = 2014;
   
   if (GDPL_konkurranse_opprett_node(&root) != 0) {
-    GDPL_log(DEBUG, signatur, "Klarer ikke å opprette en konkurranse root peker!");
-    GDPL_log(INFO, signatur, "Test feilet");
+    GDPL_log(GDPL_DEBUG, signatur, "Klarer ikke å opprette en konkurranse root peker!");
+    GDPL_log(GDPL_INFO, signatur, "Test feilet");
     return 1;  
   }
 	  
   GDPL_konkurranse_antall_i_liste(&antall, root);
-  GDPL_log(DEBUG, signatur, "antall = %d (skal være 0)", antall);
+  GDPL_log(GDPL_DEBUG, signatur, "antall = %d (skal være 0)", antall);
   
   if (GDPL_konkurranse_legg_til(node,root) != 0) {
 	free(root);
-    GDPL_log(DEBUG, signatur, "Klarer ikke å opprette en ny node i konkurranse-lista!");
-    GDPL_log(INFO, signatur, "Test feilet");
+    GDPL_log(GDPL_DEBUG, signatur, "Klarer ikke å opprette en ny node i konkurranse-lista!");
+    GDPL_log(GDPL_INFO, signatur, "Test feilet");
     return 1;
   } 
 
   GDPL_konkurranse_antall_i_liste(&antall, root);
-  GDPL_log(DEBUG, signatur, "antall = %d (skal være 1)", antall);
+  GDPL_log(GDPL_DEBUG, signatur, "antall = %d (skal være 1)", antall);
   
   if (GDPL_konkurranse_legg_til(node,root) == 0) {
     free(root);
-    GDPL_log(DEBUG, signatur, "Uups. Klarte å opprette en ny node med samme id, i konkurranse-lista!");
-    GDPL_log(INFO, signatur, "Test feilet");
+    GDPL_log(GDPL_DEBUG, signatur, "Uups. Klarte å opprette en ny node med samme id, i konkurranse-lista!");
+    GDPL_log(GDPL_INFO, signatur, "Test feilet");
     return 1;
   } 
 	
   free(root);
 	
-  GDPL_log(INFO, signatur, "Test ok");
+  GDPL_log(GDPL_INFO, signatur, "Test ok");
   return 0;  
 }
 
@@ -186,12 +186,12 @@ int GDPL_test_konkurranse_fjern_fra_a()
   node.aar = 2014;
     
   if (GDPL_konkurranse_fjern_fra(node,root) == 0) {
-    GDPL_log(DEBUG, signatur, "Uups. Klarte å fjerne node fra liste uten root!");
-    GDPL_log(INFO, signatur, "Test feilet");
+    GDPL_log(GDPL_DEBUG, signatur, "Uups. Klarte å fjerne node fra liste uten root!");
+    GDPL_log(GDPL_INFO, signatur, "Test feilet");
     return 1;
   } 
     
-  GDPL_log(INFO, signatur, "Test ok");
+  GDPL_log(GDPL_INFO, signatur, "Test ok");
   return 0;  
 }
 
@@ -213,21 +213,21 @@ int GDPL_test_konkurranse_fjern_fra_b()
   node.aar = 2014;
   
   if (GDPL_konkurranse_opprett_node(&root) != 0) {
-    GDPL_log(DEBUG, signatur, "Klarer ikke å opprette en konkurranse root peker!");
-    GDPL_log(INFO, signatur, "Test feilet");
+    GDPL_log(GDPL_DEBUG, signatur, "Klarer ikke å opprette en konkurranse root peker!");
+    GDPL_log(GDPL_INFO, signatur, "Test feilet");
     return 1;  
   }
 	      
   if (GDPL_konkurranse_fjern_fra(node,root) == 0) {
     free(root);
-	GDPL_log(DEBUG, signatur, "Uups. Klarte å fjerne node som manglet id!");
-    GDPL_log(INFO, signatur, "Test feilet");
+    GDPL_log(GDPL_DEBUG, signatur, "Uups. Klarte å fjerne node som manglet id!");
+    GDPL_log(GDPL_INFO, signatur, "Test feilet");
     return 1;
   } 
     
   free(root);
   
-  GDPL_log(INFO, signatur, "Test ok");
+  GDPL_log(GDPL_INFO, signatur, "Test ok");
   return 0;  
 }
 
@@ -250,21 +250,21 @@ int GDPL_test_konkurranse_fjern_fra_c()
   node.aar = 2014;
   
   if (GDPL_konkurranse_opprett_node(&root) != 0) {
-    GDPL_log(DEBUG, signatur, "Klarer ikke å opprette en konkurranse root peker!");
-    GDPL_log(INFO, signatur, "Test feilet");
+    GDPL_log(GDPL_DEBUG, signatur, "Klarer ikke å opprette en konkurranse root peker!");
+    GDPL_log(GDPL_INFO, signatur, "Test feilet");
     return 1;  
   }
     
   if (GDPL_konkurranse_fjern_fra(node,root) == 0) {
     free(root);
-	GDPL_log(DEBUG, signatur, "Uups. Klarte å fjerne en node med id som ikke finnes i lista!");
-    GDPL_log(INFO, signatur, "Test feilet");
+    GDPL_log(GDPL_DEBUG, signatur, "Uups. Klarte å fjerne en node med id som ikke finnes i lista!");
+    GDPL_log(GDPL_INFO, signatur, "Test feilet");
     return 1;
   } 
 
   free(root);
     	
-  GDPL_log(INFO, signatur, "Test ok");
+  GDPL_log(GDPL_INFO, signatur, "Test ok");
   return 0;  
 }
 
@@ -287,33 +287,33 @@ int GDPL_test_konkurranse_fjern_fra_d()
   node.aar = 2014;
   
   if (GDPL_konkurranse_opprett_node(&root) != 0) {
-    GDPL_log(DEBUG, signatur, "Klarer ikke å opprette en konkurranse root peker!");
-    GDPL_log(INFO, signatur, "Test feilet");
+    GDPL_log(GDPL_DEBUG, signatur, "Klarer ikke å opprette en konkurranse root peker!");
+    GDPL_log(GDPL_INFO, signatur, "Test feilet");
     return 1;  
   }
   
   if (GDPL_konkurranse_legg_til(node,root) != 0) {
     free(root);
-    GDPL_log(DEBUG, signatur, "Klarer ikke å opprette en ny node i konkurranse-lista!");
-    GDPL_log(INFO, signatur, "Test feilet");
+    GDPL_log(GDPL_DEBUG, signatur, "Klarer ikke å opprette en ny node i konkurranse-lista!");
+    GDPL_log(GDPL_INFO, signatur, "Test feilet");
     return 1;
   } 
     
   GDPL_konkurranse_antall_i_liste(&antall, root);
-  GDPL_log(DEBUG, signatur, "antall = %d", antall);
+  GDPL_log(GDPL_DEBUG, signatur, "antall = %d", antall);
   
   if (GDPL_konkurranse_fjern_fra(node,root) != 0) {
     free(root);
-    GDPL_log(INFO, signatur, "Test feilet a");
+    GDPL_log(GDPL_INFO, signatur, "Test feilet a");
     return 1;
   } 
   
   GDPL_konkurranse_antall_i_liste(&antall, root);
-  GDPL_log(DEBUG, signatur, "antall = %d", antall);
+  GDPL_log(GDPL_DEBUG, signatur, "antall = %d", antall);
 
   free(root);
   
-  GDPL_log(INFO, signatur, "Test ok");
+  GDPL_log(GDPL_INFO, signatur, "Test ok");
   return 0;  
 }
 	

@@ -154,6 +154,72 @@ int GDPL_kontroller_registrer_oppgavepoeng( int par_id, double poeng)
 int GDPL_kontroller_opprett_resultatliste()
 
 
+4. Brukergrensesnitt Qt
+-----------------------
+
+Brukergrensesnittet i Qt utgave, er definert som en single document application
+hvor en tabell over alle par'ene er den sentrale widget'en. Ulike andre view er
+definert som drop views rundt denne.
+
+
+
+
++-----------------------------------------------------------------------------+
+| Fil Oppsett Hjelp                                                           |
++-----------------------------------------------------------------------------+
+|                                                                             |         
+|                                                                             |         
+|                                                                             |         
+|                                                                             |         
+|                                                                             |         
+|                                                                             |         
+|                                                                             |         
+|                                                                             |         
+|                                                                             |         
+|                                                                             |         
+|                                                                             |         
+|                                                                             |         
+|                                                                             |         
+|                                                                             |         
+|                                                                             |         
+|                                                                             |         
+|                                                                             |         
+|                                                                             |         
+|                                                                             |         
+|                                                                             |         
+|                                                                             |         
++-----------------------------------------------------------------------------+
+
+
+
+ Fil
+   - Ny konkurranse
+   - Åpne konkurranse
+   - Lukk konkurranse
+   - Lagre konkurranse
+   - Avslutt
+   
+ Oppsett
+   - Endre instillinger (log-level etc)
+
+ Hjelp
+   - Hjelp
+   - Om 
+   
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 - The End -
 

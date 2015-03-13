@@ -26,13 +26,14 @@
 #include <assert.h>  
 #include "gdpl.h"
 
+
 const char* gdpl_kontroller_gdplib_navn = "GDPLib";
 
 const char* gdpl_kontroller_gdplib_versjon = "1.0";
 
-const char *gdpl_kontroller_feilkoder[] = { 
+const char *gdpl_kontroller_feilkoder[] = {
   "",
-  "FEILKODE 01: Filnavnet er for langt.", 
+  "FEILKODE 01: Filnavnet er for langt.",
   "FEILKODE 02: Filnavnet er for kort.",
   "FEILKODE 03: Filnavnet er ikke definert.",
   "FEILKODE 04: Kan ikke opprette datafil.",
@@ -41,12 +42,12 @@ const char *gdpl_kontroller_feilkoder[] = {
   "FEILKODE 07: Kan ikke allokere minne.",
   "FEILKODE 08: Id eksisterer allerede.",
   "FEILKODE 09: Id eksisterer ikke.",
-  "FEILKODE 10: Generell feil.",  
+  "FEILKODE 10: Generell feil.",
   "FEILKODE 11: Oppgitt verdi for max antall par, er for lavt.",
   "FEILKODE 12: Oppgitt verdi for max antall par, er for høyt.",
   "FEILKODE 13: Oppgitt verdi for max antall par, er ikke angitt."
-  
 };
+
 
 /*
  * Definerer max antall par.
@@ -59,7 +60,7 @@ int gdpl_max_antall_par;
 char gdpl_kontroller_datafilnavn[GDPL_MAX_FILNAVN_LENGDE];
 
 /*
- * Denne variabelen blir brukt av GDPL_log(). 
+ * Denne variabelen blir brukt av GDPL_log(GDPL_).
  */
 GDPL_log_type gdpl_log_nivaa;
 
@@ -138,7 +139,7 @@ int GDPL_kontroller_hent_par_nummer(int *par_id, int type) {
   /* Finn hvilke par som er ledig, gitt typen. */ 
   index = 0;  
   do {  	  
-    GDPL_log(DEBUG, signatur, "id=%d herre_person_id=%d dame_person_id=%d start_nr=%d",
+    GDPL_log(GDPL_DEBUG, signatur, "id=%d herre_person_id=%d dame_person_id=%d start_nr=%d",
 	           runner->id, runner->herre_person_id,	runner->dame_person_id,	runner->start_nr);
 		
 	if (type == 0 && runner->herre_person_id == 0) { /* Ledig herre plass. */
@@ -157,7 +158,7 @@ int GDPL_kontroller_hent_par_nummer(int *par_id, int type) {
 	if (tabell[index] == -1) 
 	  break;
 		
-    GDPL_log(DEBUG, signatur, "ledig par id=%d (for type = %s)",
+    GDPL_log(GDPL_DEBUG, signatur, "ledig par id=%d (for type = %s)",
 	           tabell[index], type==0?"herre":"dame");	
 	index++;	
   }
@@ -168,8 +169,8 @@ int GDPL_kontroller_hent_par_nummer(int *par_id, int type) {
   srand(seed);  
   *par_id = tabell[rand() % index];
   
-  GDPL_log(DEBUG, signatur, "Par-node med id=%d er ledig for %s -registrering.",*par_id, type == 0?"herre":"dame");
-  GDPL_log(DEBUG, signatur, "Slutt funksjon.");
+  GDPL_log(GDPL_DEBUG, signatur, "Par-node med id=%d er ledig for %s -registrering.",*par_id, type == 0?"herre":"dame");
+  GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
   return 0;
 }
 
@@ -198,26 +199,26 @@ int GDPL_kontroller_angi_max_antall_par(int antall)
 {
   const char* signatur = "GDPL_kontroller_angi_max_antall_par(int)";
 
-  GDPL_log(DEBUG, signatur, "Start funksjon.");
+  GDPL_log(GDPL_DEBUG, signatur, "Start funksjon.");
 
   if (antall < 1) {
       int feilkode = FEILKODE_MAX_ANTALL_PAR_FOR_LAVT;
-      GDPL_log(ERROR, signatur, gdpl_kontroller_feilkoder[feilkode]);
-      GDPL_log(DEBUG, signatur, "Slutt funksjon.");
+      GDPL_log(GDPL_ERROR, signatur, gdpl_kontroller_feilkoder[feilkode]);
+      GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
       return feilkode;    
   } 
 
   if (antall > GDPL_MAX_ANTALL_PAR) {
       int feilkode = FEILKODE_MAX_ANTALL_PAR_FOR_STORT;
-      GDPL_log(ERROR, signatur, gdpl_kontroller_feilkoder[feilkode]);
-      GDPL_log(DEBUG, signatur, "Slutt funksjon.");
+      GDPL_log(GDPL_ERROR, signatur, gdpl_kontroller_feilkoder[feilkode]);
+      GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
       return feilkode;    
   } 
 
   gdpl_max_antall_par = antall;
       
-  GDPL_log(DEBUG, signatur, "Max antall par er nå satt til '%d'", gdpl_max_antall_par);
-  GDPL_log(DEBUG, signatur, "Slutt funksjon.");
+  GDPL_log(GDPL_DEBUG, signatur, "Max antall par er nå satt til '%d'", gdpl_max_antall_par);
+  GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
   return 0;
 }
 
@@ -245,19 +246,19 @@ int GDPL_kontroller_hent_max_antall_par(int *antall)
 {
   const char* signatur = "GDPL_kontroller_hent_max_antall_par(int)";
 
-  GDPL_log(DEBUG, signatur, "Start funksjon.");
+  GDPL_log(GDPL_DEBUG, signatur, "Start funksjon.");
 
   if (antall == 0) {
     int feilkode = FEILKODE_FEIL;
-	GDPL_log(DEBUG, signatur, "antall == 0, i.e. pekeren er ikke initiert!");
-    GDPL_log(ERROR, signatur, gdpl_kontroller_feilkoder[feilkode]);
-    GDPL_log(DEBUG, signatur, "Slutt funksjon.");
+    GDPL_log(GDPL_DEBUG, signatur, "antall == 0, i.e. pekeren er ikke initiert!");
+    GDPL_log(GDPL_ERROR, signatur, gdpl_kontroller_feilkoder[feilkode]);
+    GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
     return feilkode;  
   }
   
   *antall = gdpl_max_antall_par;
       
-  GDPL_log(DEBUG, signatur, "Slutt funksjon.");
+  GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
   return 0;
 }
 
@@ -297,7 +298,7 @@ int GDPL_kontroller_angi_filnavn(const char *filnavn)
 {
   const char* signatur = "GDPL_kontroller_angi_filnavn(const char*)";
 
-  GDPL_log(DEBUG, signatur, "Start funksjon.");
+  GDPL_log(GDPL_DEBUG, signatur, "Start funksjon.");
 
   if (filnavn == 0) {
   
@@ -311,15 +312,15 @@ int GDPL_kontroller_angi_filnavn(const char *filnavn)
 
     if (strlen(filnavn) > GDPL_MAX_FILNAVN_LENGDE) {
       int feilkode = FEILKODE_DATAFILNAVN_FOR_LANGT;
-      GDPL_log(ERROR, signatur, gdpl_kontroller_feilkoder[feilkode]);
-      GDPL_log(DEBUG, signatur, "Slutt funksjon.");
+      GDPL_log(GDPL_ERROR, signatur, gdpl_kontroller_feilkoder[feilkode]);
+      GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
       return feilkode;  
     }
 
     if (strlen(filnavn) < GDPL_MIN_FILNAVN_LENGDE) {  
       int feilkode = FEILKODE_DATAFILNAVN_FOR_KORT;
-      GDPL_log(ERROR, signatur, gdpl_kontroller_feilkoder[feilkode]);
-      GDPL_log(DEBUG, signatur, "Slutt funksjon.");
+      GDPL_log(GDPL_ERROR, signatur, gdpl_kontroller_feilkoder[feilkode]);
+      GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
       return feilkode;  
     }
 
@@ -327,8 +328,8 @@ int GDPL_kontroller_angi_filnavn(const char *filnavn)
 
   }
     
-  GDPL_log(DEBUG, signatur, "Datafilnavn er nå satt til '%s'", gdpl_kontroller_datafilnavn);
-  GDPL_log(DEBUG, signatur, "Slutt funksjon.");
+  GDPL_log(GDPL_DEBUG, signatur, "Datafilnavn er nå satt til '%s'", gdpl_kontroller_datafilnavn);
+  GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
   return 0;
 }
 
@@ -364,15 +365,15 @@ int GDPL_kontroller_les_fra_fil()
 {
   const char* signatur = "GDPL_kontroller_les_fra_fil()";
   
-  GDPL_log(DEBUG, signatur, "Start funksjon.");
+  GDPL_log(GDPL_DEBUG, signatur, "Start funksjon.");
 
   /* Datafilnavn må være initiert. */
  
   if (gdpl_kontroller_datafilnavn == 0) {
   
     int feilkode = FEILKODE_DATAFILNAVN_IKKE_DEFINERT;
-    GDPL_log(ERROR, signatur, gdpl_kontroller_feilkoder[feilkode]);
-    GDPL_log(DEBUG, signatur, "Slutt funksjon.");
+    GDPL_log(GDPL_ERROR, signatur, gdpl_kontroller_feilkoder[feilkode]);
+    GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
     return feilkode;
 
   }
@@ -384,13 +385,13 @@ int GDPL_kontroller_les_fra_fil()
 
     /* Fila eksisterer ikke, opprett fil og initier grunnleggende datastruktur. */
 
-    GDPL_log(DEBUG, signatur, "Fila %s eksisterer ikke. Prøver å opprette den.", gdpl_kontroller_datafilnavn);
+    GDPL_log(GDPL_DEBUG, signatur, "Fila %s eksisterer ikke. Prøver å opprette den.", gdpl_kontroller_datafilnavn);
     file = fopen(gdpl_kontroller_datafilnavn,"w");
     if (file == 0) {
 
       int feilkode = FEILKODE_KAN_IKKE_OPPRETTE_DATAFIL;
-      GDPL_log(ERROR, signatur, gdpl_kontroller_feilkoder[feilkode]);
-      GDPL_log(DEBUG, signatur, "Slutt funksjon.");
+      GDPL_log(GDPL_ERROR, signatur, gdpl_kontroller_feilkoder[feilkode]);
+      GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
       return feilkode;
   
     }
@@ -398,8 +399,8 @@ int GDPL_kontroller_les_fra_fil()
     GDPL_konkurranse_data_node *new_node; 
     int feilkode = GDPL_konkurranse_opprett_node(&new_node);
 	if (feilkode != 0) {
-      GDPL_log(ERROR, signatur, gdpl_kontroller_feilkoder[feilkode]);
-      GDPL_log(DEBUG, signatur, "Slutt funksjon.");
+      GDPL_log(GDPL_ERROR, signatur, gdpl_kontroller_feilkoder[feilkode]);
+      GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
       return feilkode;
     }
 
@@ -409,26 +410,26 @@ int GDPL_kontroller_les_fra_fil()
     fclose(file);
     file = 0;
 
-    GDPL_log(DEBUG, signatur, "Slutt funksjon.");
+    GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
     return 0;
 
   } else {
 
     /* Fila eksisterer, les inn data i datatruktur. */
 
-    GDPL_log(DEBUG, signatur, "Fila %s eksisterer.", gdpl_kontroller_datafilnavn);
+    GDPL_log(GDPL_DEBUG, signatur, "Fila %s eksisterer.", gdpl_kontroller_datafilnavn);
 
     //TODO: les inn data fra fila og initier datastrukturer ...
 
   }
 
-  GDPL_log(DEBUG, signatur, "Slutt funksjon.");
+  GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
   return 0;
 }
 
 /* ----------------------------------------------------------------------------
  * Funksjon
- *  void GDPL_log(GDPL_log_type type, const char* signature, char* message, ...)
+ *  void GDPL_log(GDPL_GDPL_log_type type, const char* signature, char* message, ...)
  * ---------------------------------------------------------------------------- 
  * Beskrivelse
  *  Skriv ei logg melding med tidsangivelse. To globale variabler styrer hva 
@@ -447,10 +448,10 @@ int GDPL_kontroller_les_fra_fil()
  *  ingen ting.
  * 
  * Eksempel på bruk
- *  GDPL_log(DEBUG, "main()", "Hello %s", "world"); 
+ *  GDPL_log(GDPL_DEBUG, "main()", "Hello %s", "world");
  * ----------------------------------------------------------------------------
  */ 
-void GDPL_log(GDPL_log_type type, const char* signatur, const char* melding, ...) 
+void GDPL_log(GDPL_log_type type, const char* signatur, const char* melding, ...)
 {
   time_t rawtime;
   struct tm * timeinfo; 
@@ -464,16 +465,16 @@ void GDPL_log(GDPL_log_type type, const char* signatur, const char* melding, ...
     return;
 
   switch (type) {
-  case DEBUG:
+  case GDPL_DEBUG:
     strcpy(type_str,"DEBUG");
     break;
-  case INFO:
+  case GDPL_INFO:
     strcpy(type_str,"INFO");
     break;
-  case WARNING:
+  case GDPL_WARNING:
     strcpy(type_str,"WARNING");
     break;
-  case ERROR:
+  case GDPL_ERROR:
     strcpy(type_str,"ERROR");
     break;
   default:
@@ -558,6 +559,6 @@ int GDPL_init(GDPL_log_type nivaa, FILE * stream)
   gdpl_log_nivaa = nivaa;
   gdpl_log_stream = stream; 
 
-  GDPL_log(DEBUG, signatur, "Slutt funksjon.");
+  GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
   return 0;
 }
