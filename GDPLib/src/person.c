@@ -66,8 +66,8 @@ int GDPL_person_opprett_node(GDPL_person_data_node **new_node)
   }
 
   (*new_node)->id = 0;
-  (*new_node)->fnavn = 0;
-  (*new_node)->enavn = 0;
+  (*new_node)->fnavn = strdup("nop");
+  (*new_node)->enavn = strdup("nop");
   (*new_node)->neste = 0;
 
   GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");

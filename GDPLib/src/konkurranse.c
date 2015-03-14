@@ -20,13 +20,9 @@
 
 #include <stdlib.h>
 #include "konkurranse.h"
+#include "kontroller.h"
 
 
-extern const char *gdpl_kontroller_feilkoder[]; 
-
-GDPL_konkurranse_data_node *gdpl_kontroller_konkurranseliste_root_ptr = 0;
-
-GDPL_konkurranse_data_node *gdpl_kontroller_konkurranseliste_valgt_ptr = 0;
 
 
 /* ----------------------------------------------------------------------------

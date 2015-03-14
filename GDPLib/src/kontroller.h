@@ -27,6 +27,7 @@ extern "C" {
 #endif
 
 #include "diverse.h"
+#include "modell.h"
 
 
 // Variabler
@@ -37,9 +38,8 @@ extern const char* gdpl_kontroller_gdplib_versjon;
 
 extern const char *gdpl_kontroller_feilkoder[];
 
-extern int gdpl_max_antall_par;
+extern int gdpl_kontroller_max_antall_par;
 
-extern char gdpl_kontroller_datafilnavn[GDPL_MAX_FILNAVN_LENGDE];
 
 
 // Funksjoner
@@ -49,10 +49,6 @@ const char* GDPL_kontroller_gdplib_navn();
 const char* GDPL_kontroller_gdplib_ver();
 
 int GDPL_kontroller_angi_filnavn(const char *filnavn);
-
-int GDPL_kontroller_les_fra_fil();
-
-int GDPL_kontroller_skriv_til_fil();
 
 int GDPL_kontroller_angi_max_antall_par(int antall);
 

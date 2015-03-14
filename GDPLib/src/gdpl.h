@@ -39,11 +39,11 @@ extern "C" {
 
 #include "diverse.h"
 
-
 #include "kontroller.h"
 
-
 #include "konkurranse.h"
+
+#include "modell.h"
 
 
 /* Funksjoner */

@@ -6,12 +6,11 @@ extern "C" {
 #endif
 
 #include "diverse.h"
+#include "modell.h"
+
 
 // Variabler
 
-extern GDPL_konkurranse_data_node *gdpl_kontroller_konkurranseliste_root_ptr;
-
-extern GDPL_konkurranse_data_node *gdpl_kontroller_konkurranseliste_valgt_ptr;
 
 
 // Funksjoner

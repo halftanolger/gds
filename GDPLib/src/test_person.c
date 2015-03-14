@@ -23,9 +23,6 @@
 #include <stdlib.h>
 #include "gdpl.h"
 
-extern GDPL_konkurranse_data_node *gdpl_kontroller_konkurranseliste_root_ptr;
-extern GDPL_konkurranse_data_node *gdpl_kontroller_konkurranseliste_valgt_ptr;
-extern char gdpl_kontroller_datafilnavn[GDPL_MAX_FILNAVN_LENGDE];
 
 
 /* ----------------------------------------------------------------------------

@@ -14,6 +14,7 @@ QMAKE_CXXFLAGS += -std=c++11 -g
 #
 SOURCES += \
     ../GDPLib/src/diverse.c \
+    ../GDPLib/src/modell.c \
     ../GDPLib/src/konkurranse.c \
     ../GDPLib/src/kontroller.c \
     ../GDPLib/src/par.c \
@@ -27,6 +28,7 @@ SOURCES += \
 HEADERS += \
     ../GDPLib/src/gdpl.h \
     ../GDPLib/src/diverse.h \
+    ../GDPLib/src/modell.h \
     ../GDPLib/src/kontroller.h \
     ../GDPLib/src/konkurranse.h
 

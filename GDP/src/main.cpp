@@ -86,7 +86,7 @@ int test_gdplib() {
     // Angi hvilken datafil vi ønsker å bruke.
     //
 
-    error_nr = GDPL_kontroller_angi_filnavn(0);
+    error_nr = GDPL_modell_angi_filnavn(0);
     if (error_nr > 0) {
         qWarning() << "Systemfeil. GDPL_kontroller_angi_filnavn(..) returnerte > 0";
         return error_nr;
@@ -101,7 +101,7 @@ int test_gdplib() {
     //
     //
 
-    error_nr = GDPL_kontroller_les_fra_fil();
+    error_nr = GDPL_modell_les_fra_fil();
     if (error_nr > 0) {
         qWarning() << "Systemfeil. GDPL_kontroller_les_fra_fil(..) returnerte > 0";
         return error_nr;
@@ -122,7 +122,7 @@ int test_gdplib() {
     //
 
     int antall_konkurranser = -1;
-    error_nr = GDPL_konkurranse_antall_i_liste(&antall_konkurranser,gdpl_kontroller_konkurranseliste_root_ptr);
+    error_nr = GDPL_konkurranse_antall_i_liste(&antall_konkurranser,gdpl_modell_konkurranseliste_root_ptr);
     if (error_nr > 0) {
         qWarning() << "Systemfeil. GDPL_konkurranse_antall_i_liste(..) returnerte > 0";
         return error_nr;
@@ -153,7 +153,7 @@ int test_gdplib() {
 
 
 
-        error_nr = GDPL_konkurranse_legg_til(node_konkurranse, gdpl_kontroller_konkurranseliste_root_ptr);
+        error_nr = GDPL_konkurranse_legg_til(node_konkurranse, gdpl_modell_konkurranseliste_root_ptr);
         if (error_nr > 0) {
             qWarning() << "Systemfeil. GDPL_konkurranse_legg_til(..) returnerte > 0";
             return error_nr;
@@ -170,7 +170,7 @@ int test_gdplib() {
 
 
 
-    error_nr = GDPL_kontroller_skriv_til_fil();
+    error_nr = GDPL_modell_skriv_til_fil();
     if (error_nr > 0) {
         qWarning() << "Systemfeil. GDPL_kontroller_skriv_til_fil(..) returnerte > 0";
         return error_nr;

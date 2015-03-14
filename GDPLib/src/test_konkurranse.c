@@ -23,10 +23,6 @@
 #include <stdlib.h>
 #include "gdpl.h"
 
-extern GDPL_konkurranse_data_node *gdpl_kontroller_konkurranseliste_root_ptr;
-extern GDPL_konkurranse_data_node *gdpl_kontroller_konkurranseliste_valgt_ptr;
-extern char gdpl_kontroller_datafilnavn[GDPL_MAX_FILNAVN_LENGDE];
-
 /* ----------------------------------------------------------------------------
  * Testbeskrivelse
  * 
@@ -74,7 +70,7 @@ int GDPL_test_konkurranse_legg_til_b()
 
   GDPL_konkurranse_data_node *root;
   
-  root =  gdpl_kontroller_konkurranseliste_root_ptr;
+  root =  gdpl_modell_konkurranseliste_root_ptr;
   node->id = 0;
   node->aar = 2014;
   

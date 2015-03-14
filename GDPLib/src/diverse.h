@@ -48,6 +48,7 @@ extern "C" {
 #define GDPL_MIN_PERSONNAVN_LENGDE           1
 #define GDPL_MAX_FILNAVN_LENGDE              516
 #define GDPL_MIN_FILNAVN_LENGDE              8
+#define GDPL_MAX_TID_LENGDE                  16
 #define GDPL_MAX_ANTALL_PAR                  200
 
 // Enums
@@ -55,45 +56,12 @@ extern "C" {
 enum GDPL_log_type_enum {GDPL_DEBUG, GDPL_INFO, GDPL_WARNING, GDPL_ERROR};
 
 
-// Structs
-
-struct GDPL_par_data_node_struct {
-    int id;
-    int herre_person_id;
-    int dame_person_id;
-    int start_nr;
-    char start_tid[16];
-    char maal_tid[16];
-    double oppgave_poeng;
-    struct GDPL_par_data_node_struct *neste;
-};
-
-struct GDPL_person_data_node_struct {
-    int id;
-    char *fnavn;
-    char *enavn;
-    struct GDPL_person_data_node_struct *neste;
-};
-
-typedef struct GDPL_par_data_node_struct GDPL_par_data_node;
-typedef struct GDPL_person_data_node_struct GDPL_person_data_node;
-
-struct GDPL_konkurranse_data_node_struct {
-    int id;
-    int aar;
-    GDPL_person_data_node *person_liste_root_ptr;
-    GDPL_par_data_node *par_liste_root_ptr;
-    struct GDPL_konkurranse_data_node_struct *neste;
-};
-
 
 // Typedefs
 
 typedef enum GDPL_log_type_enum GDPL_log_type;
 
-typedef enum GDPL_log_type_enum GDPL_log_type;
 
-typedef struct GDPL_konkurranse_data_node_struct  GDPL_konkurranse_data_node;
 
 
 // Variabler
