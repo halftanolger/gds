@@ -70,7 +70,7 @@ int test_gdplib() {
     //
 
     const char* signatur = "test_gdplib()";
-    error_nr = GDPL_init(GDPL_DEBUG, stdout);
+    error_nr = GDPL_init_log(GDPL_DEBUG, stdout);
 
     if (error_nr > 0) {
         qWarning() << "Systemfeil. GDPL_init(..) returnerte > 0";
