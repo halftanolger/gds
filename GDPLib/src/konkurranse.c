@@ -103,7 +103,7 @@ int GDPL_konkurranse_opprett_node(GDPL_konkurranse_data_node **new_node)
  *
  * ----------------------------------------------------------------------------
  */ 
-int GDPL_konkurranse_legg_til(GDPL_konkurranse_data_node data, GDPL_konkurranse_data_node *root)
+int GDPL_konkurranse_legg_til(GDPL_konkurranse_data_node *data, GDPL_konkurranse_data_node *root)
 {
   const char* signatur = "GDPL_konkurranse_legg_til(GDPL_konkurranse_data_node,GDPL_konkurranse_data_node*)";
 
@@ -117,30 +117,42 @@ int GDPL_konkurranse_legg_til(GDPL_konkurranse_data_node data, GDPL_konkurranse_
     return FEILKODE_FEIL;  
   }
 
-  if (data.id == 0) {
+  if (data->id == 0) {
     GDPL_log(GDPL_DEBUG, signatur, "data.id == 0, I'm out of here ...");
     GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
     return FEILKODE_FEIL;  
   }
   
-  if (data.aar == 0) {
+  if (data->aar == 0) {
     GDPL_log(GDPL_DEBUG, signatur, "data.aar == 0, I'm out of here ...");
     GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
     return FEILKODE_FEIL;  
   }
   
+  if (data->person_liste_root_ptr == 0) {
+    GDPL_log(GDPL_DEBUG, signatur, "data.person_liste_root_ptr == 0, I'm out of here ...");
+    GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
+    return FEILKODE_FEIL;
+  }
+
+  if (data->par_liste_root_ptr == 0) {
+    GDPL_log(GDPL_DEBUG, signatur, "data.par_liste_root_ptr == 0, I'm out of here ...");
+    GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
+    return FEILKODE_FEIL;
+  }
+
   /* Sjekk om ny id finnes fra før i lista. */
   int id_eksisterer = 0;
   GDPL_konkurranse_data_node *runner = root;
   
   while (runner->neste != 0) {
-    if (data.id == runner->id) {
+    if (data->id == runner->id) {
       id_eksisterer = 1;
       break;
     }
     runner = runner->neste;
   }
-  if (data.id == runner->id) {
+  if (data->id == runner->id) {
     id_eksisterer = 1;
   }
   
@@ -162,10 +174,10 @@ int GDPL_konkurranse_legg_til(GDPL_konkurranse_data_node data, GDPL_konkurranse_
     return feilkode;  
   }
     
-  new_node->id = data.id;
-  new_node->aar = data.aar;
-  new_node->person_liste_root_ptr = data.person_liste_root_ptr;
-  new_node->par_liste_root_ptr = data.par_liste_root_ptr;
+  new_node->id = data->id;
+  new_node->aar = data->aar;
+  new_node->person_liste_root_ptr = data->person_liste_root_ptr;
+  new_node->par_liste_root_ptr = data->par_liste_root_ptr;
   
     
   if (root->neste == 0) {
@@ -213,7 +225,7 @@ int GDPL_konkurranse_legg_til(GDPL_konkurranse_data_node data, GDPL_konkurranse_
  *
  * ----------------------------------------------------------------------------
  */ 
-int GDPL_konkurranse_fjern_fra(GDPL_konkurranse_data_node data, GDPL_konkurranse_data_node *root)
+int GDPL_konkurranse_fjern_fra(GDPL_konkurranse_data_node* data, GDPL_konkurranse_data_node *root)
 {
   const char* signatur = "GDPL_konkurranse_fjern_fra(GDPL_konkurranse_data_node,GDPL_konkurranse_data_node*)";
 
@@ -227,7 +239,7 @@ int GDPL_konkurranse_fjern_fra(GDPL_konkurranse_data_node data, GDPL_konkurranse
     return FEILKODE_FEIL;  
   }
 
-  if (data.id == 0) {
+  if (data->id == 0) {
     GDPL_log(GDPL_DEBUG, signatur, "data.id == 0, I'm out of here ...");
     GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
     return FEILKODE_FEIL;  
@@ -238,13 +250,13 @@ int GDPL_konkurranse_fjern_fra(GDPL_konkurranse_data_node data, GDPL_konkurranse
   GDPL_konkurranse_data_node *runner = root;
   
   while (runner->neste != 0) {
-    if (data.id == runner->id) {
+    if (data->id == runner->id) {
       id_eksisterer = 1;
       break;
     }
     runner = runner->neste;
   }
-  if (data.id == runner->id) {
+  if (data->id == runner->id) {
     id_eksisterer = 1;
   }
   
@@ -408,6 +420,7 @@ int GDPL_konkurranse_antall_i_liste(int *antall, GDPL_konkurranse_data_node *roo
   
   *antall = teller;
   
+  GDPL_log(GDPL_DEBUG, signatur, "antall i lista er %d", teller);
   GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
   return 0;
 }

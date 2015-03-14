@@ -30,6 +30,9 @@
 extern const char* gdpl_kontroller_gdplib_navn;
 extern const char* gdpl_kontroller_gdplib_versjon;
 
+extern GDPL_konkurranse_data_node *gdpl_kontroller_konkurranseliste_root_ptr;
+extern GDPL_konkurranse_data_node *gdpl_kontroller_konkurranseliste_valgt_ptr;
+
 int test_gdplib();
 
 int main(int argc, char **argv)
@@ -83,7 +86,7 @@ int test_gdplib() {
     // Angi hvilken datafil vi ønsker å bruke.
     //
 
-    error_nr = GDPL_kontroller_angi_filnavn("c:/tmp/gdpdata.dat");
+    error_nr = GDPL_kontroller_angi_filnavn(0);
     if (error_nr > 0) {
         qWarning() << "Systemfeil. GDPL_kontroller_angi_filnavn(..) returnerte > 0";
         return error_nr;
@@ -100,22 +103,78 @@ int test_gdplib() {
 
     error_nr = GDPL_kontroller_les_fra_fil();
     if (error_nr > 0) {
-        qWarning() << "Systemfeil. GDPL_kontroller_angi_filnavn(..) returnerte > 0";
+        qWarning() << "Systemfeil. GDPL_kontroller_les_fra_fil(..) returnerte > 0";
         return error_nr;
     }
 
 
+    //
+    // Punkt 4.
+    //
+    // Her kan vi ha en av to situasjoner;
+    //
+    // Punkt 4.1. Vi ingen konkurranser under root-noden.
+    //
+    // Punkt 4.2. Vi en eller flere konkurranser der, og kan følgelig velge
+    //            å jobbe videre med en av disse.
+    //
+    //
+    //
 
-    //GDPL_kontroller_angi_max_antall_par(50);
+    int antall_konkurranser = -1;
+    error_nr = GDPL_konkurranse_antall_i_liste(&antall_konkurranser,gdpl_kontroller_konkurranseliste_root_ptr);
+    if (error_nr > 0) {
+        qWarning() << "Systemfeil. GDPL_konkurranse_antall_i_liste(..) returnerte > 0";
+        return error_nr;
+    }
+
+    if (antall_konkurranser == 0) {
+
+        /* Punkt 4.1. */
+
+        GDPL_konkurranse_data_node* node_konkurranse;
+        GDPL_konkurranse_opprett_node(&node_konkurranse);
+
+        node_konkurranse->id = 1;
+        node_konkurranse->aar = 2015;
+
+        /* Når man oppretter en ny konkurranse, så må man også opprette nye
+         * root-pekere til person og par -lista. Dette bør kanskje gjøres
+         * ved hjelp av en utility-funksjon? */
+
+        GDPL_person_data_node* node_person;
+        GDPL_person_opprett_node(&node_person);
+
+        GDPL_par_data_node* node_par;
+        GDPL_par_opprett_node(&node_par);
+
+        node_konkurranse->person_liste_root_ptr = node_person;
+        node_konkurranse->par_liste_root_ptr = node_par;
 
 
 
-    GDPL_konkurranse_data_node *root_konkurranse = 0;
-    GDPL_konkurranse_data_node *valgt_konkurranse = 0;
-    GDPL_konkurranse_data_node node_konkurranse;
+        error_nr = GDPL_konkurranse_legg_til(node_konkurranse, gdpl_kontroller_konkurranseliste_root_ptr);
+        if (error_nr > 0) {
+            qWarning() << "Systemfeil. GDPL_konkurranse_legg_til(..) returnerte > 0";
+            return error_nr;
+        }
 
-    node_konkurranse.id = 1;
-    node_konkurranse.aar = 2015;
+    } else {
+
+        /* Punkt 4.2 */
+
+      //  qDebug() << "Todo: alt rundt punkt 4.2";
+    }
+
+
+
+
+
+    error_nr = GDPL_kontroller_skriv_til_fil();
+    if (error_nr > 0) {
+        qWarning() << "Systemfeil. GDPL_kontroller_skriv_til_fil(..) returnerte > 0";
+        return error_nr;
+    }
 
 
     return 0;

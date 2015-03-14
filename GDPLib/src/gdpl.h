@@ -49,12 +49,11 @@ extern "C" {
 #define FEILKODE_MAX_ANTALL_PAR_FOR_STORT    12
 #define FEILKODE_MAX_ANTALL_IKKE_ANGITT      13
 
-#define GDPL_MAX_PERSONNAVN_LENGDE           1024
+#define GDPL_MAX_PERSONNAVN_LENGDE           128
 #define GDPL_MIN_PERSONNAVN_LENGDE           1
-#define GDPL_MAX_FILNAVN_LENGDE              1024
+#define GDPL_MAX_FILNAVN_LENGDE              516
 #define GDPL_MIN_FILNAVN_LENGDE              8
 #define GDPL_MAX_ANTALL_PAR                  200
-
 
 enum GDPL_log_type_enum {GDPL_DEBUG, GDPL_INFO, GDPL_WARNING, GDPL_ERROR};
 typedef enum GDPL_log_type_enum GDPL_log_type;
@@ -99,8 +98,8 @@ int GDPL_kontroller_hent_max_antall_par(int *antall);
 int GDPL_kontroller_hent_par_nummer(int *par_nummer, int type);
 
 int GDPL_konkurranse_opprett_node(GDPL_konkurranse_data_node **new_node);
-int GDPL_konkurranse_legg_til(GDPL_konkurranse_data_node data, GDPL_konkurranse_data_node *root);
-int GDPL_konkurranse_fjern_fra(GDPL_konkurranse_data_node data, GDPL_konkurranse_data_node *root);
+int GDPL_konkurranse_legg_til(GDPL_konkurranse_data_node *data, GDPL_konkurranse_data_node *root);
+int GDPL_konkurranse_fjern_fra(GDPL_konkurranse_data_node *data, GDPL_konkurranse_data_node *root);
 int GDPL_konkurranse_antall_i_liste(int *antall, GDPL_konkurranse_data_node *root);
 int GDPL_konkurranse_hent(int id, GDPL_konkurranse_data_node **data, GDPL_konkurranse_data_node *root);
 

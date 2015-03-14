@@ -70,6 +70,7 @@ int GDPL_par_opprett_node(GDPL_par_data_node **new_node)
   (*new_node)->dame_person_id = 0;
   (*new_node)->start_nr = 0;
   (*new_node)->oppgave_poeng = 0;
+  (*new_node)->neste = 0;
   strcpy((*new_node)->start_tid,"00:00:00");  
   strcpy((*new_node)->maal_tid,"00:00:00");  
       

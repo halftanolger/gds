@@ -38,12 +38,16 @@ int GDPL_test_konkurranse_legg_til_a()
 {
   const char* signatur = "GDPL_test_konkurranse_legg_til_a()";
 
-  GDPL_konkurranse_data_node node;
+  GDPL_konkurranse_data_node* node;
+  GDPL_konkurranse_opprett_node(&node);
+
   GDPL_konkurranse_data_node *root;
   
+
+
   root =  0;
-  node.id = 1;
-  node.aar = 2014;
+  node->id = 1;
+  node->aar = 2014;
   
   if (GDPL_konkurranse_legg_til(node,root) == 0) {
     GDPL_log(GDPL_INFO, signatur, "Test feilet");
@@ -65,12 +69,14 @@ int GDPL_test_konkurranse_legg_til_b()
 {
   const char* signatur = "GDPL_test_konkurranse_legg_til_b()";
 
-  GDPL_konkurranse_data_node node;
+  GDPL_konkurranse_data_node* node;
+  GDPL_konkurranse_opprett_node(&node);
+
   GDPL_konkurranse_data_node *root;
   
   root =  gdpl_kontroller_konkurranseliste_root_ptr;
-  node.id = 0; 
-  node.aar = 2014;
+  node->id = 0;
+  node->aar = 2014;
   
   if (GDPL_konkurranse_legg_til(node,root) == 0) {
     GDPL_log(GDPL_INFO, signatur, "Test feilet");
@@ -92,11 +98,13 @@ int GDPL_test_konkurranse_legg_til_c()
 {
   const char* signatur = "GDPL_test_konkurranse_legg_til_c()";
 
-  GDPL_konkurranse_data_node node;
+  GDPL_konkurranse_data_node* node;
+  GDPL_konkurranse_opprett_node(&node);
+
   GDPL_konkurranse_data_node *root;
   
-  node.id = 1; 
-  node.aar = 0;
+  node->id = 1;
+  node->aar = 0;
   
   if (GDPL_konkurranse_opprett_node(&root) != 0) {
     GDPL_log(GDPL_DEBUG, signatur, "Klarer ikke å opprette en konkurranse root peker!");
@@ -129,11 +137,13 @@ int GDPL_test_konkurranse_legg_til_d()
   const char* signatur = "GDPL_test_konkurranse_legg_til_d()";
 
   int antall = 0;     
-  GDPL_konkurranse_data_node node;
+  GDPL_konkurranse_data_node* node;
+  GDPL_konkurranse_opprett_node(&node);
+
   GDPL_konkurranse_data_node *root;
       
-  node.id = 1; 
-  node.aar = 2014;
+  node->id = 1;
+  node->aar = 2014;
   
   if (GDPL_konkurranse_opprett_node(&root) != 0) {
     GDPL_log(GDPL_DEBUG, signatur, "Klarer ikke å opprette en konkurranse root peker!");
@@ -178,12 +188,14 @@ int GDPL_test_konkurranse_fjern_fra_a()
 {
   const char* signatur = "GDPL_test_konkurranse_fjern_fra_a()";
 
-  GDPL_konkurranse_data_node node;
+  GDPL_konkurranse_data_node *node;
+  GDPL_konkurranse_opprett_node(&node);
+
   GDPL_konkurranse_data_node *root;
   
   root = 0;  
-  node.id = 1;
-  node.aar = 2014;
+  node->id = 1;
+  node->aar = 2014;
     
   if (GDPL_konkurranse_fjern_fra(node,root) == 0) {
     GDPL_log(GDPL_DEBUG, signatur, "Uups. Klarte å fjerne node fra liste uten root!");
@@ -206,11 +218,13 @@ int GDPL_test_konkurranse_fjern_fra_b()
 {
   const char* signatur = "GDPL_test_konkurranse_fjern_fra_b()";
 
-  GDPL_konkurranse_data_node node;
+  GDPL_konkurranse_data_node *node;
+  GDPL_konkurranse_opprett_node(&node);
+
   GDPL_konkurranse_data_node *root;
     
-  node.id = 0; 
-  node.aar = 2014;
+  node->id = 0;
+  node->aar = 2014;
   
   if (GDPL_konkurranse_opprett_node(&root) != 0) {
     GDPL_log(GDPL_DEBUG, signatur, "Klarer ikke å opprette en konkurranse root peker!");
@@ -243,11 +257,12 @@ int GDPL_test_konkurranse_fjern_fra_c()
   const char* signatur = "GDPL_test_konkurranse_fjern_fra_c()";
 
   int antall = 0;     
-  GDPL_konkurranse_data_node node;
+  GDPL_konkurranse_data_node *node;
+  GDPL_konkurranse_opprett_node(&node);
   GDPL_konkurranse_data_node *root;
     
-  node.id = 2; 
-  node.aar = 2014;
+  node->id = 2;
+  node->aar = 2014;
   
   if (GDPL_konkurranse_opprett_node(&root) != 0) {
     GDPL_log(GDPL_DEBUG, signatur, "Klarer ikke å opprette en konkurranse root peker!");
@@ -280,11 +295,13 @@ int GDPL_test_konkurranse_fjern_fra_d()
   const char* signatur = "GDPL_test_konkurranse_fjern_fra_d()";
 
   int antall = 0;     
-  GDPL_konkurranse_data_node node;
+  GDPL_konkurranse_data_node* node;
+  GDPL_konkurranse_opprett_node(&node);
+
   GDPL_konkurranse_data_node *root;
     
-  node.id = 1; 
-  node.aar = 2014;
+  node->id = 1;
+  node->aar = 2014;
   
   if (GDPL_konkurranse_opprett_node(&root) != 0) {
     GDPL_log(GDPL_DEBUG, signatur, "Klarer ikke å opprette en konkurranse root peker!");

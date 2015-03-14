@@ -43,10 +43,12 @@ int GDPL_test_kontroller_sett_opp_konkurranse(int antall_par)
   
   GDPL_konkurranse_data_node *root_konkurranse = 0; 
   GDPL_konkurranse_data_node *valgt_konkurranse = 0;
-  GDPL_konkurranse_data_node node_konkurranse;
+  GDPL_konkurranse_data_node *node_konkurranse;
   
-  node_konkurranse.id = 1;
-  node_konkurranse.aar = 2014;
+  GDPL_konkurranse_opprett_node(&node_konkurranse);
+
+  node_konkurranse->id = 1;
+  node_konkurranse->aar = 2014;
   
   /* Opprett root-konkurranse-node */ 
   assert(GDPL_konkurranse_opprett_node(&root_konkurranse) == 0);

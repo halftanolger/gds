@@ -72,10 +72,11 @@ int GDPL_test_par_legg_til_b()
   
   GDPL_konkurranse_data_node *root_konkurranse = 0; 
   GDPL_konkurranse_data_node *valgt_konkurranse = 0;
-  GDPL_konkurranse_data_node node_konkurranse;
+  GDPL_konkurranse_data_node *node_konkurranse;
+  GDPL_konkurranse_opprett_node(&node_konkurranse);
   
-  node_konkurranse.id = 123;
-  node_konkurranse.aar = 2014;
+  node_konkurranse->id = 123;
+  node_konkurranse->aar = 2014;
   
   /* Opprett root-konkurranse-node */ 
   if (GDPL_konkurranse_opprett_node(&root_konkurranse) != 0) {
