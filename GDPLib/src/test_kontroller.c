@@ -179,7 +179,7 @@ int GDPL_test_kontroller_les_fra_fil_a()
   GDPL_log(GDPL_DEBUG, signatur, "Opprettet temoprært filnavn: %s", tilfeldig_filnavn);
  
   GDPL_modell_angi_filnavn(tilfeldig_filnavn);
-  GDPL_modell_les_fra_fil();
+  GDPL_modell_les_data();
 
   /* Test, fila skal eksistere. */
   

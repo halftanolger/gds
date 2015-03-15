@@ -28,7 +28,7 @@
 #include <assert.h>
 #include "diverse.h"
 
-GDPL_log_type gdpl_log_nivaa = GDPL_ERROR;
+GDPL_log_type gdpl_log_nivaa = -1;
 
 FILE * gdpl_log_stream = 0;
 

@@ -23,9 +23,10 @@
 #include "gdpmainwindows.h"
 
 #include <stdio.h>
+#include <iostream>
 #include "gdpl.h"
 
-
+#include "test_modell.h"
 
 extern const char* gdpl_kontroller_gdplib_navn;
 extern const char* gdpl_kontroller_gdplib_versjon;
@@ -37,12 +38,23 @@ int test_gdplib();
 
 int main(int argc, char **argv)
 {
+
+    std::cout << "hello world" << std::endl;
+
+    GDPL_init_log(GDPL_DEBUG, stdout);
+    int i = GDPL_test_modell_alle_funksjoner();
+
+    std::cout << "i=" << i << std::endl;
+
+    return 0;
+
     QApplication app(argc, argv);
     GDPMainWindows* appWin = new GDPMainWindows();
     appWin->show();
     appWin->setFocus();
 
-    test_gdplib();
+    //test_gdplib();
+
 
     int r = app.exec();
     return r;
@@ -101,7 +113,7 @@ int test_gdplib() {
     //
     //
 
-    error_nr = GDPL_modell_les_fra_fil();
+    error_nr = GDPL_modell_les_data();
     if (error_nr > 0) {
         qWarning() << "Systemfeil. GDPL_kontroller_les_fra_fil(..) returnerte > 0";
         return error_nr;
@@ -138,18 +150,6 @@ int test_gdplib() {
         node_konkurranse->id = 1;
         node_konkurranse->aar = 2015;
 
-        /* Når man oppretter en ny konkurranse, så må man også opprette nye
-         * root-pekere til person og par -lista. Dette bør kanskje gjøres
-         * ved hjelp av en utility-funksjon? */
-
-        GDPL_person_data_node* node_person;
-        GDPL_person_opprett_node(&node_person);
-
-        GDPL_par_data_node* node_par;
-        GDPL_par_opprett_node(&node_par);
-
-        node_konkurranse->person_liste_root_ptr = node_person;
-        node_konkurranse->par_liste_root_ptr = node_par;
 
 
 
@@ -163,14 +163,13 @@ int test_gdplib() {
 
         /* Punkt 4.2 */
 
-      //  qDebug() << "Todo: alt rundt punkt 4.2";
+        //qDebug() << "Todo: alt rundt punkt 4.2";
     }
 
 
 
 
-
-    error_nr = GDPL_modell_skriv_til_fil();
+    error_nr = GDPL_modell_skriv_data();
     if (error_nr > 0) {
         qWarning() << "Systemfeil. GDPL_kontroller_skriv_til_fil(..) returnerte > 0";
         return error_nr;

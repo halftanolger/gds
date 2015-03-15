@@ -28,7 +28,9 @@ extern "C" {
 
 #include "diverse.h"
 
-// Variabler og definisjoner
+
+/* Variabel-deklareringer */
+
 
 struct GDPL_par_data_node_struct {
     int id;
@@ -68,20 +70,28 @@ extern GDPL_konkurranse_data_node *gdpl_modell_konkurranseliste_root_ptr;
 extern GDPL_konkurranse_data_node *gdpl_modell_konkurranseliste_valgt_ptr;
 
 
-// Funksjoner
+/* Funksjons-deklareringer */
+
 
 int GDPL_modell_angi_filnavn(const char *filnavn);
 
-int GDPL_modell_les_fra_fil();
+int GDPL_modell_les_data();
 
-int GDPL_modell_skriv_til_fil();
+int GDPL_modell_skriv_data();
 
-int GDPL_modell_opprett_ny_fil();
 
-int GDPL_modell_les_inn_fra_eksisterende_fil(FILE* file);
+/* 'Private' funksjons-deklareringer */
+
+
+int GDPL_modell_privat_opprett_ny_fil();
+
+int GDPL_modell_privat_les_fra_fil(FILE* file);
+
+int GDPL_modell_privat_skriv_til_fil(FILE* file);
+
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif // KONTROLLER_H
+#endif // MODELL_H

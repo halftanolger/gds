@@ -24,13 +24,18 @@ SOURCES += \
     ../GDPLib/src/test_kontroller.c \
     ../GDPLib/src/test_par.c \
     ../GDPLib/src/test_person.c \
+    ../GDPLib/src/test_modell.c \
+
 
 HEADERS += \
     ../GDPLib/src/gdpl.h \
     ../GDPLib/src/diverse.h \
     ../GDPLib/src/modell.h \
+    ../GDPLib/src/person.h \
+    ../GDPLib/src/par.h \
     ../GDPLib/src/kontroller.h \
-    ../GDPLib/src/konkurranse.h
+    ../GDPLib/src/konkurranse.h \
+    ../GDPLib/src/test_modell.h \
 
 DEPENDPATH += \
     ../GDPLib/src/ \
