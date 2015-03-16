@@ -31,6 +31,20 @@ extern "C" {
 
 /* Variabel-deklareringer */
 
+struct GDPL_node {
+    void *data;
+    struct GDPL_node *neste;
+};
+
+struct GDPL_konkurranse_data {
+    int id;
+    int aar;
+    struct GDPL_node *person_liste;
+    struct GDPL_node *par_liste;
+};
+
+
+
 
 struct GDPL_par_data_node_struct {
     int id;
@@ -63,6 +77,8 @@ struct GDPL_konkurranse_data_node_struct {
 
 typedef struct GDPL_konkurranse_data_node_struct  GDPL_konkurranse_data_node;
 
+/* Variabler */
+
 extern char gdpl_modell_datafilnavn[GDPL_MAX_FILNAVN_LENGDE];
 
 extern GDPL_konkurranse_data_node *gdpl_modell_konkurranseliste_root_ptr;
@@ -85,10 +101,11 @@ int GDPL_modell_skriv_data();
 
 int GDPL_modell_privat_opprett_ny_fil();
 
-int GDPL_modell_privat_les_fra_fil(FILE* file);
+int GDPL_modell_privat_skriv_til_eksisterende_fil();
 
-int GDPL_modell_privat_skriv_til_fil(FILE* file);
+int GDPL_modell_privat_les_inn_fra_eksisterende_fil();
 
+int GDPL_modell_privat_sjekk_filnavn(const char* filnavn);
 
 #ifdef __cplusplus
 }

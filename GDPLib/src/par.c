@@ -20,9 +20,10 @@
 
 #include <stdlib.h>
 #include <string.h>
-#include "gdpl.h"
+#include "diverse.h"
+#include "kontroller.h"
 
-extern const char *gdpl_kontroller_feilkoder[]; 
+
 
 /* ----------------------------------------------------------------------------
  *

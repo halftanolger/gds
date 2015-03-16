@@ -58,19 +58,8 @@ int GDPL_modell_angi_filnavn(const char *filnavn)
 
     } else {
 
-        /* Angi oppgitt filnavn, såfremt det ikke er for langt eller kort. */
-
-        if (strlen(filnavn) > GDPL_MAX_FILNAVN_LENGDE) {
-            int feilkode = FEILKODE_DATAFILNAVN_FOR_LANGT;
-            GDPL_log(GDPL_ERROR, signatur, gdpl_kontroller_feilkoder[feilkode]);
-            GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
-            return feilkode;
-        }
-
-        if (strlen(filnavn) < GDPL_MIN_FILNAVN_LENGDE) {
-            int feilkode = FEILKODE_DATAFILNAVN_FOR_KORT;
-            GDPL_log(GDPL_ERROR, signatur, gdpl_kontroller_feilkoder[feilkode]);
-            GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
+        int feilkode = GDPL_modell_privat_sjekk_filnavn(filnavn);
+        if (feilkode > 0) {
             return feilkode;
         }
 
@@ -128,35 +117,26 @@ int GDPL_modell_les_data()
 
     GDPL_log(GDPL_DEBUG, signatur, "Start funksjon.");
 
-    if (gdpl_modell_datafilnavn == 0) {
+    /* Vi må ha et ok filnavn å lese fra. */
 
-        const char* msg = "Datafilnavn er ikke satt/initiert. Dette er feil!";
-        GDPL_log(GDPL_DEBUG, signatur, msg);
+    if (GDPL_modell_privat_sjekk_filnavn(gdpl_modell_datafilnavn) > 0)
+        return FEILKODE_FEIL;
 
-        feilkode = FEILKODE_DATAFILNAVN_IKKE_DEFINERT;
-        GDPL_log(GDPL_ERROR, signatur, gdpl_kontroller_feilkoder[feilkode]);
-        GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
-        return feilkode;
+    /* Om vi ikke har noen datafil med dette navnet på systemet, så oppretter
+     * vi den, og skriver inn litt root-data, .. før vi fortsetter som om
+     * ingen ting hadde hent, dvs leser inn data fra ei eksisterende datafil.
+     */
 
+    FILE *fptr;
+    fptr = fopen(gdpl_modell_datafilnavn,"rb+");
+    if (fptr == NULL) {
+        GDPL_modell_privat_opprett_ny_fil();
+    } else {
+        fclose(fptr);
     }
 
-    FILE *file;
-    file = fopen(gdpl_modell_datafilnavn,"rb");
-
-    if (file == 0) {
-
-        feilkode = GDPL_modell_privat_opprett_ny_fil();
-        return feilkode;
-
-    } else {
-
-        feilkode = GDPL_modell_privat_les_inn_fra_eksisterende_fil(file);
-
-        fclose(file);
-        file = 0;
-
-        return feilkode;
-
+    if (GDPL_modell_privat_les_inn_fra_eksisterende_fil() > 0) {
+        return FEILKODE_FEIL;
     }
 
     GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
@@ -165,10 +145,105 @@ int GDPL_modell_les_data()
 
 
 
-int GDPL_modell_privat_skriv_til_fil(FILE* file)
+
+int GDPL_modell_skriv_data()
 {
-    const char* signatur = "GDPL_modell_skriv_til_fil()";
+    const char* signatur = "GDPL_modell_skriv_data()";
+
+    GDPL_log(GDPL_DEBUG, signatur, "Start funksjon.");
+
+    if (GDPL_modell_privat_sjekk_filnavn(gdpl_modell_datafilnavn) > 0)
+        return FEILKODE_FEIL;
+
+    if (gdpl_modell_konkurranseliste_root_ptr == 0) {
+        GDPL_log(GDPL_ERROR, signatur, "gdpl_modell_konkurranseliste_root_ptr == 0");
+        return FEILKODE_FEIL;
+    }
+
+    FILE *file;
+    file = fopen(gdpl_modell_datafilnavn,"wb");
+    if (file == 0) {
+        GDPL_log(GDPL_ERROR, signatur, "file == 0");
+        return FEILKODE_FEIL;
+    }
+    fclose(file);
+
+    if (GDPL_modell_privat_skriv_til_eksisterende_fil() > 0) {
+        return FEILKODE_FEIL;
+    }
+
+    GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
+    return 0;
+}
+
+
+
+/* Private funksjons-definisjoner */
+
+
+int GDPL_modell_privat_opprett_ny_fil()
+{
+    const char* signatur = "GDPL_modell_opprett_ny_fil()";
     int feilkode = 0;
+
+    /* Fila eksisterer ikke, opprett fil og initier grunnleggende datastruktur. */
+
+    GDPL_log(GDPL_DEBUG, signatur, "Fila %s eksisterer ikke. Prøver å opprette den.", gdpl_modell_datafilnavn);
+    FILE* file = fopen(gdpl_modell_datafilnavn,"wb");
+    if (file == 0) {
+
+        feilkode = FEILKODE_KAN_IKKE_OPPRETTE_DATAFIL;
+        GDPL_log(GDPL_ERROR, signatur, gdpl_kontroller_feilkoder[feilkode]);
+        GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
+        return feilkode;
+
+    }
+
+    /* Ok, fila er opprettet. Opprett nå den interne grunnstrukturen med en
+       root-konkurranse-node med tilhørende person- og par-root-noder.*/
+
+    GDPL_konkurranse_data_node *root_konkurranse_data_node;
+    GDPL_konkurranse_opprett_node(&root_konkurranse_data_node);
+
+    GDPL_person_data_node* node_person;
+    GDPL_person_opprett_node(&node_person);
+
+    GDPL_par_data_node* node_par;
+    GDPL_par_opprett_node(&node_par);
+
+    root_konkurranse_data_node->person_liste_root_ptr = node_person;
+    root_konkurranse_data_node->par_liste_root_ptr = node_par;
+
+    /* initier hoved-root-pekeren og indiker samtidig at ingen konkurranse
+       enda ikke er valgt */
+
+    gdpl_modell_konkurranseliste_root_ptr = root_konkurranse_data_node;
+    gdpl_modell_konkurranseliste_valgt_ptr = 0;
+
+    fclose(file);
+    file = 0;
+
+    /* Skriv denne noden til fila. */
+
+    GDPL_modell_skriv_data();
+
+    GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
+    return 0;
+
+}
+
+int GDPL_modell_privat_skriv_til_eksisterende_fil()
+{
+    const char* signatur = "GDPL_modell_privat_skriv_til_eksisterende_fil()";
+
+    FILE *file;
+    file = fopen(gdpl_modell_datafilnavn,"wb+");
+    if (file == NULL) {
+        int feilkode = FEILKODE_KAN_IKKE_SKRIVE_TIL_DATAFIL;
+        GDPL_log(GDPL_ERROR, signatur, gdpl_kontroller_feilkoder[feilkode]);
+        GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
+        return feilkode;
+    }
 
     /* Skriv magiskt tall til fila. */
 
@@ -223,15 +298,6 @@ int GDPL_modell_privat_skriv_til_fil(FILE* file)
         } while (person_data_node != 0);
 
         par_data_node = konkurranse_data_node->par_liste_root_ptr;
-        if (par_data_node == 0) {
-            GDPL_log(GDPL_DEBUG, signatur, "konkurranse id=%d har nullptr som par root.",konkurranse_data_node->id);
-            feilkode = FEILKODE_FEIL;
-            GDPL_log(GDPL_ERROR, signatur, gdpl_kontroller_feilkoder[feilkode]);
-            GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
-            return feilkode;
-        } else {
-            GDPL_log(GDPL_DEBUG, signatur, "konkurranse id=%d har ok ptr som par root.",konkurranse_data_node->id);
-        }
 
         do {
             int par_data_node_id = par_data_node->id;
@@ -267,190 +333,41 @@ int GDPL_modell_privat_skriv_til_fil(FILE* file)
 
             par_data_node = par_data_node->neste;
         } while (par_data_node != 0);
+
         konkurranse_data_node = konkurranse_data_node->neste;
     } while (konkurranse_data_node != 0);
 
-
-    return feilkode;
+    fclose(file);
+    return 0;
 }
 
-int GDPL_modell_skriv_data()
+
+int GDPL_modell_privat_les_inn_fra_eksisterende_fil()
 {
-    const char* signatur = "GDPL_modell_skriv_data()";
+    const char* signatur = "GDPL_modell_privat_les_inn_fra_eksisterende_fil()";
     int feilkode = 0;
-
-    GDPL_log(GDPL_DEBUG, signatur, "Start funksjon.");
-
-    if (gdpl_modell_datafilnavn == 0) {
-
-        /* Datafilnavn er ikke initiert! */
-
-        feilkode = FEILKODE_DATAFILNAVN_IKKE_DEFINERT;
-        GDPL_log(GDPL_ERROR, signatur, gdpl_kontroller_feilkoder[feilkode]);
-        GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
-        return feilkode;
-
-    }
-
-    if (gdpl_modell_konkurranseliste_root_ptr == 0) {
-
-        /* Vi har ingen data å skrive. Root-pekeren er tom! */
-
-        feilkode = FEILKODE_FEIL;
-        GDPL_log(GDPL_ERROR, signatur, gdpl_kontroller_feilkoder[feilkode]);
-        GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
-        return feilkode;
-
-    }
 
     FILE *file;
-    file = fopen(gdpl_modell_datafilnavn,"wb");
-
-    if (file == 0) {
-
-        /* Klarer ikke å åpne fila */
-
-        feilkode = FEILKODE_FEIL;
-        GDPL_log(GDPL_ERROR, signatur, gdpl_kontroller_feilkoder[feilkode]);
-        GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
-        return feilkode;
-
-    }
-
-    GDPL_modell_privat_skriv_til_fil(file);
-
-    fclose(file);
-    file = 0;
-
-    GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
-    return 0;
-}
-
-
-
-/* Private funksjons-definisjoner */
-
-
-int GDPL_modell_privat_opprett_ny_fil()
-{
-    const char* signatur = "GDPL_modell_opprett_ny_fil()";
-    int feilkode = 0;
-
-    /* Fila eksisterer ikke, opprett fil og initier grunnleggende datastruktur. */
-
-    GDPL_log(GDPL_DEBUG, signatur, "Fila %s eksisterer ikke. Prøver å opprette den.", gdpl_modell_datafilnavn);
-    FILE* file = fopen(gdpl_modell_datafilnavn,"wb");
-    if (file == 0) {
-
-        const char* msg = "Fila eksisterer ikke, og jeg klarer ikke å opprette den heller. Dette er feil!";
-        GDPL_log(GDPL_DEBUG, signatur, msg);
-
-        feilkode = FEILKODE_KAN_IKKE_OPPRETTE_DATAFIL;
-        GDPL_log(GDPL_ERROR, signatur, gdpl_kontroller_feilkoder[feilkode]);
-        GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
-        return feilkode;
-
-    }
-
-    /* Ok, fila er opprettet. Opprett nå den interne grunnstrukturen med en
-       root-konkurranse-node med tilhørende person- og par-root-noder.*/
-
-    GDPL_konkurranse_data_node *root_konkurranse_data_node;
-    feilkode = GDPL_konkurranse_opprett_node(&root_konkurranse_data_node);
-    if (feilkode != 0) {
+    file = fopen(gdpl_modell_datafilnavn,"rb+");
+    if (file == NULL) {
+        feilkode = FEILKODE_KAN_IKKE_LESE_FRA_DATAFIL;
         GDPL_log(GDPL_ERROR, signatur, gdpl_kontroller_feilkoder[feilkode]);
         GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
         return feilkode;
     }
-
-
-    /* Når man oppretter en ny konkurranse, så må man også opprette nye
-       root-pekere til person og par -lista. */
-
-    GDPL_person_data_node* node_person;
-    GDPL_person_opprett_node(&node_person);
-
-    GDPL_par_data_node* node_par;
-    GDPL_par_opprett_node(&node_par);
-
-    root_konkurranse_data_node->person_liste_root_ptr = node_person;
-    root_konkurranse_data_node->par_liste_root_ptr = node_par;
-
-
-    /* initier hoved-root-pekeren og indiker samtidig at ingen konkurranse
-       enda ikke er valgt */
-
-    gdpl_modell_konkurranseliste_root_ptr = root_konkurranse_data_node;
-    gdpl_modell_konkurranseliste_valgt_ptr = 0;
-
-    fclose(file);
-    file = 0;
-
-    /* Skriv denne noden til fila. */
-
-    feilkode = GDPL_modell_skriv_data();
-    if (feilkode > 0) {
-        return feilkode;
-    }
-
-    GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
-    return 0;
-
-}
-
-
-int GDPL_modell_privat_les_inn_fra_eksisterende_fil(FILE* file)
-{
-
-    const char* signatur = "GDPL_modell_opprett_ny_fil()";
-    int feilkode = 0;
-
-    /* Fila eksisterer, les inn data i datatruktur. */
-
-    GDPL_log(GDPL_DEBUG, signatur, "Fila %s eksisterer.", gdpl_modell_datafilnavn);
-
-    /* Sjekk om den inneholder noe data, e.g. har size > 0 */
-
-    fseek(file,0L, SEEK_END);
-    size_t sz = ftell(file);
-
-    if (sz == 0) {
-
-        //TODO: her bør jeg kanskje kalle opp funksjonen 'opprette ei ny fil'...
-
-        const char* msg = "Fila eksisterer, men er tom. Dette er feil!";
-        GDPL_log(GDPL_DEBUG, signatur, msg);
-
-        feilkode = FEILKODE_FEIL;
-        GDPL_log(GDPL_ERROR, signatur, gdpl_kontroller_feilkoder[feilkode]);
-        GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
-        return feilkode;
-
-    }
-
-    fseek(file,0L,0L);
 
     int mt = 0;
     fread(&mt,sizeof(int),1,file);
 
     if (mt != 12345) {
-
         const char* msg = "Fila starter ikke med det 'magiske tallet'; 12345, i.e. dette er ikke ei korrekt GDPLib-datafil!";
         GDPL_log(GDPL_DEBUG, signatur, msg);
-
         feilkode = FEILKODE_FEIL;
         GDPL_log(GDPL_ERROR, signatur, gdpl_kontroller_feilkoder[feilkode]);
         GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
+        fclose(file);
         return feilkode;
-
-    } else {
-
-        const char* msg = "Fila starter med det 'magiske tallet'; 12345, i.e. dette er kanskje ei korrekt GDPLib-datafil...";
-        GDPL_log(GDPL_DEBUG, signatur, msg);
-
     }
-
-    GDPL_log(GDPL_DEBUG, signatur, "Les inn data fra fil.");
 
     GDPL_konkurranse_data_node *konkurranse_data_node_root = 0;
 
@@ -524,7 +441,6 @@ int GDPL_modell_privat_les_inn_fra_eksisterende_fil(FILE* file)
             char *enavn = (char*) malloc(sz);
             strncpy(enavn,&person_data_node_enavn,sz);
 
-
             person_data_node_tmp->id = person_data_node_id;
             person_data_node_tmp->fnavn = fnavn;
             person_data_node_tmp->enavn = enavn;
@@ -542,8 +458,6 @@ int GDPL_modell_privat_les_inn_fra_eksisterende_fil(FILE* file)
             GDPL_log(GDPL_DEBUG, signatur, "b");
 
         } while (person_data_node_har_neste != 0);
-
-        GDPL_log(GDPL_DEBUG, signatur, "Ferdig med personer, går til par.");
 
         do {
 
@@ -616,11 +530,41 @@ int GDPL_modell_privat_les_inn_fra_eksisterende_fil(FILE* file)
     fclose(file);
     file = 0;
 
-    int antall_konkurranser = -1;
-    GDPL_konkurranse_antall_i_liste(&antall_konkurranser, gdpl_modell_konkurranseliste_root_ptr);
-    GDPL_log(GDPL_DEBUG, signatur, "antall_konkurranser=%d",antall_konkurranser);
-
     GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
+    return 0;
+}
+
+
+
+int GDPL_modell_privat_sjekk_filnavn(const char* filnavn)
+{
+
+    const char* signatur = "GDPL_modell_privat_sjekk_filnavn(const char*)";
+
+    GDPL_log(GDPL_DEBUG, signatur, "Start funksjon.");
+
+    if (filnavn == 0) {
+        int feilkode = FEILKODE_DATAFILNAVN_IKKE_DEFINERT;
+        GDPL_log(GDPL_ERROR, signatur, gdpl_kontroller_feilkoder[feilkode]);
+        GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon. (filnavn er ikke satt)");
+        return feilkode;
+    }
+
+    if (strlen(filnavn) > GDPL_MAX_FILNAVN_LENGDE) {
+        int feilkode = FEILKODE_DATAFILNAVN_FOR_LANGT;
+        GDPL_log(GDPL_ERROR, signatur, gdpl_kontroller_feilkoder[feilkode]);
+        GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon. (filnavn er for langt)");
+        return feilkode;
+    }
+
+    if (strlen(filnavn) < GDPL_MIN_FILNAVN_LENGDE) {
+        int feilkode = FEILKODE_DATAFILNAVN_FOR_KORT;
+        GDPL_log(GDPL_ERROR, signatur, gdpl_kontroller_feilkoder[feilkode]);
+        GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon. (filnavn er for kort)");
+        return feilkode;
+    }
+
+    GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon. (filnavn er ok)");
     return 0;
 
 }

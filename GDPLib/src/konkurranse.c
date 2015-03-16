@@ -166,24 +166,9 @@ int GDPL_konkurranse_legg_til(GDPL_konkurranse_data_node *data, GDPL_konkurranse
   }
   
   /* Legg inn noden sist i lista. */
-
-  GDPL_konkurranse_data_node *new_node;
-  
-  int feilkode = GDPL_konkurranse_opprett_node(&new_node);
-  if (feilkode != 0) {
-    GDPL_log(GDPL_ERROR, signatur, gdpl_kontroller_feilkoder[feilkode]);
-    GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
-    return feilkode;  
-  }
-    
-  new_node->id = data->id;
-  new_node->aar = data->aar;
-  new_node->person_liste_root_ptr = data->person_liste_root_ptr;
-  new_node->par_liste_root_ptr = data->par_liste_root_ptr;
-  
     
   if (root->neste == 0) {
-    root->neste = new_node;
+    root->neste = data;
     GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
     return 0;
   }
@@ -192,7 +177,7 @@ int GDPL_konkurranse_legg_til(GDPL_konkurranse_data_node *data, GDPL_konkurranse
   while (runner->neste != 0) {
     runner = runner->neste;
   }  
-  runner->neste = new_node;
+  runner->neste = data;
   
   GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
   return 0;
