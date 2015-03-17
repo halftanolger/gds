@@ -28,39 +28,30 @@ extern "C" {
 
 #include "diverse.h"
 
-
 /* Variabel-deklareringer */
 
-struct GDPL_node {
-    void *data;
-    struct GDPL_node *neste;
+struct GDPL_tid {
+    int timer;
+    int minutt;
+    int sekund;
 };
-
-struct GDPL_konkurranse_data {
-    int id;
-    int aar;
-    struct GDPL_node *person_liste;
-    struct GDPL_node *par_liste;
-};
-
-
-
 
 struct GDPL_par_data_node_struct {
     int id;
     int herre_person_id;
     int dame_person_id;
     int start_nr;
-    char start_tid[GDPL_MAX_TID_LENGDE];
-    char maal_tid[GDPL_MAX_TID_LENGDE];
+    struct GDPL_tid start_tid;
+    struct GDPL_tid maal_tid;
+    int tids_poeng;
     int oppgave_poeng;
     struct GDPL_par_data_node_struct *neste;
 };
 
 struct GDPL_person_data_node_struct {
-    int id;
-    char *fnavn;
-    char *enavn;
+    int id;    
+    char fnavn[GDPL_MAX_PERSONNAVN_LENGDE];
+    char enavn[GDPL_MAX_PERSONNAVN_LENGDE];
     struct GDPL_person_data_node_struct *neste;
 };
 
@@ -95,17 +86,8 @@ int GDPL_modell_les_data();
 
 int GDPL_modell_skriv_data();
 
+int GDPL_modell_dump();
 
-/* 'Private' funksjons-deklareringer */
-
-
-int GDPL_modell_privat_opprett_ny_fil();
-
-int GDPL_modell_privat_skriv_til_eksisterende_fil();
-
-int GDPL_modell_privat_les_inn_fra_eksisterende_fil();
-
-int GDPL_modell_privat_sjekk_filnavn(const char* filnavn);
 
 #ifdef __cplusplus
 }

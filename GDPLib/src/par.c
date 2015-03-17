@@ -20,6 +20,7 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include "par.h"
 #include "diverse.h"
 #include "kontroller.h"
 
@@ -56,13 +57,18 @@ int GDPL_par_opprett_node(GDPL_par_data_node **new_node)
 
   GDPL_log(GDPL_DEBUG, signatur, "Start funksjon.");
   
+  if ((*new_node) != 0) {
+      int feilkode = FEILKODE_KAN_IKKE_ALLOKERE_MINNE_S;
+      GDPL_log(GDPL_ERROR, signatur, gdpl_kontroller_feilkoder[feilkode]);
+      return feilkode;
+  }
+
   *new_node = (GDPL_par_data_node*)
                malloc (sizeof (GDPL_par_data_node));
 
   if (*new_node == 0) {
     int feilkode = FEILKODE_KAN_IKKE_ALLOKERE_MINNE;
-    GDPL_log(GDPL_ERROR, signatur, gdpl_kontroller_feilkoder[feilkode]);
-    GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
+    GDPL_log(GDPL_ERROR, signatur, gdpl_kontroller_feilkoder[feilkode]);    
     return feilkode;
   }
 
@@ -70,12 +76,18 @@ int GDPL_par_opprett_node(GDPL_par_data_node **new_node)
   (*new_node)->herre_person_id = 0;
   (*new_node)->dame_person_id = 0;
   (*new_node)->start_nr = 0;
+  (*new_node)->tids_poeng = 0;
   (*new_node)->oppgave_poeng = 0;
   (*new_node)->neste = 0;
-  strcpy((*new_node)->start_tid,"00:00:00");  
-  strcpy((*new_node)->maal_tid,"00:00:00");  
+  (*new_node)->start_tid.timer = 0;
+  (*new_node)->start_tid.minutt = 0;
+  (*new_node)->start_tid.sekund = 0;
+  (*new_node)->maal_tid.timer = 0;
+  (*new_node)->maal_tid.minutt = 0;
+  (*new_node)->maal_tid.sekund = 0;
       
   GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
+
   return 0;
 }
 
@@ -107,77 +119,54 @@ int GDPL_par_opprett_node(GDPL_par_data_node **new_node)
  *
  * ----------------------------------------------------------------------------
  */ 
-int GDPL_par_legg_til(GDPL_par_data_node data, GDPL_par_data_node *root)
+int GDPL_par_legg_til(GDPL_par_data_node *data)
 {
   const char* signatur = "GDPL_par_legg_til(GDPL_par_data_node,GDPL_par_data_node*)";
 
   GDPL_log(GDPL_DEBUG, signatur, "Start funksjon.");
-  
+    
+  GDPL_konkurranse_data_node *kroot = gdpl_modell_konkurranseliste_valgt_ptr;
+  if (kroot == 0) {
+      GDPL_log(GDPL_ERROR, signatur, "gdpl_modell_konkurranseliste_valgt_ptr er null");
+      return FEILKODE_FEIL;
+  }
+
+  GDPL_par_data_node *root = gdpl_modell_konkurranseliste_valgt_ptr->par_liste_root_ptr;
+  if (root == 0) {
+    GDPL_log(GDPL_ERROR, signatur, "gdpl_modell_konkurranseliste_valgt_ptr->par_liste_root_ptr er null");
+    return FEILKODE_FEIL;
+  }
+
   /* Litt inputparameter-sjekking. */
   
   if (root == 0) {
-    GDPL_log(GDPL_DEBUG, signatur, "root == 0, I'm out of here ...");
-    GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
+    GDPL_log(GDPL_ERROR, signatur, "root == 0, I'm out of here ...");
     return FEILKODE_FEIL;  
   }
 
-  if (data.id == 0) {
-    GDPL_log(GDPL_DEBUG, signatur, "data.id == 0, I'm out of here ...");
-    GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
-    return FEILKODE_FEIL;  
-  }
-  
-/*  
-  if (data.fnavn == 0) {
-    GDPL_log(GDPL_DEBUG, signatur, "data.fnavn == 0, I'm out of here ...");
-    GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
-    return FEILKODE_FEIL;  
+  if (data == 0) {
+    GDPL_log(GDPL_ERROR, signatur, "data == 0, I'm out of here ...");
+    return FEILKODE_FEIL;
   }
 
-  if (strlen(data.fnavn) > GDPL_MAX_PERSONNAVN_LENGDE) {
-    GDPL_log(GDPL_DEBUG, signatur, "data.fnavn for langt, I'm out of here ...");
-    GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
+  if (data->id == 0) {
+    GDPL_log(GDPL_ERROR, signatur, "data->id == 0, id må være større enn null");
     return FEILKODE_FEIL;  
   }
   
-  if (strlen(data.fnavn) < GDPL_MIN_PERSONNAVN_LENGDE) {
-    GDPL_log(GDPL_DEBUG, signatur, "data.fnavn for kort, I'm out of here ...");
-    GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
-    return FEILKODE_FEIL;  
-  }
-    
-  if (data.enavn == 0) {
-    GDPL_log(GDPL_DEBUG, signatur, "data.enavn == 0, I'm out of here ...");
-    GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
-    return FEILKODE_FEIL;  
-  }
-  
-  if (strlen(data.enavn) > GDPL_MAX_PERSONNAVN_LENGDE) {
-    GDPL_log(GDPL_DEBUG, signatur, "data.lnavn for langt, I'm out of here ...");
-    GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
-    return FEILKODE_FEIL;  
-  }
-  
-  if (strlen(data.enavn) < GDPL_MIN_PERSONNAVN_LENGDE) {
-    GDPL_log(GDPL_DEBUG, signatur, "data.lnavn for kort, I'm out of here ...");
-    GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
-    return FEILKODE_FEIL;  
-  }
-	
-*/	
 	
   /* Sjekk om ny id finnes fra før i lista. */
   int id_eksisterer = 0;
   GDPL_par_data_node *runner = root;
         
   while (runner->neste != 0) {
-    if (data.id == runner->id) {
+    if (data->id == runner->id) {
       id_eksisterer = 1;
       break;
     }
     runner = runner->neste;
   }
-  if (data.id == runner->id) {
+  if (data->id == runner->id) {
     id_eksisterer = 1;
   }
   
@@ -190,25 +179,9 @@ int GDPL_par_legg_til(GDPL_par_data_node data, GDPL_par_data_node *root)
     
   /* Legg inn noden sist i lista. */
   
-  GDPL_par_data_node *new_node;
-  
-  int feilkode = GDPL_par_opprett_node(&new_node);
-  if (feilkode != 0) {
-    GDPL_log(GDPL_ERROR, signatur, gdpl_kontroller_feilkoder[feilkode]);
-    GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
-    return feilkode;  
-  }
-    
-  new_node->id = data.id;  
-  new_node->herre_person_id = data.herre_person_id;
-  new_node->dame_person_id = data.dame_person_id;      
-  new_node->start_nr = data.start_nr;
-  new_node->oppgave_poeng = data.oppgave_poeng;
-  strcpy(new_node->start_tid,data.start_tid);
-  strcpy(new_node->maal_tid,data.maal_tid);        	  	  	  	 	 
 	  
   if (root->neste == 0) {
-    root->neste = new_node;
+    root->neste = data;
     GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
     return 0;
   }
@@ -217,7 +190,7 @@ int GDPL_par_legg_til(GDPL_par_data_node data, GDPL_par_data_node *root)
   while (runner->neste != 0) {
     runner = runner->neste;
   }  
-  runner->neste = new_node;
+  runner->neste = data;
   
   GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
   return 0;
@@ -252,12 +225,24 @@ int GDPL_par_legg_til(GDPL_par_data_node data, GDPL_par_data_node *root)
  *
  * ----------------------------------------------------------------------------
  */ 
-int GDPL_par_fjern_fra(GDPL_par_data_node data, GDPL_par_data_node *root)
+int GDPL_par_fjern_fra(GDPL_par_data_node *data)
 {
   const char* signatur = "GDPL_par_fjern_fra(GDPL_par_data_node,GDPL_par_data_node*)";
 
   GDPL_log(GDPL_DEBUG, signatur, "Start funksjon.");
-  
+    
+  GDPL_konkurranse_data_node *kroot = gdpl_modell_konkurranseliste_valgt_ptr;
+  if (kroot == 0) {
+      GDPL_log(GDPL_ERROR, signatur, "gdpl_modell_konkurranseliste_valgt_ptr er null");
+      return FEILKODE_FEIL;
+  }
+
+  GDPL_par_data_node *root = gdpl_modell_konkurranseliste_valgt_ptr->par_liste_root_ptr;
+  if (root == 0) {
+    GDPL_log(GDPL_ERROR, signatur, "gdpl_modell_konkurranseliste_valgt_ptr->par_liste_root_ptr er null");
+    return FEILKODE_FEIL;
+  }
+
   /* Litt inputparameter-sjekking. */
   
   if (root == 0) {
@@ -266,7 +251,7 @@ int GDPL_par_fjern_fra(GDPL_par_data_node data, GDPL_par_data_node *root)
     return FEILKODE_FEIL;  
   }
 
-  if (data.id == 0) {
+  if (data->id == 0) {
     GDPL_log(GDPL_DEBUG, signatur, "data.id == 0, I'm out of here ...");
     GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
     return FEILKODE_FEIL;  
@@ -277,13 +262,13 @@ int GDPL_par_fjern_fra(GDPL_par_data_node data, GDPL_par_data_node *root)
   GDPL_par_data_node *runner = root;
   
   while (runner->neste != 0) {
-    if (data.id == runner->id) {
+    if (data->id == runner->id) {
       id_eksisterer = 1;
       break;
     }
     runner = runner->neste;
   }
-  if (data.id == runner->id) {
+  if (data->id == runner->id) {
     id_eksisterer = 1;
   }
   
@@ -341,12 +326,24 @@ int GDPL_par_fjern_fra(GDPL_par_data_node data, GDPL_par_data_node *root)
  *
  * ----------------------------------------------------------------------------
  */ 
-int GDPL_par_hent(int id, GDPL_par_data_node **data, GDPL_par_data_node *root)
+int GDPL_par_hent(int id, GDPL_par_data_node **data)
 {
   const char* signatur = "GDPL_par_hent(int,GDPL_par_data_node,GDPL_par_data_node*)";
 
   GDPL_log(GDPL_DEBUG, signatur, "Start funksjon.");
   
+  GDPL_konkurranse_data_node *kroot = gdpl_modell_konkurranseliste_valgt_ptr;
+  if (kroot == 0) {
+      GDPL_log(GDPL_ERROR, signatur, "gdpl_modell_konkurranseliste_valgt_ptr er null");
+      return FEILKODE_FEIL;
+  }
+
+  GDPL_par_data_node *root = gdpl_modell_konkurranseliste_valgt_ptr->par_liste_root_ptr;
+  if (root == 0) {
+    GDPL_log(GDPL_ERROR, signatur, "gdpl_modell_konkurranseliste_valgt_ptr->par_liste_root_ptr er null");
+    return FEILKODE_FEIL;
+  }
+
   /* Litt inputparameter-sjekking. */
   
   if (root == 0) {
@@ -417,12 +414,24 @@ int GDPL_par_hent(int id, GDPL_par_data_node **data, GDPL_par_data_node *root)
  *
  * ----------------------------------------------------------------------------
  */ 
-int GDPL_par_antall_i_liste(int *antall, GDPL_par_data_node *root)
+int GDPL_par_antall_i_liste(int *antall)
 {
   const char* signatur = "GDPL_par_antall_i_liste(int *antall,GDPL_par_data_node*)";
 
   GDPL_log(GDPL_DEBUG, signatur, "Start funksjon.");
-  
+
+  GDPL_konkurranse_data_node *kroot = gdpl_modell_konkurranseliste_valgt_ptr;
+  if (kroot == 0) {
+      GDPL_log(GDPL_ERROR, signatur, "gdpl_modell_konkurranseliste_valgt_ptr er null");
+      return FEILKODE_FEIL;
+  }
+
+  GDPL_par_data_node *root = gdpl_modell_konkurranseliste_valgt_ptr->par_liste_root_ptr;
+  if (root == 0) {
+    GDPL_log(GDPL_ERROR, signatur, "gdpl_modell_konkurranseliste_valgt_ptr->par_liste_root_ptr er null");
+    return FEILKODE_FEIL;
+  }
+
   /* Litt inputparameter-sjekking. */
   
   if (root == 0) {
@@ -453,4 +462,61 @@ int GDPL_par_antall_i_liste(int *antall, GDPL_par_data_node *root)
   
   GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
   return 0;
+}
+
+
+int GDPL_par_finn_neste_ledige_id(int *id)
+{
+  const char* signatur = "GDPL_par_finn_neste_ledige_id(..)";
+
+  GDPL_log(GDPL_DEBUG, signatur, "Start funksjon.");
+
+  GDPL_konkurranse_data_node *kroot = gdpl_modell_konkurranseliste_valgt_ptr;
+  if (kroot == 0) {
+      GDPL_log(GDPL_ERROR, signatur, "gdpl_modell_konkurranseliste_valgt_ptr er null");
+      return FEILKODE_FEIL;
+  }
+
+  GDPL_par_data_node *root = gdpl_modell_konkurranseliste_valgt_ptr->par_liste_root_ptr;
+  if (root == 0) {
+    GDPL_log(GDPL_ERROR, signatur, "gdpl_modell_konkurranseliste_valgt_ptr->par_liste_root_ptr er null");
+    return FEILKODE_FEIL;
+  }
+
+  if (id == 0) {
+    GDPL_log(GDPL_ERROR, signatur, "id må peke på et heltall, id peker på null");
+    return FEILKODE_FEIL;
+  }
+
+  /* Finn neste unike id mht par-lista. */
+
+  int tmp_id = 1;
+  do {
+      int i = root->id;
+      if (tmp_id <= i) {
+        tmp_id = i + 1;
+      }
+      root = root->neste;
+  } while (root != 0);
+  *id = tmp_id;
+
+  GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon. (id=%d)",*id);
+  return 0;
+}
+
+
+int GDPL_par_beregn_tidspoeng(GDPL_par_data_node *data)
+{
+    const char* signatur = "GDPL_par_beregn_tidspoeng(..)";
+
+    GDPL_log(GDPL_DEBUG, signatur, "Start funksjon.");
+
+    struct TIME{ int seconds; int minutes; int hours; };
+    struct TIME t1,t2,diff;
+
+    //sscanf(data->start_tid,"%d)
+
+    GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
+    return 0;
+
 }

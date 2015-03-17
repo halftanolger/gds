@@ -47,7 +47,9 @@ const char *gdpl_kontroller_feilkoder[] = {
     "FEILKODE 10: Generell feil.",
     "FEILKODE 11: Oppgitt verdi for max antall par, er for lavt.",
     "FEILKODE 12: Oppgitt verdi for max antall par, er for høyt.",
-    "FEILKODE 13: Oppgitt verdi for max antall par, er ikke angitt."
+    "FEILKODE 13: Oppgitt verdi for max antall par, er ikke angitt.",
+    "FEILKODE 14: Ukjent datafil. Feil 'magic number'.",
+    "FEILKODE 15: Kan ikke allokere minne. Systemfeil: 'datapeker' må være null."
 };
 
 int gdpl_kontroller_max_antall_par = -1;

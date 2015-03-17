@@ -23,7 +23,6 @@ SOURCES += \
     ../GDPLib/src/test_konkurranse.c \
     ../GDPLib/src/test_kontroller.c \
     ../GDPLib/src/test_par.c \
-    ../GDPLib/src/test_person.c \
     ../GDPLib/src/test_modell.c \
 
 

@@ -37,15 +37,15 @@ extern "C" {
 
 int GDPL_person_opprett_node(GDPL_person_data_node **new_node);
 
-int GDPL_person_legg_til(GDPL_person_data_node *data, GDPL_person_data_node *root);
+int GDPL_person_legg_til(GDPL_person_data_node *data);
 
-int GDPL_person_fjern_fra(GDPL_person_data_node data, GDPL_person_data_node *root);
+int GDPL_person_fjern_fra(GDPL_person_data_node data);
 
-int GDPL_person_hent(int id, GDPL_person_data_node **data, GDPL_person_data_node *root);
+int GDPL_person_hent(int id, GDPL_person_data_node **data);
 
-int GDPL_person_antall_i_liste(int *antall, GDPL_person_data_node *root);
+int GDPL_person_antall_i_liste(int *antall);
 
-int GDPL_person_finn_neste_ledige_id(int *id, GDPL_person_data_node *root);
+int GDPL_person_finn_neste_ledige_id(int *id);
 
 /* 'Private' funksjons-deklareringer */
 

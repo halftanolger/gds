@@ -34,11 +34,6 @@ extern "C" {
 
 int GDPL_test_modell_alle_funksjoner();
 
-int GDPL_test_modell_angi_filnavn(const char *filnavn);
-
-int GDPL_test_modell_les_data();
-
-int GDPL_test_modell_skriv_data();
 
 /* 'Private' funksjons-deklareringer */
 

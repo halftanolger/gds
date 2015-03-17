@@ -97,34 +97,11 @@ int GDPL_test()
   */
   int (*function_ptr_array[])() = { 
     
-	GDPL_test_kontroller_hent_par_nummer_a, /* */
-	
-    GDPL_test_kontroller_angi_filnavn_a,    /* Filnavn ikke angitt, i.e. null peker. */
-    GDPL_test_kontroller_angi_filnavn_b,    /* Filnavn for kort. */
-    GDPL_test_kontroller_angi_filnavn_c,    /* Filnavn for langt. */
-    GDPL_test_kontroller_angi_filnavn_d,    /* Filnavn ok. */
 
-    GDPL_test_kontroller_les_fra_fil_a,     /* Fil eksisterer ikke. */
-    GDPL_test_kontroller_les_fra_fil_b,     /* Fil eksisterer. */
 
-    GDPL_test_konkurranse_legg_til_a,       /* Liste root ptr ikke satt. */
-    GDPL_test_konkurranse_legg_til_b,       /* Ny node mangler id. */
-    GDPL_test_konkurranse_legg_til_c,       /* Ny node mangler aar. */
-    GDPL_test_konkurranse_legg_til_d,       /* Ny node har id som finnes i lista. */
 
-    GDPL_test_konkurranse_fjern_fra_a,      /* Liste root ptr ikke satt. */
-    GDPL_test_konkurranse_fjern_fra_b,      /* Node mangler id. */	
-    GDPL_test_konkurranse_fjern_fra_c,      /* Node har id som ikke finnes i lista. */
-    GDPL_test_konkurranse_fjern_fra_d,      /* Fjern node lagt inn av GDPL_test_konkurranse_legg_til_d*/
-
-    GDPL_test_person_legg_til_a,            /* Liste root ptr ikke satt. */
-    GDPL_test_person_legg_til_b,            /* Ny node mangler id. */
-    GDPL_test_person_legg_til_c,            /* Ny node mangler fornavn. */
-    GDPL_test_person_legg_til_d,            /* Ny node mangler etternavn. */	
-    GDPL_test_person_legg_til_e,            /* Ny node har id som finnes i lista. */
-
-    GDPL_test_par_legg_til_a,               /* Liste root ptr ikke satt. */
-    GDPL_test_par_legg_til_b                /* Ny node mangler id. */
+  //  GDPL_test_par_legg_til_a,               /* Liste root ptr ikke satt. */
+  //  GDPL_test_par_legg_til_b                /* Ny node mangler id. */
 	
 	
   };

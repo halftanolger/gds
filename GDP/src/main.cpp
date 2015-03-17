@@ -134,7 +134,7 @@ int test_gdplib() {
     //
 
     int antall_konkurranser = -1;
-    error_nr = GDPL_konkurranse_antall_i_liste(&antall_konkurranser,gdpl_modell_konkurranseliste_root_ptr);
+    error_nr = GDPL_konkurranse_antall_i_liste(&antall_konkurranser);
     if (error_nr > 0) {
         qWarning() << "Systemfeil. GDPL_konkurranse_antall_i_liste(..) returnerte > 0";
         return error_nr;
@@ -153,7 +153,7 @@ int test_gdplib() {
 
 
 
-        error_nr = GDPL_konkurranse_legg_til(node_konkurranse, gdpl_modell_konkurranseliste_root_ptr);
+        error_nr = GDPL_konkurranse_legg_til(node_konkurranse);
         if (error_nr > 0) {
             qWarning() << "Systemfeil. GDPL_konkurranse_legg_til(..) returnerte > 0";
             return error_nr;

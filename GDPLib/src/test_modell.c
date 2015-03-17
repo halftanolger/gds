@@ -41,41 +41,52 @@ int GDPL_test_modell_privat_alle_funksjoner_eksisterende_data()
 
     assert ( gdpl_modell_konkurranseliste_root_ptr != 0 );
 
-    /* Precondition er at vi skal ha en node med id lik 1 her ...*/
+    GDPL_modell_dump();
 
-    int id = 1;
-    GDPL_konkurranse_data_node *data = 0;
+    /* Precondition:  Vi skal ha en konkurranse med id = 1 */
 
-    if (GDPL_konkurranse_hent(id, &data, gdpl_modell_konkurranseliste_root_ptr)>0) {
-        return FEILKODE_FEIL;
-    }
-
-    GDPL_log(GDPL_DEBUG, signatur, "data->id=%d",data->id);
-    GDPL_log(GDPL_DEBUG, signatur, "data->aar=%d",data->aar);
-
-
-    gdpl_modell_konkurranseliste_valgt_ptr = data;
-
-    GDPL_person_data_node *person;
-    GDPL_person_opprett_node(&person);
-
-    int ny_id = 0;
-    GDPL_person_finn_neste_ledige_id(&ny_id,data->par_liste_root_ptr);
-
-    person->id = ny_id;
-    person->fnavn = strdup("Ola");  <- her må jeg bruke realloc() stuff ...
-    person->enavn = strdup("Nordmann");
-
-    if (GDPL_person_legg_til(person, data->par_liste_root_ptr) > 0) {
+    if (GDPL_konkurranse_sett_valgt_konkurranse(1) > 0) {
         return FEILKODE_FEIL;
     }
 
 
-    if (GDPL_modell_skriv_data() > 0)
+    /* Precondition:  Vi skal ha et par id = 1 */
+
+    GDPL_par_data_node* parA = 0;
+    if (GDPL_par_hent(1, &parA) > 0) {
         return FEILKODE_FEIL;
+    }
+
+    /* Precondition:  Vi skal ha et par id = 2 */
+
+    GDPL_par_data_node* parB = 0;
+    if (GDPL_par_hent(2, &parB) > 0) {
+        return FEILKODE_FEIL;
+    }
+
+    strcpy(parA->start_tid,"12:00:00");
+    strcpy(parB->start_tid,"12:01:00");
+
+    strcpy(parA->maal_tid,"14:10:00");
+    strcpy(parB->maal_tid,"14:25:30");
+
+    parA->oppgave_poeng = 20;
+    parB->oppgave_poeng = 30;
+
+    GDPL_modell_dump();
+
+    GDPL_log(GDPL_DEBUG, signatur, "ok så langt");
+
+    /*
+    if (GDPL_modell_skriv_data() > 0) {
+        return FEILKODE_FEIL;
+    }*/
+
+
 
 
     GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
+
     return 0;
 }
 
@@ -100,31 +111,134 @@ int GDPL_test_modell_privat_alle_funksjoner_ny_data()
     int teller = 1;
     for (teller=1; teller<2; teller++) {
 
-        GDPL_konkurranse_data_node *k;
-        GDPL_konkurranse_opprett_node(&k);
+        GDPL_konkurranse_data_node *k = 0;
+        if (GDPL_konkurranse_opprett_node(&k)>0)
+            return FEILKODE_FEIL;
 
-        GDPL_person_data_node* person;
-        GDPL_person_opprett_node(&person);
+        GDPL_person_data_node* person = 0;
+        if (GDPL_person_opprett_node(&person)>0)
+            return FEILKODE_FEIL;
 
-        GDPL_par_data_node* par;
-        GDPL_par_opprett_node(&par);
+        GDPL_par_data_node* par = 0;
+        if (GDPL_par_opprett_node(&par)>0)
+            return FEILKODE_FEIL;
 
         k->id = teller;
         k->aar = 2009 + teller;
         k->person_liste_root_ptr = person;
         k->par_liste_root_ptr = par;
 
-        if (GDPL_konkurranse_legg_til(k,gdpl_modell_konkurranseliste_root_ptr) > 0) {
-            return FEILKODE_FEIL;
-        }
+        if (GDPL_konkurranse_legg_til(k) > 0)
+            return FEILKODE_FEIL;        
     }
+
+    GDPL_modell_dump();
+
+    if (GDPL_konkurranse_sett_valgt_konkurranse(1)>0)
+        return FEILKODE_FEIL;
+
+    GDPL_person_data_node *person = 0;
+    if(GDPL_person_opprett_node(&person)>0)
+        return FEILKODE_FEIL;
+
+    int ny_id = 0;
+    if(GDPL_person_finn_neste_ledige_id(&ny_id)>0)
+        return FEILKODE_FEIL;
+
+    person->id = ny_id;
+    strcpy(person->fnavn,"Ola1");
+    strcpy(person->enavn,"Nordmann1");
+    if (GDPL_person_legg_til(person) > 0)
+        return FEILKODE_FEIL;
+
+    person = 0;
+    GDPL_person_opprett_node(&person);
+    ny_id = 0;
+    if(GDPL_person_finn_neste_ledige_id(&ny_id)>0)
+        return FEILKODE_FEIL;
+
+    person->id = ny_id;
+    strcpy(person->fnavn,"Kari1");
+    strcpy(person->enavn,"Nordkvinne1");
+    if (GDPL_person_legg_til(person) > 0)
+        return FEILKODE_FEIL;
+
+    person = 0;
+    GDPL_person_opprett_node(&person);
+    ny_id = 0;
+    if(GDPL_person_finn_neste_ledige_id(&ny_id)>0)
+        return FEILKODE_FEIL;
+
+    person->id = ny_id;
+    strcpy(person->fnavn,"Ola2");
+    strcpy(person->enavn,"Nordmann2");
+    if (GDPL_person_legg_til(person) > 0)
+        return FEILKODE_FEIL;
+
+    person = 0;
+    GDPL_person_opprett_node(&person);
+    ny_id = 0;
+    if(GDPL_person_finn_neste_ledige_id(&ny_id)>0)
+        return FEILKODE_FEIL;
+
+    person->id = ny_id;
+    strcpy(person->fnavn,"Kari2");
+    strcpy(person->enavn,"Nordkvinne2");
+    if (GDPL_person_legg_til(person) > 0)
+        return FEILKODE_FEIL;
+
+
+
+
+    GDPL_person_data_node *ptrPerson = 0;
+    if (GDPL_person_hent(1, &ptrPerson)>0)
+        return FEILKODE_FEIL;
+
+
+    if (strcmp(ptrPerson->fnavn,"Ola1") != 0) {
+        GDPL_log(GDPL_ERROR, signatur, "strcmp(ptrPerson->fnavn,Ola1) != 0");
+        return FEILKODE_FEIL;
+    }
+
+
+    /* Opprett noen par */
+
+
+    GDPL_par_data_node *par = 0;
+    GDPL_par_opprett_node(&par);
+    ny_id = 0;
+    if(GDPL_par_finn_neste_ledige_id(&ny_id)>0) {
+        return FEILKODE_FEIL;
+    }
+    par->id = ny_id;
+    par->herre_person_id = 1;
+    par->dame_person_id = 4;
+    par->start_nr=100;
+    if (GDPL_par_legg_til(par) > 0) {
+        return FEILKODE_FEIL;
+    }
+    par = 0;
+    GDPL_par_opprett_node(&par);
+    ny_id = 0;
+    if(GDPL_par_finn_neste_ledige_id(&ny_id)>0) {
+        return FEILKODE_FEIL;
+    }
+    par->id = ny_id;
+    par->herre_person_id = 2;
+    par->dame_person_id = 3;
+    par->start_nr=101;
+    if (GDPL_par_legg_til(par) > 0) {
+        return FEILKODE_FEIL;
+    }
+
+    GDPL_modell_dump();
 
     if (GDPL_modell_skriv_data() > 0)
         return FEILKODE_FEIL;
 
 
     int antall = 0;
-    GDPL_konkurranse_antall_i_liste(&antall,gdpl_modell_konkurranseliste_root_ptr);
+    GDPL_konkurranse_antall_i_liste(&antall);
     GDPL_log(GDPL_DEBUG, signatur, "antall konkurranser = %d",antall);
 
     GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon");
@@ -153,7 +267,7 @@ int GDPL_test_modell_alle_funksjoner()
      * datafil som inneholder data. */
 
     int antall = 0;
-    if (GDPL_konkurranse_antall_i_liste(&antall,gdpl_modell_konkurranseliste_root_ptr) > 0)
+    if (GDPL_konkurranse_antall_i_liste(&antall) > 0)
         return FEILKODE_FEIL;
 
     if (antall > 0) {
@@ -172,50 +286,5 @@ int GDPL_test_modell_alle_funksjoner()
 }
 
 
-int GDPL_test_modell_angi_filnavn(const char *filnavn)
-{
-    const char* signatur = "GDPL_test_modell_angi_filnavn()";
-    int feilkode = 0;
-
-    GDPL_log(GDPL_DEBUG, signatur, "Start funksjon.");
-
-
-    GDPL_log(GDPL_DEBUG, signatur, "TODO: alt ..");
-    feilkode = 1;
-
-
-    GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon, feilkode=%d", feilkode);
-    return feilkode;
-}
-
-
-int GDPL_test_modell_les_data()
-{
-    const char* signatur = "GDPL_test_modell_les_data()";
-    int feilkode = 0;
-
-    GDPL_log(GDPL_DEBUG, signatur, "Start funksjon.");
-
-    GDPL_log(GDPL_DEBUG, signatur, "TODO: alt ..");
-    feilkode = 1;
-
-    GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon, feilkode=%d", feilkode);
-    return feilkode;
-}
-
-
-int GDPL_test_modell_skriv_data()
-{
-    const char* signatur = "GDPL_test_modell_skriv_data()";
-    int feilkode = 0;
-
-    GDPL_log(GDPL_DEBUG, signatur, "Start funksjon.");
-
-    GDPL_log(GDPL_DEBUG, signatur, "TODO: alt ..");
-    feilkode = 1;
-
-    GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon, feilkode=%d", feilkode);
-    return feilkode;
-}
 
 
