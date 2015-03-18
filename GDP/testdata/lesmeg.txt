@@ -20,12 +20,25 @@ kolonne-overskrifter:
  - Oppgave-poeng
  - Beregnet-totalt-poeng
 
-Lagre dette regnearket som ei semikolonseparert datafil. Når alt av input-
-data er fylt inn, kan ved hjelp av GDS -programmet få beregnet de 
-kolonnene som "mangler", dvs 
+Lagre deretter dette regnearket som ei semikolonseparert datafil. Når alt av 
+input-data er fylt inn, kan man ved hjelp av GDS -programmet få beregnet de 
+kolonnene som "mangler", dvs kolonnene:
+
+ - Beregnet-middel-tid
+ - Beregnet-tids-poeng
+ - Beregnet-totalt-poeng
+
+GDS -programmet produserer ei fil som heter det nesten det samme som inputfila, 
+bare med den forskjellen at den starter med ordet 'output'.
+ 
++-----------------------------------------------------------------------------+
+ Eksempel
++-----------------------------------------------------------------------------+
  
 I samme katalog som denne 'les meg' -fila, skal det ligge et 
 eksempel-regneark, kalt testinput.cvs
+
+Innholdet i testinput.cvs er:
  
 Startnummer;Herre-fornavn;Herre-etternavn;Dame-fornavn;Dame-etternavn;Start-tid;Slutt-tid;Anvendt-tid;Beregnet-middel-tid;Beregnet-tids-poeng;Oppgave-poeng;Beregnet-totalt-poeng
 100;Ola1;Nordmann1;Kari1;Nordkvinne1;12:00:00;14:32:00;;;;20;
@@ -39,3 +52,15 @@ Startnummer;Herre-fornavn;Herre-etternavn;Dame-fornavn;Dame-etternavn;Start-tid;
 108;Ola9;Nordmann9;Kari9;Nordkvinne9;12:08:00;14:14:00;;;;28;
 109;Ola10;Nordmann10;Kari10;Nordkvinne10;12:09:00;15:00:00;;;;29;
 110;Ola11;Nordmann11;Kari11;Nordkvinne11;12:10:00;15:02:00;;;;30;
+
+ 
+Eksempel på bruk:
+
+>gds.exe -i testinput.cvs 
+
+vil resultere i fila output_testinput.csv
+
+
+
+
+
