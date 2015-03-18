@@ -293,6 +293,8 @@ int GDPL_konkurranse_sett_valgt_konkurranse(int id)
     gdpl_modell_konkurranseliste_valgt_ptr = data;
 
     GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon. ok");
+
+    return 0;
 }
 
 /* ----------------------------------------------------------------------------

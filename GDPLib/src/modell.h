@@ -43,6 +43,7 @@ struct GDPL_par_data_node_struct {
     int start_nr;
     struct GDPL_tid start_tid;
     struct GDPL_tid maal_tid;
+    struct GDPL_tid anvendt_tid;
     int tids_poeng;
     int oppgave_poeng;
     struct GDPL_par_data_node_struct *neste;

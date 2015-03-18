@@ -32,13 +32,15 @@ extern "C" {
 
 // Variabler
 
+/*
 extern const char* gdpl_kontroller_gdplib_navn;
 
 extern const char* gdpl_kontroller_gdplib_versjon;
+*/
 
 extern const char *gdpl_kontroller_feilkoder[];
 
-extern int gdpl_kontroller_max_antall_par;
+//extern int gdpl_kontroller_max_antall_par;
 
 
 
@@ -46,7 +48,8 @@ extern int gdpl_kontroller_max_antall_par;
 
 const char* GDPL_kontroller_gdplib_navn();
 
-const char* GDPL_kontroller_gdplib_ver();
+const char* GDPL_kontroller_gdplib_versjon();
+
 
 int GDPL_kontroller_angi_filnavn(const char *filnavn);
 

@@ -206,7 +206,7 @@ int GDPL_modell_privat_skriv_til_eksisterende_fil()
 
     do {
 
-        GDPL_log(GDPL_DEBUG, signatur, "--------------------------------------");
+        GDPL_log(GDPL_INFO, signatur, "--------------------------------------");
 
         int konkurranse_data_node_id = konkurranse_data_node->id;
         int konkurranse_data_node_aar = konkurranse_data_node->aar;
@@ -214,11 +214,11 @@ int GDPL_modell_privat_skriv_til_eksisterende_fil()
 
         size_t sz;
         sz = fwrite(&konkurranse_data_node_id,sizeof(int),1,file);
-        GDPL_log(GDPL_DEBUG, signatur, "Skriver konkurranse id=%d (%d)",konkurranse_data_node_id, sz);
+        GDPL_log(GDPL_INFO, signatur, "Skriver konkurranse id=%d (%d)",konkurranse_data_node_id, sz);
         sz = fwrite(&konkurranse_data_node_aar,sizeof(int),1,file);
-        GDPL_log(GDPL_DEBUG, signatur, "Skriver konkurranse aar=%d (%d)",konkurranse_data_node_aar, sz);
+        GDPL_log(GDPL_INFO, signatur, "Skriver konkurranse aar=%d (%d)",konkurranse_data_node_aar, sz);
         sz = fwrite(&konkurranse_data_node_har_neste,sizeof(int),1,file);
-        GDPL_log(GDPL_DEBUG, signatur, "Skriver konkurranse harNeste=%d (%d)",konkurranse_data_node_har_neste, sz);
+        GDPL_log(GDPL_INFO, signatur, "Skriver konkurranse harNeste=%d (%d)",konkurranse_data_node_har_neste, sz);
 
         person_data_node = konkurranse_data_node->person_liste_root_ptr;
 
@@ -234,13 +234,13 @@ int GDPL_modell_privat_skriv_til_eksisterende_fil()
 
             size_t sz = 0;
             sz = fwrite(&person_data_node_id,sizeof(int),1,file);
-            GDPL_log(GDPL_DEBUG, signatur, "  Skriver person id=%d (%d) -------",person_data_node_id, sz);
+            GDPL_log(GDPL_INFO, signatur, "  Skriver person id=%d (%d) -------",person_data_node_id, sz);
             sz = fwrite(&person_data_node_fnavn,sizeof(char),GDPL_MAX_PERSONNAVN_LENGDE,file);
-            GDPL_log(GDPL_DEBUG, signatur, "  Skriver person fnavn=%s (%d)",person_data_node_fnavn, sz);
+            GDPL_log(GDPL_INFO, signatur, "  Skriver person fnavn=%s (%d)",person_data_node_fnavn, sz);
             sz = fwrite(&person_data_node_enavn,sizeof(char),GDPL_MAX_PERSONNAVN_LENGDE,file);
-            GDPL_log(GDPL_DEBUG, signatur, "  Skriver person enavn=%s (%d)",person_data_node_enavn, sz);
+            GDPL_log(GDPL_INFO, signatur, "  Skriver person enavn=%s (%d)",person_data_node_enavn, sz);
             sz = fwrite(&person_data_node_har_neste,sizeof(int),1,file);
-            GDPL_log(GDPL_DEBUG, signatur, "  Skriver person harNeste=%d (%d)",person_data_node_har_neste, sz);
+            GDPL_log(GDPL_INFO, signatur, "  Skriver person harNeste=%d (%d)",person_data_node_har_neste, sz);
 
             person_data_node = person_data_node->neste;
         } while (person_data_node != 0);
@@ -254,33 +254,44 @@ int GDPL_modell_privat_skriv_til_eksisterende_fil()
             int par_data_node_start_nr = par_data_node->start_nr;
             int par_data_node_tids_poeng = par_data_node->tids_poeng;
             int par_data_node_oppgave_poeng = par_data_node->oppgave_poeng;
-            char par_data_node_start_tid[GDPL_MAX_TID_LENGDE];
-            char par_data_node_maal_tid[GDPL_MAX_TID_LENGDE];
-            memset(par_data_node_start_tid, 0, GDPL_MAX_TID_LENGDE);
-            memset(par_data_node_maal_tid, 0, GDPL_MAX_TID_LENGDE);
-            strcpy((char*)&par_data_node_start_tid, par_data_node->start_tid);
-            strcpy((char*)&par_data_node_maal_tid, par_data_node->maal_tid);
+
+            int par_data_node_start_tid_timer = par_data_node->start_tid.timer;
+            int par_data_node_start_tid_minutt = par_data_node->start_tid.minutt;
+            int par_data_node_start_tid_sekund = par_data_node->start_tid.sekund;
+
+            int par_data_node_maal_tid_timer = par_data_node->maal_tid.timer;
+            int par_data_node_maal_tid_minutt = par_data_node->maal_tid.minutt;
+            int par_data_node_maal_tid_sekund = par_data_node->maal_tid.sekund;
+
             int par_data_node_har_neste = par_data_node->neste != 0?1:0;
 
             size_t sz = 0;
             sz = fwrite(&par_data_node_id,sizeof(int),1,file);
-            GDPL_log(GDPL_DEBUG, signatur, "  Skriver par id=%d (%d)-----------",par_data_node_id, sz);
+            GDPL_log(GDPL_INFO, signatur, "  Skriver par id=%d (%d)-----------",par_data_node_id, sz);
             sz = fwrite(&par_data_node_herre_person_id,sizeof(int),1,file);
-            GDPL_log(GDPL_DEBUG, signatur, "  Skriver par herre_person_id=%d (%d)",par_data_node_herre_person_id, sz);
+            GDPL_log(GDPL_INFO, signatur, "  Skriver par herre_person_id=%d (%d)",par_data_node_herre_person_id, sz);
             sz = fwrite(&par_data_node_dame_person_id,sizeof(int),1,file);
-            GDPL_log(GDPL_DEBUG, signatur, "  Skriver par dame_person_id=%d (%d)",par_data_node_dame_person_id, sz);
+            GDPL_log(GDPL_INFO, signatur, "  Skriver par dame_person_id=%d (%d)",par_data_node_dame_person_id, sz);
             sz = fwrite(&par_data_node_start_nr,sizeof(int),1,file);
-            GDPL_log(GDPL_DEBUG, signatur, "  Skriver par start_nr=%d (%d)",par_data_node_start_nr, sz);
+            GDPL_log(GDPL_INFO, signatur, "  Skriver par start_nr=%d (%d)",par_data_node_start_nr, sz);
             sz = fwrite(&par_data_node_tids_poeng,sizeof(int),1,file);
-            GDPL_log(GDPL_DEBUG, signatur, "  Skriver par tids_poeng=%d (%d)",par_data_node_tids_poeng, sz);
+            GDPL_log(GDPL_INFO, signatur, "  Skriver par tids_poeng=%d (%d)",par_data_node_tids_poeng, sz);
             sz = fwrite(&par_data_node_oppgave_poeng,sizeof(int),1,file);
-            GDPL_log(GDPL_DEBUG, signatur, "  Skriver par oppgave_poeng=%d (%d)",par_data_node_oppgave_poeng, sz);
-            sz = fwrite(&par_data_node_start_tid,sizeof(char),GDPL_MAX_TID_LENGDE,file);
-            GDPL_log(GDPL_DEBUG, signatur, "  Skriver par start_tid=%s (%d)",par_data_node_start_tid, sz);
-            sz = fwrite(&par_data_node_maal_tid,sizeof(char),GDPL_MAX_TID_LENGDE,file);
-            GDPL_log(GDPL_DEBUG, signatur, "  Skriver par maal_tid=%s (%d)",par_data_node_maal_tid, sz);
+            GDPL_log(GDPL_INFO, signatur, "  Skriver par oppgave_poeng=%d (%d)",par_data_node_oppgave_poeng, sz);
+            sz = fwrite(&par_data_node_start_tid_timer,sizeof(int),1,file);
+            GDPL_log(GDPL_INFO, signatur, "  Skriver par start_tid_timer=%d (%d)",par_data_node_start_tid_timer, sz);
+            sz = fwrite(&par_data_node_start_tid_minutt,sizeof(int),1,file);
+            GDPL_log(GDPL_INFO, signatur, "  Skriver par start_tid_minutt=%d (%d)",par_data_node_start_tid_minutt, sz);
+            sz = fwrite(&par_data_node_start_tid_sekund,sizeof(int),1,file);
+            GDPL_log(GDPL_INFO, signatur, "  Skriver par start_tid_sekund=%d (%d)",par_data_node_start_tid_sekund, sz);
+            sz = fwrite(&par_data_node_maal_tid_timer,sizeof(int),1,file);
+            GDPL_log(GDPL_INFO, signatur, "  Skriver par maal_tid_timer=%d (%d)",par_data_node_maal_tid_timer, sz);
+            sz = fwrite(&par_data_node_maal_tid_minutt,sizeof(int),1,file);
+            GDPL_log(GDPL_INFO, signatur, "  Skriver par maal_tid_minutt=%d (%d)",par_data_node_maal_tid_minutt, sz);
+            sz = fwrite(&par_data_node_maal_tid_sekund,sizeof(int),1,file);
+            GDPL_log(GDPL_INFO, signatur, "  Skriver par maal_tid_sekund=%d (%d)",par_data_node_maal_tid_sekund, sz);
             sz = fwrite(&par_data_node_har_neste,sizeof(int),1,file);
-            GDPL_log(GDPL_DEBUG, signatur, "  Skriver par harNeste=%d (%d)",par_data_node_har_neste, sz);
+            GDPL_log(GDPL_INFO, signatur, "  Skriver par harNeste=%d (%d)",par_data_node_har_neste, sz);
 
             par_data_node = par_data_node->neste;
         } while (par_data_node != 0);
@@ -428,10 +439,12 @@ int GDPL_modell_privat_les_inn_fra_eksisterende_fil()
             int par_data_node_start_nr = 0;
             int par_data_node_tids_poeng = 0;
             int par_data_node_oppgave_poeng = 0;
-            char par_data_node_start_tid[GDPL_MAX_TID_LENGDE];
-            char par_data_node_maal_tid[GDPL_MAX_TID_LENGDE];
-            memset(par_data_node_start_tid, 0, GDPL_MAX_TID_LENGDE);
-            memset(par_data_node_maal_tid, 0, GDPL_MAX_TID_LENGDE);
+            int par_data_node_start_tid_timer = 0;
+            int par_data_node_start_tid_minutt = 0;
+            int par_data_node_start_tid_sekund = 0;
+            int par_data_node_maal_tid_timer = 0;
+            int par_data_node_maal_tid_minutt = 0;
+            int par_data_node_maal_tid_sekund = 0;
 
             size_t sz = 0;
             sz = fread(&par_data_node_id,sizeof(int),1,file);
@@ -445,11 +458,19 @@ int GDPL_modell_privat_les_inn_fra_eksisterende_fil()
             sz = fread(&par_data_node_tids_poeng,sizeof(int),1,file);
             GDPL_log(GDPL_INFO, signatur, "  Leser par tids_poeng=%d (%d)",par_data_node_tids_poeng,sz);
             sz = fread(&par_data_node_oppgave_poeng,sizeof(int),1,file);
-            GDPL_log(GDPL_INFO, signatur, "  Leser par oppgave_poeng=%d (%d)",par_data_node_oppgave_poeng,sz);
-            sz = fread(&par_data_node_start_tid,sizeof(char),GDPL_MAX_TID_LENGDE,file);
-            GDPL_log(GDPL_INFO, signatur, "  Leser par start_tid=%s (%d)",par_data_node_start_tid,sz);
-            sz = fread(&par_data_node_maal_tid,sizeof(char),GDPL_MAX_TID_LENGDE,file);
-            GDPL_log(GDPL_INFO, signatur, "  Leser par maal_tid=%s (%d)",par_data_node_maal_tid,sz);
+            GDPL_log(GDPL_INFO, signatur, "  Leser par oppgave_poeng=%d (%d)",par_data_node_oppgave_poeng,sz);                                    
+            sz = fread(&par_data_node_start_tid_timer,sizeof(int),1,file);
+            GDPL_log(GDPL_INFO, signatur, "  Leser par start_tid_timer=%d (%d)",par_data_node_start_tid_timer, sz);
+            sz = fread(&par_data_node_start_tid_minutt,sizeof(int),1,file);
+            GDPL_log(GDPL_INFO, signatur, "  Leser par start_tid_minutt=%d (%d)",par_data_node_start_tid_minutt, sz);
+            sz = fread(&par_data_node_start_tid_sekund,sizeof(int),1,file);
+            GDPL_log(GDPL_INFO, signatur, "  Leser par start_tid_sekund=%d (%d)",par_data_node_start_tid_sekund, sz);
+            sz = fread(&par_data_node_maal_tid_timer,sizeof(int),1,file);
+            GDPL_log(GDPL_INFO, signatur, "  Leser par maal_tid_timer=%d (%d)",par_data_node_maal_tid_timer, sz);
+            sz = fread(&par_data_node_maal_tid_minutt,sizeof(int),1,file);
+            GDPL_log(GDPL_INFO, signatur, "  Leser par maal_tid_minutt=%d (%d)",par_data_node_maal_tid_minutt, sz);
+            sz = fread(&par_data_node_maal_tid_sekund,sizeof(int),1,file);
+            GDPL_log(GDPL_INFO, signatur, "  Leser par maal_tid_sekund=%d (%d)",par_data_node_maal_tid_sekund, sz);
             sz = fread(&par_data_node_har_neste,sizeof(int),1,file);
             GDPL_log(GDPL_INFO, signatur, "  Leser par harNeste=%d (%d)",par_data_node_har_neste,sz);
 
@@ -457,9 +478,13 @@ int GDPL_modell_privat_les_inn_fra_eksisterende_fil()
             par_data_node_tmp->herre_person_id = par_data_node_herre_person_id;
             par_data_node_tmp->dame_person_id = par_data_node_dame_person_id;
             par_data_node_tmp->start_nr = par_data_node_start_nr;
-            par_data_node_tmp->oppgave_poeng = par_data_node_oppgave_poeng;
-            strncpy(par_data_node_tmp->start_tid,par_data_node_start_tid,GDPL_MAX_TID_LENGDE);
-            strncpy(par_data_node_tmp->maal_tid,par_data_node_maal_tid,GDPL_MAX_TID_LENGDE);
+            par_data_node_tmp->oppgave_poeng = par_data_node_oppgave_poeng;            
+            par_data_node_tmp->start_tid.timer = par_data_node_start_tid_timer;
+            par_data_node_tmp->start_tid.minutt = par_data_node_start_tid_minutt;
+            par_data_node_tmp->start_tid.sekund = par_data_node_start_tid_sekund;
+            par_data_node_tmp->maal_tid.timer = par_data_node_maal_tid_timer;
+            par_data_node_tmp->maal_tid.minutt = par_data_node_maal_tid_minutt;
+            par_data_node_tmp->maal_tid.sekund = par_data_node_maal_tid_sekund;
 
             if (konkurranse_data_node_tmp->par_liste_root_ptr == 0) {
                 konkurranse_data_node_tmp->par_liste_root_ptr = par_data_node_tmp;
@@ -539,7 +564,7 @@ int GDPL_modell_privat_slett_alt()
 
     if (gdpl_modell_konkurranseliste_root_ptr == 0) {
         GDPL_log(GDPL_ERROR, signatur, "%d == DEBUG Systemfeil. Klarte ikke å slette.",__LINE__);
-        return 0;
+        return FEILKODE_FEIL;
     }
 
     GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
@@ -610,8 +635,15 @@ int GDPL_modell_dump()
             GDPL_log(GDPL_INFO, signatur, "   par herre_person_id :%d",par->herre_person_id);
             GDPL_log(GDPL_INFO, signatur, "   par dame_person_id  :%d",par->dame_person_id);
             GDPL_log(GDPL_INFO, signatur, "   par start_nr        :%d",par->start_nr);
-            GDPL_log(GDPL_INFO, signatur, "   par start_tid       :%s",par->start_tid);
-            GDPL_log(GDPL_INFO, signatur, "   par maal_tid        :%s",par->maal_tid);
+            GDPL_log(GDPL_INFO, signatur, "   par start_tid.timer :%d",par->start_tid.timer);
+            GDPL_log(GDPL_INFO, signatur, "   par start_tid.minutt:%d",par->start_tid.minutt);
+            GDPL_log(GDPL_INFO, signatur, "   par start_tid.sekund:%d",par->start_tid.sekund);
+            GDPL_log(GDPL_INFO, signatur, "   par maal_tid.timer  :%d",par->maal_tid.timer);
+            GDPL_log(GDPL_INFO, signatur, "   par maal_tid.minutt :%d",par->maal_tid.minutt);
+            GDPL_log(GDPL_INFO, signatur, "   par maal_tid.sekund :%d",par->maal_tid.sekund);
+            GDPL_log(GDPL_INFO, signatur, "   par anvendt_tid.timer  :%d",par->anvendt_tid.timer);
+            GDPL_log(GDPL_INFO, signatur, "   par anvendt_tid.minutt :%d",par->anvendt_tid.minutt);
+            GDPL_log(GDPL_INFO, signatur, "   par anvendt_tid.sekund :%d",par->anvendt_tid.sekund);
             GDPL_log(GDPL_INFO, signatur, "   par tids_poeng      :%d",par->tids_poeng);
             GDPL_log(GDPL_INFO, signatur, "   par oppgave_poeng   :%d",par->oppgave_poeng);
             par = par->neste;

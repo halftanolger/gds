@@ -26,36 +26,31 @@
 #include <iostream>
 #include "gdpl.h"
 
-#include "test_modell.h"
 
-extern const char* gdpl_kontroller_gdplib_navn;
-extern const char* gdpl_kontroller_gdplib_versjon;
-
-extern GDPL_konkurranse_data_node *gdpl_kontroller_konkurranseliste_root_ptr;
-extern GDPL_konkurranse_data_node *gdpl_kontroller_konkurranseliste_valgt_ptr;
-
-int test_gdplib();
 
 int main(int argc, char **argv)
 {
 
-    std::cout << "hello world" << std::endl;
+    QApplication app(argc, argv);
+
+
+    const char *navn = GDPL_kontroller_gdplib_navn();
+    const char *ver =  GDPL_kontroller_gdplib_versjon();
+
+    std::cout << navn << " " << ver << std::endl;
+
 
     GDPL_init_log(GDPL_DEBUG, stdout);
-    int i = GDPL_test_modell_alle_funksjoner();
 
-    std::cout << "i=" << i << std::endl;
+
+
 
     return 0;
 
-    QApplication app(argc, argv);
+
     GDPMainWindows* appWin = new GDPMainWindows();
     appWin->show();
     appWin->setFocus();
-
-    //test_gdplib();
-
-
     int r = app.exec();
     return r;
 }
@@ -89,7 +84,7 @@ int test_gdplib() {
         return error_nr;
     }
 
-    GDPL_log(GDPL_DEBUG, signatur, "Hello world - %s %s", gdpl_kontroller_gdplib_navn, gdpl_kontroller_gdplib_versjon);
+    //GDPL_log(GDPL_DEBUG, signatur, "Hello world - %s %s", gdpl_kontroller_gdplib_navn, gdpl_kontroller_gdplib_versjon);
 
 
     //

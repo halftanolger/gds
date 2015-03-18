@@ -64,18 +64,39 @@ int GDPL_test_modell_privat_alle_funksjoner_eksisterende_data()
         return FEILKODE_FEIL;
     }
 
-    strcpy(parA->start_tid,"12:00:00");
-    strcpy(parB->start_tid,"12:01:00");
+    /* Precondition:  Vi skal ha et par id = 3 */
 
-    strcpy(parA->maal_tid,"14:10:00");
-    strcpy(parB->maal_tid,"14:25:30");
+    GDPL_par_data_node* parC = 0;
+    if (GDPL_par_hent(3, &parC) > 0) {
+        return FEILKODE_FEIL;
+    }
 
-    parA->oppgave_poeng = 20;
-    parB->oppgave_poeng = 30;
+    struct GDPL_tid middel_tid;
+
+    if (GDPL_par_beregn_middel_tid(&middel_tid)>0)
+        return FEILKODE_FEIL;
+
+    if(GDPL_par_beregn_tids_poeng(parA, middel_tid)>0)
+        return FEILKODE_FEIL;
+
+    if(GDPL_par_beregn_tids_poeng(parB, middel_tid)>0)
+        return FEILKODE_FEIL;
+
+    if(GDPL_par_beregn_tids_poeng(parC, middel_tid)>0)
+        return FEILKODE_FEIL;
+
+
+    if (GDPL_par_sorter(START_NR_STIGENDE)>0)
+        return FEILKODE_FEIL;
+
 
     GDPL_modell_dump();
 
-    GDPL_log(GDPL_DEBUG, signatur, "ok så langt");
+
+    GDPL_log(GDPL_DEBUG, signatur, "middeltid %d:%d:%d",middel_tid.timer,middel_tid.minutt,middel_tid.sekund);
+
+
+
 
     /*
     if (GDPL_modell_skriv_data() > 0) {
@@ -96,17 +117,14 @@ int GDPL_test_modell_privat_alle_funksjoner_ny_data()
 
     GDPL_log(GDPL_DEBUG, signatur, "Start funksjon.");
 
-    /* Opprett en ny node. */
-
-    /* Etter at vi har lest inn data så skal vi i alle fall ha grunnstrukturen
-     * på plass. */
-
     assert ( gdpl_modell_konkurranseliste_root_ptr != 0 );
     assert ( gdpl_modell_konkurranseliste_root_ptr->neste == 0 );
     assert ( gdpl_modell_konkurranseliste_root_ptr->person_liste_root_ptr != 0 );
     assert ( gdpl_modell_konkurranseliste_root_ptr->person_liste_root_ptr->neste == 0 );
     assert ( gdpl_modell_konkurranseliste_root_ptr->par_liste_root_ptr != 0 );
     assert ( gdpl_modell_konkurranseliste_root_ptr->par_liste_root_ptr->neste == 0 );
+
+    /* Opprett noen konkurranser */
 
     int teller = 1;
     for (teller=1; teller<2; teller++) {
@@ -132,10 +150,12 @@ int GDPL_test_modell_privat_alle_funksjoner_ny_data()
             return FEILKODE_FEIL;        
     }
 
-    GDPL_modell_dump();
+    /* Velg konkurranse med id lik 1 */
 
     if (GDPL_konkurranse_sett_valgt_konkurranse(1)>0)
         return FEILKODE_FEIL;
+
+    /* Opprett seks personer */
 
     GDPL_person_data_node *person = 0;
     if(GDPL_person_opprett_node(&person)>0)
@@ -187,22 +207,31 @@ int GDPL_test_modell_privat_alle_funksjoner_ny_data()
     if (GDPL_person_legg_til(person) > 0)
         return FEILKODE_FEIL;
 
-
-
-
-    GDPL_person_data_node *ptrPerson = 0;
-    if (GDPL_person_hent(1, &ptrPerson)>0)
+    person = 0;
+    GDPL_person_opprett_node(&person);
+    ny_id = 0;
+    if(GDPL_person_finn_neste_ledige_id(&ny_id)>0)
         return FEILKODE_FEIL;
 
-
-    if (strcmp(ptrPerson->fnavn,"Ola1") != 0) {
-        GDPL_log(GDPL_ERROR, signatur, "strcmp(ptrPerson->fnavn,Ola1) != 0");
+    person->id = ny_id;
+    strcpy(person->fnavn,"Ola3");
+    strcpy(person->enavn,"Nordmann3");
+    if (GDPL_person_legg_til(person) > 0)
         return FEILKODE_FEIL;
-    }
 
+    person = 0;
+    GDPL_person_opprett_node(&person);
+    ny_id = 0;
+    if(GDPL_person_finn_neste_ledige_id(&ny_id)>0)
+        return FEILKODE_FEIL;
 
-    /* Opprett noen par */
+    person->id = ny_id;
+    strcpy(person->fnavn,"Kari3");
+    strcpy(person->enavn,"Nordkvinne3");
+    if (GDPL_person_legg_til(person) > 0)
+        return FEILKODE_FEIL;
 
+    /* Opprett tre par */
 
     GDPL_par_data_node *par = 0;
     GDPL_par_opprett_node(&par);
@@ -214,6 +243,14 @@ int GDPL_test_modell_privat_alle_funksjoner_ny_data()
     par->herre_person_id = 1;
     par->dame_person_id = 4;
     par->start_nr=100;
+    par->start_tid.timer = 12;
+    par->start_tid.minutt = 0;
+    par->start_tid.sekund = 0;
+    par->maal_tid.timer = 14;
+    par->maal_tid.minutt = 31;
+    par->maal_tid.sekund = 0;
+    par->oppgave_poeng = 20;
+
     if (GDPL_par_legg_til(par) > 0) {
         return FEILKODE_FEIL;
     }
@@ -227,9 +264,42 @@ int GDPL_test_modell_privat_alle_funksjoner_ny_data()
     par->herre_person_id = 2;
     par->dame_person_id = 3;
     par->start_nr=101;
+    par->start_tid.timer = 12;
+    par->start_tid.minutt = 2;
+    par->start_tid.sekund = 0;
+    par->maal_tid.timer = 14;
+    par->maal_tid.minutt = 13;
+    par->maal_tid.sekund = 30;
+    par->oppgave_poeng = 32;
+
     if (GDPL_par_legg_til(par) > 0) {
         return FEILKODE_FEIL;
     }
+    par = 0;
+    GDPL_par_opprett_node(&par);
+    ny_id = 0;
+    if(GDPL_par_finn_neste_ledige_id(&ny_id)>0) {
+        return FEILKODE_FEIL;
+    }
+    par->id = ny_id;
+    par->herre_person_id = 5;
+    par->dame_person_id = 6;
+    par->start_nr=102;
+    par->start_tid.timer = 12;
+    par->start_tid.minutt = 3;
+    par->start_tid.sekund = 0;
+    par->maal_tid.timer = 14;
+    par->maal_tid.minutt = 05;
+    par->maal_tid.sekund = 30;
+    par->oppgave_poeng = 8;
+
+    if (GDPL_par_legg_til(par) > 0) {
+        return FEILKODE_FEIL;
+    }
+
+
+
+
 
     GDPL_modell_dump();
 

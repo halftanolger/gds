@@ -50,7 +50,6 @@ extern "C" {
 #define GDPL_MIN_PERSONNAVN_LENGDE           1
 #define GDPL_MAX_FILNAVN_LENGDE              516
 #define GDPL_MIN_FILNAVN_LENGDE              1
-#define GDPL_MAX_TID_LENGDE                  16
 #define GDPL_MAX_ANTALL_PAR                  200
 
 // Enums

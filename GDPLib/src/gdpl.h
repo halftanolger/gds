@@ -26,16 +26,6 @@
 extern "C" {
 #endif
 
-#include <stdio.h>
-
-
-//
-// 'Diverse'
-//
-// Definerer ulike globale varibler og funksjoner, slikt som
-// datastrukturen til biblioteket og ulike hjelpefunksjoner som logging
-// og filhandtering.
-//
 
 #include "diverse.h"
 
@@ -46,19 +36,6 @@ extern "C" {
 #include "modell.h"
 
 
-/* Funksjoner */
-
-int GDPL_person_opprett_node(GDPL_person_data_node **new_node);
-int GDPL_person_legg_til(GDPL_person_data_node data, GDPL_person_data_node *root);
-int GDPL_person_fjern_fra(GDPL_person_data_node data, GDPL_person_data_node *root);
-int GDPL_person_antall_i_liste(int *antall, GDPL_person_data_node *root);
-int GDPL_person_hent(int id, GDPL_person_data_node **data, GDPL_person_data_node *root);
-
-int GDPL_par_opprett_node(GDPL_par_data_node **new_node);
-int GDPL_par_legg_til(GDPL_par_data_node data, GDPL_par_data_node *root);
-int GDPL_par_fjern_fra(GDPL_par_data_node data, GDPL_par_data_node *root);
-int GDPL_par_antall_i_liste(int *antall, GDPL_par_data_node *root);
-int GDPL_par_hent(int id, GDPL_par_data_node **data, GDPL_par_data_node *root);
 
 #ifdef __cplusplus
 }

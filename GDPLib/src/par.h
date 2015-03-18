@@ -26,13 +26,32 @@
 extern "C" {
 #endif
 
-#include "diverse.h"
 #include "modell.h"
+
+// Enums
+
+enum GDPL_par_sorter_enum { TIDS_POENG_SYNKENDE,    /* 0 */
+                            TIDS_POENG_STIGENDE,    /* 1 */
+                            OPPGAVE_POENG_SYNKENDE, /* 2 */
+                            OPPGAVE_POENG_STIGENDE, /* 3 */
+                            TOTALT_POENG_SYNKENDE,  /* 4 */
+                            TOTALT_POENG_STIGENDE,  /* 5 */
+                            START_NR_SYNKENDE,      /* 6 */
+                            START_NR_STIGENDE       /* 7 */
+                          };
+
+// Typedefs
+
+typedef enum GDPL_par_sorter_enum GDPL_par_sorter_type;
+
+
+
 
 /* Variabel-deklareringer */
 
 
 /* Funksjons-deklareringer */
+
 int GDPL_par_opprett_node(GDPL_par_data_node **new_node);
 
 int GDPL_par_legg_til(GDPL_par_data_node *data);
@@ -45,7 +64,17 @@ int GDPL_par_antall_i_liste(int *antall);
 
 int GDPL_par_finn_neste_ledige_id(int *id);
 
-int GDPL_par_beregn_tidspoeng(GDPL_par_data_node *data);
+int GDPL_par_valider_tid(struct GDPL_tid tid);
+
+int GDPL_par_valider_starttid_mot_maaltid(struct GDPL_tid starttid, struct GDPL_tid maaltid);
+
+int GDPL_par_beregn_anvendt_tid(GDPL_par_data_node *data);
+
+int GDPL_par_beregn_middel_tid(struct GDPL_tid *middel_tid);
+
+int GDPL_par_beregn_tids_poeng(GDPL_par_data_node *data, struct GDPL_tid middel_tid);
+
+int GDPL_par_sorter(GDPL_par_sorter_type type);
 
 /* 'Private' funksjons-deklareringer */
 
