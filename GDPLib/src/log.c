@@ -28,11 +28,13 @@
 #include <assert.h>
 #include "log.h"
 
+/* Variabler */
+
 GDPL_log_type gdpl_log_nivaa = -1;
 
 FILE * gdpl_log_stream = 0;
 
-
+/* Funksjoner */
 
 void GDPL_log(GDPL_log_type type, const char* signatur, const char* melding, ...)
 {
@@ -100,33 +102,6 @@ void GDPL_log(GDPL_log_type type, const char* signatur, const char* melding, ...
     fflush(gdpl_log_stream);
 }
 
-/* ----------------------------------------------------------------------------
- *
- * Funksjon
- *  int GDPL_init()
- *
- * ----------------------------------------------------------------------------
- *
- * Beskrivelse
- *  Initier GDPLib.
- *
- * Parametre
- *  nivaa på logging - DEBUG, INFO, WARNING eller ERROR
- *  stream for logging - stdout, stderr eller en annen filstream.
- *  datafil for data - et filnavn eller en nullpeker for default navn.
- *
- * Return
- *  0 - ok
- *  alt annet  - feil. Den returnerte verdien kan brukes som indeks til
- *  gdpl_kontroller_feilkoder[] for å hente ut ei feilmelding.
- *
- * Eksempel på bruk
- *  int error_nr;
- *  error_nr = GDPL_initier()
- *  if (error_nr > 0) 'handle error'
- *
- * ----------------------------------------------------------------------------
- */
 int GDPL_log_init(GDPL_log_type nivaa, FILE * stream)
 {
     const char* signatur = "GDPL_init";

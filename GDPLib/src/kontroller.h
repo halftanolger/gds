@@ -26,11 +26,11 @@
 extern "C" {
 #endif
 
-// Variabler
+/* Variabler */
 
 extern const char *gdpl_kontroller_feilkoder[];
 
-// Funksjoner
+/* Funksjoner */
 
 const char* GDPL_kontroller_gdplib_navn();
 

@@ -62,52 +62,11 @@ int gdpl_kontroller_max_antall_par = -1;
 /* Funksjons definisjoner */
 
 
-/* ----------------------------------------------------------------------------
- *
- * Funksjon
- *  const char* GDPL_kontroller_gdplib_navn()
- *
- * ----------------------------------------------------------------------------
- *
- * Beskrivelse
- *   Returnerer navnet på biblioteket, f.eks 'GDPLib'.
- *
- * Parametre
- *   nop
- *
- * Returnerer
- *   En streng som representerer navnet på biblioteket.
- *
- * Eksempel på bruk
- *   const char* navn = GDPL_kontroller_gdplib_navn();
- * ----------------------------------------------------------------------------
- */
 const char* GDPL_kontroller_gdplib_navn()
 {
     return gdpl_kontroller_gdplib_navn;
 }
 
-
-/* ----------------------------------------------------------------------------
- *
- * Funksjon
- *  const char* GDPL_kontroller_gdplib_versjon()
- *
- * ----------------------------------------------------------------------------
- *
- * Beskrivelse
- *   Returnerer versjonen til biblioteket, f.eks '1.0'.
- *
- * Parametre
- *   nop
- *
- * Returnerer
- *   En streng som representerer versjonen til biblioteket.
- *
- * Eksempel på bruk
- *   const char* ver = GDPL_kontroller_gdplib_versjon();
- * ----------------------------------------------------------------------------
- */
 const char* GDPL_kontroller_gdplib_versjon()
 {
     return gdpl_kontroller_gdplib_versjon;
@@ -115,32 +74,14 @@ const char* GDPL_kontroller_gdplib_versjon()
 
 
 
-/* ----------------------------------------------------------------------------
- *
- * Funksjon
- *  int GDPL_kontroller_hent_par_nummer(int *par_nummer, int type)
- *
- * ----------------------------------------------------------------------------
- *
+/*
  * Beskrivelse
+ *
  *   Trekk et tilfeldig valgt par-nummer, blant de som er
  *   ledige i settet [1, gdpl_max_antall_par]. Om gdpl_max_antall_par == -1
  *   skal det returneres ei feilmelding. Man må angi som et parameter til
  *   funksjonen, om man ønsker å trekke et par-nummer for ei dame, eller en
  *   herre.
- *
- * Parametre
- *   par_nummer - peker til int hvor det trukne par-nummeret skal plasseres.
- *   type - 0 herrer, 1 damer.
- *
- * Returnerer
- *  0 - ok
- *  alt annet - feil. Den returnerte verdien kan brukes som indeks til
- *  gdpl_kontroller_feilkoder[] for å hente ut ei feilmelding.
- *
- * Eksempel på bruk
- *
- * ----------------------------------------------------------------------------
  */
 int GDPL_kontroller_hent_par_nummer(int *par_id, int type) {
 
@@ -208,27 +149,6 @@ int GDPL_kontroller_hent_par_nummer(int *par_id, int type) {
     return 0;
 }
 
-
-/* ----------------------------------------------------------------------------
- *
- * Funksjon
- *  int GDPL_kontroller_angi_max_antall_par(int antall)
- *
- * ----------------------------------------------------------------------------
- *
- * Beskrivelse
- *
- * Parametre
- *
- * Returnerer
- *  0 - ok
- *  alt annet - feil. Den returnerte verdien kan brukes som indeks til
- *  gdpl_kontroller_feilkoder[] for å hente ut ei feilmelding.
- *
- * Eksempel på bruk
- *
- * ----------------------------------------------------------------------------
- */
 int GDPL_kontroller_angi_max_antall_par(int antall)
 {
     const char* signatur = "GDPL_kontroller_angi_max_antall_par(int)";
@@ -256,44 +176,18 @@ int GDPL_kontroller_angi_max_antall_par(int antall)
     return 0;
 }
 
-/* ----------------------------------------------------------------------------
- *
- * Funksjon
- *  int GDPL_kontroller_hent_max_antall_par(int *antall)
- *
- * ----------------------------------------------------------------------------
- *
- * Beskrivelse
- *
- * Parametre
- *
- * Returnerer
- *  0 - ok
- *  alt annet - feil. Den returnerte verdien kan brukes som indeks til
- *  gdpl_kontroller_feilkoder[] for å hente ut ei feilmelding.
- *
- * Eksempel på bruk
- *
- * ----------------------------------------------------------------------------
- */
 int GDPL_kontroller_hent_max_antall_par(int *antall)
 {
     const char* signatur = "GDPL_kontroller_hent_max_antall_par(int)";
 
     GDPL_log(GDPL_DEBUG, signatur, "Start funksjon.");
 
-    if (antall == 0) {
-        int feilkode = FEILKODE_FEIL;
-        GDPL_log(GDPL_DEBUG, signatur, "antall == 0, i.e. pekeren er ikke initiert!");
-        GDPL_log(GDPL_ERROR, signatur, gdpl_kontroller_feilkoder[feilkode]);
-        GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
-        return feilkode;
-    }
-
     *antall = gdpl_kontroller_max_antall_par;
 
     GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
+
     return 0;
+
 }
 
 

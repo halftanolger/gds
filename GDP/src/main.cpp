@@ -29,6 +29,34 @@
 #include "gdpmainwindows.h"
 #include "gdpl.h"
 
+std::vector<std::string> getNextLineAndSplitIntoTokens(std::istream& str);
+std::vector<std::string> &split(const std::string &s, char delim, std::vector<std::string> &elems);
+std::vector<std::string> split(const std::string &s, char delim);
+int filversjon(const char* filnavn);
+
+int main(int argc, char **argv)
+{
+    if (argc > 1) {
+        if (strcmp(argv[1],"-v")==0) {
+            const char *navn = GDPL_kontroller_gdplib_navn();
+            const char *ver =  GDPL_kontroller_gdplib_versjon();
+            std::cout << "'Gubberenn dataprogram' er basert paa " << navn << " " << ver << std::endl;
+            return 0;
+        }
+        if (strcmp(argv[1],"-i")==0 && argc == 3) {
+            const char *filnavn = argv[2];
+            return filversjon(filnavn);
+        }
+    }
+
+    QApplication app(argc, argv);
+    GDPMainWindows* appWin = new GDPMainWindows();
+    appWin->show();
+    appWin->setFocus();
+    int r = app.exec();
+    return r;
+}
+
 std::vector<std::string> getNextLineAndSplitIntoTokens(std::istream& str)
 {
     std::vector<std::string>   result;
@@ -45,7 +73,8 @@ std::vector<std::string> getNextLineAndSplitIntoTokens(std::istream& str)
     return result;
 }
 
-std::vector<std::string> &split(const std::string &s, char delim, std::vector<std::string> &elems) {
+std::vector<std::string> &split(const std::string &s, char delim, std::vector<std::string> &elems)
+{
     std::stringstream ss(s);
     std::string item;
     while (std::getline(ss, item, delim)) {
@@ -54,7 +83,8 @@ std::vector<std::string> &split(const std::string &s, char delim, std::vector<st
     return elems;
 }
 
-std::vector<std::string> split(const std::string &s, char delim) {
+std::vector<std::string> split(const std::string &s, char delim)
+{
     std::vector<std::string> elems;
     split(s, delim, elems);
     return elems;
@@ -227,7 +257,6 @@ int filversjon(const char* filnavn)
 
             if (GDPL_par_legg_til(par) > 0)
                 return 1;
-
         }
 
     } while (loop);
@@ -311,29 +340,5 @@ int filversjon(const char* filnavn)
 }
 
 
-int main(int argc, char **argv)
-{  
-
-    if (argc > 1) {
-        if (strcmp(argv[1],"-v")==0) {
-            const char *navn = GDPL_kontroller_gdplib_navn();
-            const char *ver =  GDPL_kontroller_gdplib_versjon();
-            std::cout << "'Gubberenn Dataprogram' er basert paa " << navn << " " << ver << std::endl;
-            return 0;
-        }
-        if (strcmp(argv[1],"-i")==0 && argc == 3) {
-            const char *filnavn = argv[2];
-            return filversjon(filnavn);
-        }
-    }
-
-    QApplication app(argc, argv);
-    GDPMainWindows* appWin = new GDPMainWindows();
-    appWin->show();
-    appWin->setFocus();
-    int r = app.exec();
-    return r;
-
-}
 
 

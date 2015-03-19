@@ -24,34 +24,6 @@
 #include "modell.h"
 #include "kontroller.h"
 
-
-
-
-/* ----------------------------------------------------------------------------
- *
- * Funksjon 
- *  int GDPL_konkurranse_opprett_node(GDPL_konkurranse_data_node**)
- *  
- * ----------------------------------------------------------------------------
- *
- * Beskrivelse
- *  Oppretter en ny konkurranse-data-node og initialiserer denne.
- *   
- * Parametre  
- *  Peker til peker til node.
- * 
- * Returnerer 
- *  0 - ok
- *  alt annet - feil. Den returnerte verdien kan brukes som indeks til 
- *  gdpl_kontroller_feilkoder[] for å hente ut ei feilmelding.
- *  
- * Eksempel på bruk
- *  GDPL_konkurranse_data_node *ptr;
- *  int fk = GDPL_konkurranse_opprett_node(&ptr);
- *  if (fk != 0) 'handle failure'
- *
- * ----------------------------------------------------------------------------
- */ 
 int GDPL_konkurranse_opprett_node(GDPL_konkurranse_data_node **new_node)
 {
   const char* signatur = "GDPL_konkurranse_opprett_node(GDPL_konkurranse_data_node**)";
@@ -84,34 +56,6 @@ int GDPL_konkurranse_opprett_node(GDPL_konkurranse_data_node **new_node)
   return 0;
 }
 
-/* ----------------------------------------------------------------------------
- *
- * Funksjon 
- *  int GDPL_konkurranse_legg_til(GDPL_konkurranse_data_node,GDPL_konkurranse_data_node*)
- *  
- * ----------------------------------------------------------------------------
- *
- * Beskrivelse
- *  Legg til en konkurranse-node i konkurranse-lista.
- *   
- * Parametre  
- *  GDPL_konkurranse_data_node  - noden som skal legges til lista.
- *  GDPL_konkurranse_data_node* - peker til root-node i konkurranselista.
- * 
- * Returnerer 
- *  0 - ok
- *  alt annet - feil. Den returnerte verdien kan brukes som indeks til 
- *  gdpl_kontroller_feilkoder[] for å hente ut ei feilmelding.
- *  
- * Eksempel på bruk
- *  GDPL_konkurranse_data_node node;
- *  GDPL_konkurranse_data_node *root;
- *  int feilnr;
- *  feilnr = GDPL_konkurranse_legg_til(node,root);
- *  if (feilnr != 0) 'handle failure'
- *
- * ----------------------------------------------------------------------------
- */ 
 int GDPL_konkurranse_legg_til(GDPL_konkurranse_data_node *data)
 {
   const char* signatur = "GDPL_konkurranse_legg_til(GDPL_konkurranse_data_node,GDPL_konkurranse_data_node*)";
@@ -188,35 +132,6 @@ int GDPL_konkurranse_legg_til(GDPL_konkurranse_data_node *data)
   return 0;
 }
 
-/* ----------------------------------------------------------------------------
- *
- * Funksjon 
- *  int GDPL_konkurranse_fjern_fra(GDPL_konkurranse_data_node,
- *                                   GDPL_konkurranse_data_node*)
- *  
- * ----------------------------------------------------------------------------
- *
- * Beskrivelse
- *  Fjern en konkurranse-node fra konkurranse-lista.
- *   
- * Parametre  
- *  GDPL_konkurranse_data_node  - noden som skal fjernes fra lista.
- *  GDPL_konkurranse_data_node* - peker til root-node i konkurranselista.
- * 
- * Returnerer 
- *  0 - ok
- *  alt annet - feil. Den returnerte verdien kan brukes som indeks til 
- *  gdpl_kontroller_feilkoder[] for å hente ut ei feilmelding.
- *  
- * Eksempel på bruk
- *  GDPL_konkurranse_data_node node;
- *  GDPL_konkurranse_data_node *root;
- *  int feilnr;
- *  feilnr = GDPL_konkurranse_fjern_fra(node,root);
- *  if (feilnr != 0) 'handle failure'
- *
- * ----------------------------------------------------------------------------
- */ 
 int GDPL_konkurranse_fjern_fra(GDPL_konkurranse_data_node* data, GDPL_konkurranse_data_node *root)
 {
   const char* signatur = "GDPL_konkurranse_fjern_fra(GDPL_konkurranse_data_node,GDPL_konkurranse_data_node*)";
@@ -292,37 +207,6 @@ int GDPL_konkurranse_sett_valgt_konkurranse(int id)
     return 0;
 }
 
-/* ----------------------------------------------------------------------------
- *
- * Funksjon 
- *  int GDPL_konkurranse_hent(int id, GDPL_konkurranse_data_node*,
- *                              GDPL_konkurranse_data_node*)
- *  
- * ----------------------------------------------------------------------------
- *
- * Beskrivelse
- *  Hent en konkurranse-node fra konkurranse-lista, gitt en id.
- *   
- * Parametre  
- *  int                          - id til den noden som skal hentes.
- *  GDPL_konkurranse_data_node*  - noden som hentes fra lista.
- *  GDPL_konkurranse_data_node*  - peker til root-node i konkurranselista.
- * 
- * Returnerer 
- *  0 - ok
- *  alt annet - feil. Den returnerte verdien kan brukes som indeks til 
- *  gdpl_kontroller_feilkoder[] for å hente ut ei feilmelding.
- *  
- * Eksempel på bruk
- *  int id;
- *  GDPL_konkurranse_data_node *node;
- *  GDPL_konkurranse_data_node *root;
- *  int feilnr;
- *  feilnr = GDPL_konkurranse_hent(id,node,root);
- *  if (feilnr != 0) 'handle failure'
- *
- * ----------------------------------------------------------------------------
- */ 
 int GDPL_konkurranse_hent(int id, GDPL_konkurranse_data_node **data)
 {
   const char* signatur = "GDPL_konkurranse_hent(int,GDPL_konkurranse_data_node,GDPL_konkurranse_data_node*)";
@@ -344,6 +228,7 @@ int GDPL_konkurranse_hent(int id, GDPL_konkurranse_data_node **data)
   }
   
   /* Sjekk om id finnes i lista. */
+
   int id_eksisterer = 0;
   GDPL_konkurranse_data_node *runner = root;
   
@@ -367,37 +252,11 @@ int GDPL_konkurranse_hent(int id, GDPL_konkurranse_data_node **data)
   *data = runner;
   
   GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
+
   return 0;
+
 }
 
-/* ----------------------------------------------------------------------------
- *
- * Funksjon 
- *  int GDPL_konkurranse_antall_i_liste(int *antall, GDPL_konkurranse_data_node*)
- *  
- * ----------------------------------------------------------------------------
- *
- * Beskrivelse
- *  Beregn antall noder i konkurranse-lista.
- *   
- * Parametre  
- *  int* - peker til en heltallsvariabel som svaret skal legges i.
- *  GDPL_konkurranse_data_node* - peker til root-node i konkurranselista.
- * 
- * Returnerer 
- *  0 - ok
- *  alt annet - feil. Den returnerte verdien kan brukes som indeks til 
- *  gdpl_kontroller_feilkoder[] for å hente ut ei feilmelding.
- *  
- * Eksempel på bruk
- *  int antall;
- *  GDPL_konkurranse_data_node *root;
- *  int feilnr;
- *  feilnr = GDPL_konkurranse_antall_i_liste(&antall,root);
- *  if (feilnr != 0) 'handle failure'
- *
- * ----------------------------------------------------------------------------
- */ 
 int GDPL_konkurranse_antall_i_liste(int *antall)
 {
   const char* signatur = "GDPL_konkurranse_antall_i_liste(int *antall,GDPL_konkurranse_data_node*)";
