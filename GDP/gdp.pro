@@ -24,6 +24,7 @@ SOURCES += \
     ../GDPLib/src/test_kontroller.c \
     ../GDPLib/src/test_par.c \
     ../GDPLib/src/test_modell.c \
+    src/fil_versjon/gdpfilversjon.cpp
 
 
 HEADERS += \
@@ -35,6 +36,7 @@ HEADERS += \
     ../GDPLib/src/kontroller.h \
     ../GDPLib/src/konkurranse.h \
     ../GDPLib/src/test_modell.h \
+    src/fil_versjon/gdpfilversjon.h
 
 DEPENDPATH += \
     ../GDPLib/src/ \

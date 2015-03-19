@@ -35,7 +35,9 @@ extern "C" {
 
 #include "modell.h"
 
+#include "person.h"
 
+#include "par.h"
 
 #ifdef __cplusplus
 }

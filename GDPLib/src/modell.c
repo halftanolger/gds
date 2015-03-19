@@ -506,12 +506,6 @@ int GDPL_modell_privat_les_inn_fra_eksisterende_fil()
 
     } while (konkurranse_data_node_har_neste != 0);
 
-    if (gdpl_modell_konkurranseliste_root_ptr != 0) {
-        if (GDPL_modell_privat_slett_alt() > 0) {
-            return FEILKODE_FEIL;
-        }
-    }
-
     gdpl_modell_konkurranseliste_root_ptr = konkurranse_data_node_root;
     gdpl_modell_konkurranseliste_valgt_ptr = 0;
 
@@ -525,14 +519,15 @@ int GDPL_modell_privat_les_inn_fra_eksisterende_fil()
 }
 
 
-int GDPL_modell_privat_slett_alt()
+int GDPL_modell_nullstill()
 {
-    const char* signatur = "GDPL_modell_privat_slett_alt()";
+    /* Nullstill datamodell med tilhørende fil. */
+
+    const char* signatur = "GDPL_modell_nullstill()";
 
     GDPL_log(GDPL_DEBUG, signatur, "Start funksjon.");
 
-    if (gdpl_modell_konkurranseliste_root_ptr == 0) {
-        GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
+    if (gdpl_modell_konkurranseliste_root_ptr == 0) {        
         return 0;
     }
 
@@ -559,13 +554,26 @@ int GDPL_modell_privat_slett_alt()
         } while (par_data_node != 0);
         ptrKonkurranse = konkurranse_data_node;
         konkurranse_data_node = konkurranse_data_node->neste;
-        free(ptrKonkurranse);
+        free(ptrKonkurranse);        
     } while (konkurranse_data_node != 0);
 
-    if (gdpl_modell_konkurranseliste_root_ptr == 0) {
-        GDPL_log(GDPL_ERROR, signatur, "%d == DEBUG Systemfeil. Klarte ikke å slette.",__LINE__);
-        return FEILKODE_FEIL;
+    gdpl_modell_konkurranseliste_root_ptr = 0;
+    gdpl_modell_konkurranseliste_valgt_ptr = 0;
+
+    FILE *fptr;
+    fptr = fopen(gdpl_modell_datafilnavn,"r");
+    if (fptr != 0) {
+        fclose(fptr);
+        int status = 0;
+        status = remove(gdpl_modell_datafilnavn);
+        if (status != 0) {
+            GDPL_log(GDPL_ERROR, signatur, "klarte ikke å slette %s",gdpl_modell_datafilnavn);
+            return FEILKODE_FEIL;
+        }
     }
+
+    if (GDPL_modell_les_data() > 0)
+        return FEILKODE_FEIL;
 
     GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
 

@@ -60,6 +60,8 @@ int GDPL_par_fjern_fra(GDPL_par_data_node *data);
 
 int GDPL_par_hent(int id, GDPL_par_data_node **data);
 
+int GDPL_par_hent_i_rekke(int nr, GDPL_par_data_node **data);
+
 int GDPL_par_antall_i_liste(int *antall);
 
 int GDPL_par_finn_neste_ledige_id(int *id);
@@ -67,6 +69,8 @@ int GDPL_par_finn_neste_ledige_id(int *id);
 int GDPL_par_valider_tid(struct GDPL_tid tid);
 
 int GDPL_par_valider_starttid_mot_maaltid(struct GDPL_tid starttid, struct GDPL_tid maaltid);
+
+int GDPL_par_beregn();
 
 int GDPL_par_beregn_anvendt_tid(GDPL_par_data_node *data);
 

@@ -89,6 +89,7 @@ int GDPL_modell_skriv_data();
 
 int GDPL_modell_dump();
 
+int GDPL_modell_nullstill();
 
 #ifdef __cplusplus
 }
