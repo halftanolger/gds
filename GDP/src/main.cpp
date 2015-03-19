@@ -327,9 +327,6 @@ int main(int argc, char **argv)
         }
     }
 
-
-
-
     QApplication app(argc, argv);
     GDPMainWindows* appWin = new GDPMainWindows();
     appWin->show();
