@@ -22,35 +22,10 @@
 #include <string.h>
 #include "person.h"
 #include "kontroller.h"
-#include "modell.h"
 #include "konkurranse.h"
+#include "log.h"
 
 
-/* ----------------------------------------------------------------------------
- *
- * Funksjon 
- *  int GDPL_person_opprett_node(GDPL_person_data_node**)
- *  
- * ----------------------------------------------------------------------------
- *
- * Beskrivelse
- *  Oppretter en ny person-data-node og  initialiserer denne.  
- *   
- * Parametre  
- *  Peker til peker til node
- * 
- * Returnerer 
- *  0 - ok
- *  alt annet - feil. Den returnerte verdien kan brukes som indeks til 
- *  gdpl_kontroller_feilkoder[] for å hente ut ei feilmelding.
- *  
- * Eksempel på bruk
- *  GDPL_person_data_node *ptr;
- *  int fk = GDPL_person_opprett_node(&ptr);
- *  if (fk != 0) 'handle failure'
- *
- * ----------------------------------------------------------------------------
- */ 
 int GDPL_person_opprett_node(GDPL_person_data_node **new_node)
 {
   const char* signatur = "GDPL_person_opprett_node(GDPL_person_data_node**)";
@@ -83,34 +58,7 @@ int GDPL_person_opprett_node(GDPL_person_data_node **new_node)
   return 0;
 }
 
-/* ----------------------------------------------------------------------------
- *
- * Funksjon 
- *  int GDPL_person_legg_til(GDPL_person_data_node, GDPL_person_data_node*)
- *  
- * ----------------------------------------------------------------------------
- *
- * Beskrivelse
- *  Legg til en person-node i person-lista.
- *   
- * Parametre  
- *  GDPL_person_data_node  - noden som skal legges til lista.
- *  GDPL_person_data_node* - peker til root-node i personlista.
- * 
- * Returnerer 
- *  0 - ok
- *  alt annet - feil. Den returnerte verdien kan brukes som indeks til 
- *  gdpl_kontroller_feilkoder[] for å hente ut ei feilmelding.
- *  
- * Eksempel på bruk
- *  GDPL_person_data_node node;
- *  GDPL_person_data_node *root;
- *  int feilnr;
- *  feilnr = GDPL_person_legg_til(node,root);
- *  if (feilnr != 0) 'handle failure'
- *
- * ----------------------------------------------------------------------------
- */ 
+
 int GDPL_person_legg_til(GDPL_person_data_node *data)
 {
   const char* signatur = "GDPL_person_legg_til(GDPL_person_data_node,GDPL_person_data_node*)";
@@ -131,7 +79,7 @@ int GDPL_person_legg_til(GDPL_person_data_node *data)
 
   if (root->neste == 0) {
     root->neste = data;
-    GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon. (1.node)");
+    GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon");
     return 0;
   }
 
@@ -142,8 +90,10 @@ int GDPL_person_legg_til(GDPL_person_data_node *data)
   }  
   root->neste = data;
   
-  GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon. (node nummer %d)",teller);
+  GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon");
+
   return 0;
+
 }
 
 /* ----------------------------------------------------------------------------
@@ -197,14 +147,12 @@ int GDPL_person_fjern_fra(GDPL_person_data_node data)
   /* Litt inputparameter-sjekking. */
   
   if (root == 0) {
-    GDPL_log(GDPL_DEBUG, signatur, "root == 0, I'm out of here ...");
-    GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
+    GDPL_log(GDPL_ERROR, signatur, "root == 0");
     return FEILKODE_FEIL;  
   }
 
   if (data.id == 0) {
-    GDPL_log(GDPL_DEBUG, signatur, "data.id == 0, I'm out of here ...");
-    GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
+    GDPL_log(GDPL_ERROR, signatur, "data.id == 0");
     return FEILKODE_FEIL;  
   }
   
@@ -225,8 +173,7 @@ int GDPL_person_fjern_fra(GDPL_person_data_node data)
   
   if (id_eksisterer != 1) {
     int feilkode = FEILKODE_ID_EKSISTERER_IKKE;
-    GDPL_log(GDPL_DEBUG, signatur, gdpl_kontroller_feilkoder[feilkode]);
-    GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
+    GDPL_log(GDPL_ERROR, signatur, gdpl_kontroller_feilkoder[feilkode]);
     return feilkode;
   }
   
@@ -300,12 +247,12 @@ int GDPL_person_hent(int id, GDPL_person_data_node **data)
   /* Litt inputparameter-sjekking. */
   
   if (root == 0) {
-    GDPL_log(GDPL_DEBUG, signatur, "root -peker er null");
+    GDPL_log(GDPL_ERROR, signatur, "root -peker er null");
     return FEILKODE_FEIL;  
   }
 
   if ((*data) != 0) {
-    GDPL_log(GDPL_DEBUG, signatur, "data -peker må være null.");
+    GDPL_log(GDPL_ERROR, signatur, "data -peker må være null.");
     return FEILKODE_FEIL;  
   }
   
@@ -326,7 +273,7 @@ int GDPL_person_hent(int id, GDPL_person_data_node **data)
   
   if (id_eksisterer != 1) {
     int feilkode = FEILKODE_ID_EKSISTERER_IKKE;
-    GDPL_log(GDPL_DEBUG, signatur, gdpl_kontroller_feilkoder[feilkode]);    
+    GDPL_log(GDPL_ERROR, signatur, gdpl_kontroller_feilkoder[feilkode]);
     return feilkode;
   }
     
@@ -385,14 +332,12 @@ int GDPL_person_antall_i_liste(int *antall)
   /* Litt inputparameter-sjekking. */
   
   if (root == 0) {
-    GDPL_log(GDPL_DEBUG, signatur, "root == 0, I'm out of here ...");
-    GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
+    GDPL_log(GDPL_ERROR, signatur, "root == 0");
     return FEILKODE_FEIL;  
   }
 
   if (antall == 0) {
-    GDPL_log(GDPL_DEBUG, signatur, "antall == 0, I'm out of here ...");
-    GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
+    GDPL_log(GDPL_ERROR, signatur, "antall == 0");
     return FEILKODE_FEIL;  
   }
     

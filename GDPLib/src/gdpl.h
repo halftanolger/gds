@@ -26,17 +26,11 @@
 extern "C" {
 #endif
 
-
-#include "diverse.h"
-
-#include "kontroller.h"
-
-#include "konkurranse.h"
-
+#include "log.h"
 #include "modell.h"
-
+#include "kontroller.h"
+#include "konkurranse.h"
 #include "person.h"
-
 #include "par.h"
 
 #ifdef __cplusplus

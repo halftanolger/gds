@@ -28,8 +28,6 @@ extern "C" {
 
 #include "modell.h"
 
-// Enums
-
 enum GDPL_par_sorter_enum { TIDS_POENG_SYNKENDE,    /* 0 */
                             TIDS_POENG_STIGENDE,    /* 1 */
                             OPPGAVE_POENG_SYNKENDE, /* 2 */
@@ -40,17 +38,7 @@ enum GDPL_par_sorter_enum { TIDS_POENG_SYNKENDE,    /* 0 */
                             START_NR_STIGENDE       /* 7 */
                           };
 
-// Typedefs
-
 typedef enum GDPL_par_sorter_enum GDPL_par_sorter_type;
-
-
-
-
-/* Variabel-deklareringer */
-
-
-/* Funksjons-deklareringer */
 
 int GDPL_par_opprett_node(GDPL_par_data_node **new_node);
 
@@ -78,11 +66,9 @@ int GDPL_par_beregn_middel_tid(struct GDPL_tid *middel_tid);
 
 int GDPL_par_beregn_tids_poeng(GDPL_par_data_node *data, struct GDPL_tid middel_tid);
 
+int GDPL_par_beregn_avvik(struct GDPL_tid *avvik, struct GDPL_tid a, struct GDPL_tid b);
+
 int GDPL_par_sorter(GDPL_par_sorter_type type);
-
-/* 'Private' funksjons-deklareringer */
-
-
 
 #ifdef __cplusplus
 }

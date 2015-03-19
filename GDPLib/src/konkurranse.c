@@ -20,6 +20,8 @@
 
 #include <stdlib.h>
 #include "konkurranse.h"
+#include "log.h"
+#include "modell.h"
 #include "kontroller.h"
 
 
@@ -121,34 +123,29 @@ int GDPL_konkurranse_legg_til(GDPL_konkurranse_data_node *data)
   GDPL_konkurranse_data_node *root = gdpl_modell_konkurranseliste_root_ptr;
 
   if (root == 0) {
-    GDPL_log(GDPL_DEBUG, signatur, "root == 0, I'm out of here ...");
-    GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
+    GDPL_log(GDPL_ERROR, signatur, "root == 0");
     return FEILKODE_FEIL;  
   }
 
   /* Litt inputparameter-sjekking. */
 
   if (data->id == 0) {
-    GDPL_log(GDPL_DEBUG, signatur, "data.id == 0, I'm out of here ...");
-    GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
+    GDPL_log(GDPL_ERROR, signatur, "data.id == 0");
     return FEILKODE_FEIL;  
   }
   
   if (data->aar == 0) {
-    GDPL_log(GDPL_DEBUG, signatur, "data.aar == 0, I'm out of here ...");
-    GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
+    GDPL_log(GDPL_ERROR, signatur, "data.aar == 0");
     return FEILKODE_FEIL;  
   }
   
   if (data->person_liste_root_ptr == 0) {
-    GDPL_log(GDPL_DEBUG, signatur, "data.person_liste_root_ptr == 0, I'm out of here ...");
-    GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
+    GDPL_log(GDPL_ERROR, signatur, "data.person_liste_root_ptr == 0");
     return FEILKODE_FEIL;
   }
 
   if (data->par_liste_root_ptr == 0) {
-    GDPL_log(GDPL_DEBUG, signatur, "data.par_liste_root_ptr == 0, I'm out of here ...");
-    GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
+    GDPL_log(GDPL_ERROR, signatur, "data.par_liste_root_ptr == 0");
     return FEILKODE_FEIL;
   }
 
@@ -169,8 +166,7 @@ int GDPL_konkurranse_legg_til(GDPL_konkurranse_data_node *data)
   
   if (id_eksisterer != 0) {
     int feilkode = FEILKODE_ID_EKSISTERER;
-    GDPL_log(GDPL_DEBUG, signatur, gdpl_kontroller_feilkoder[feilkode]);
-    GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
+    GDPL_log(GDPL_ERROR, signatur, gdpl_kontroller_feilkoder[feilkode]);
     return feilkode;
   }
   
@@ -230,14 +226,12 @@ int GDPL_konkurranse_fjern_fra(GDPL_konkurranse_data_node* data, GDPL_konkurrans
   /* Litt inputparameter-sjekking. */
   
   if (root == 0) {
-    GDPL_log(GDPL_DEBUG, signatur, "root == 0, I'm out of here ...");
-    GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
+    GDPL_log(GDPL_ERROR, signatur, "root == 0");
     return FEILKODE_FEIL;  
   }
 
   if (data->id == 0) {
-    GDPL_log(GDPL_DEBUG, signatur, "data.id == 0, I'm out of here ...");
-    GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
+    GDPL_log(GDPL_ERROR, signatur, "data.id == 0");
     return FEILKODE_FEIL;  
   }
   
@@ -258,8 +252,7 @@ int GDPL_konkurranse_fjern_fra(GDPL_konkurranse_data_node* data, GDPL_konkurrans
   
   if (id_eksisterer != 1) {
     int feilkode = FEILKODE_ID_EKSISTERER_IKKE;
-    GDPL_log(GDPL_DEBUG, signatur, gdpl_kontroller_feilkoder[feilkode]);
-    GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
+    GDPL_log(GDPL_ERROR, signatur, gdpl_kontroller_feilkoder[feilkode]);
     return feilkode;
   }
   
@@ -276,7 +269,9 @@ int GDPL_konkurranse_fjern_fra(GDPL_konkurranse_data_node* data, GDPL_konkurrans
   free(runner);
   
   GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
+
   return 0;
+
 }
 
 int GDPL_konkurranse_sett_valgt_konkurranse(int id)
@@ -337,16 +332,14 @@ int GDPL_konkurranse_hent(int id, GDPL_konkurranse_data_node **data)
   GDPL_konkurranse_data_node *root = gdpl_modell_konkurranseliste_root_ptr;
 
   if (root == 0) {
-    GDPL_log(GDPL_DEBUG, signatur, "root == 0, I'm out of here ...");
-    GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
+    GDPL_log(GDPL_ERROR, signatur, "root == 0");
     return FEILKODE_FEIL;  
   }
 
   /* Litt inputparameter-sjekking. */
 
   if (*data != 0) {
-    GDPL_log(GDPL_DEBUG, signatur, "data != 0, I'm out of here ...");
-    GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
+    GDPL_log(GDPL_ERROR, signatur, "data != 0");
     return FEILKODE_FEIL;  
   }
   
@@ -367,8 +360,7 @@ int GDPL_konkurranse_hent(int id, GDPL_konkurranse_data_node **data)
   
   if (id_eksisterer != 1) {
     int feilkode = FEILKODE_ID_EKSISTERER_IKKE;
-    GDPL_log(GDPL_DEBUG, signatur, gdpl_kontroller_feilkoder[feilkode]);
-    GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
+    GDPL_log(GDPL_ERROR, signatur, gdpl_kontroller_feilkoder[feilkode]);
     return feilkode;
   }
     
@@ -420,8 +412,7 @@ int GDPL_konkurranse_antall_i_liste(int *antall)
   }
 
   if (antall == 0) {
-    GDPL_log(GDPL_ERROR, signatur, "antall må peke på et heltall, antall er null");
-    GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
+    GDPL_log(GDPL_ERROR, signatur, "antall må peke på et heltall, antall er null");    
     return FEILKODE_FEIL;  
   }
     
@@ -433,7 +424,8 @@ int GDPL_konkurranse_antall_i_liste(int *antall)
   
   *antall = teller;
   
-  GDPL_log(GDPL_DEBUG, signatur, "antall i lista er %d", teller);
   GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
+
   return 0;
+
 }

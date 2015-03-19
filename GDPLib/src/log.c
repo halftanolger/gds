@@ -1,4 +1,4 @@
-/*
+﻿/*
 ** This file is part of the GDPLib project.
 **
 ** Copyright (C) Halftan Sætherskar (halftan@saetherskar.no)
@@ -26,36 +26,14 @@
 #include <locale.h>
 #include <time.h>
 #include <assert.h>
-#include "diverse.h"
+#include "log.h"
 
 GDPL_log_type gdpl_log_nivaa = -1;
 
 FILE * gdpl_log_stream = 0;
 
-/* ----------------------------------------------------------------------------
- * Funksjon
- *  void GDPL_log(GDPL_GDPL_log_type type, const char* signature, char* message, ...)
- * ----------------------------------------------------------------------------
- * Beskrivelse
- *  Skriv ei logg melding med tidsangivelse. To globale variabler styrer hva
- *  som skal logges og hvor det skal logges;
- *
- *  gdpl_log_stream - definerer hvor; stdout, stderr, eller til fil.
- *  gdpl_log_nivaa  - definerer minimumsnivået; DEBUG, INFO, WARNING.
- *
- * Parametre
- *  type - DEBUG, INFO, WARNING, ERROR
- *  signatur - navn på funksjon
- *  melding - loggmeldinga
- *  ... - variablet sett med argumenter til loggmeldinga, ala printf()
- *
- * Returnerer
- *  ingen ting.
- *
- * Eksempel på bruk
- *  GDPL_log(GDPL_DEBUG, "main()", "Hello %s", "world");
- * ----------------------------------------------------------------------------
- */
+
+
 void GDPL_log(GDPL_log_type type, const char* signatur, const char* melding, ...)
 {
     time_t rawtime;
@@ -149,13 +127,16 @@ void GDPL_log(GDPL_log_type type, const char* signatur, const char* melding, ...
  *
  * ----------------------------------------------------------------------------
  */
-int GDPL_init_log(GDPL_log_type nivaa, FILE * stream)
+int GDPL_log_init(GDPL_log_type nivaa, FILE * stream)
 {
     const char* signatur = "GDPL_init";
 
     /* Sett locale til 'norsk bokmål',
      noe som bør fikse øæå -problematikk. */
-    setlocale(LC_ALL,"nb_NO.utf8");
+    char* locale;
+    locale = setlocale(LC_ALL,"");
+
+    GDPL_log(GDPL_DEBUG, signatur, "locale=%s",locale);
 
     /* Sett loggnivå og loggdestinasjon ihht inputparametre. */
     gdpl_log_nivaa = nivaa;

@@ -1,4 +1,4 @@
-/*
+﻿/*
 ** This file is part of the GDPLib project.
 **
 ** Copyright (C) Halftan Sætherskar (halftan@saetherskar.no)
@@ -26,9 +26,8 @@
 #include <sstream>
 #include <vector>
 #include <string>
+#include "gdpmainwindows.h"
 #include "gdpl.h"
-
-
 
 std::vector<std::string> getNextLineAndSplitIntoTokens(std::istream& str)
 {
@@ -61,11 +60,10 @@ std::vector<std::string> split(const std::string &s, char delim) {
     return elems;
 }
 
-int main(int argc, char **argv)
-{  
-    const char* signatur = "main()";
-
-    GDPL_init_log(GDPL_INFO, stdout);
+int filversjon(const char* filnavn)
+{
+    const char* signatur = "filversjon";
+    GDPL_log_init(GDPL_INFO, stdout);
 
     const char *navn = GDPL_kontroller_gdplib_navn();
     const char *ver =  GDPL_kontroller_gdplib_versjon();
@@ -120,8 +118,12 @@ int main(int argc, char **argv)
 
     /* Last inn data fra cvs-fil. */
 
-    // TODO: bruk arg ...
-    std::ifstream file("testinput.csv");
+    std::ifstream file(filnavn);
+
+    if (!file.is_open()) {
+        GDPL_log(GDPL_ERROR,"Klarer ikke aa aapne fila %s", filnavn);
+        return FEILKODE_FEIL;
+    }
 
     /* Første linje er bare kolonnenavn. */
 
@@ -137,10 +139,10 @@ int main(int argc, char **argv)
 
             int antall = v.size();
 
-            /* Antall kolonner må være 11 */
+            /* Antall kolonner skal være 7 */
 
-            if (antall != 11) {
-                GDPL_log(GDPL_ERROR, signatur, "Feil format på cvs-input-fil.");
+            if (antall != 7) {
+                GDPL_log(GDPL_ERROR, signatur, "Feil antall kolonner i cvs-input-fil.");
             }
 
             std::string  start_nr_str = v.at(0);
@@ -170,7 +172,7 @@ int main(int argc, char **argv)
             int maal_tid_m = atoi(maal_tid_elementer.at(1).c_str());
             int maal_tid_s = atoi(maal_tid_elementer.at(2).c_str());
 
-            std::string oppgave_poeng_str = v.at(10);
+            std::string oppgave_poeng_str = v.at(7);
             int oppgave_poeng = atoi(oppgave_poeng_str.c_str());
 
             /* Legg til herre-person */
@@ -239,28 +241,102 @@ int main(int argc, char **argv)
     if (GDPL_par_antall_i_liste(&antall_par)>0)
         return 1;
 
+    std::string fn(filnavn);
+    fn += "_output.csv";
+
+    std::ofstream myfile;
+    myfile.open(fn);
+
+    if (!myfile.is_open()) {
+        GDPL_log(GDPL_ERROR,"Klarer ikke aa aapne fila %s", fn.c_str());
+        return FEILKODE_FEIL;
+    }
+
+    myfile << "Plassering" << ";"
+           << "Startnummer" << ";"
+           << "Herre-navn" << ";"
+           << "Dame-navn" << ";"
+           << "Start-tid" << ";"
+           << "Slutt-tid" << ";"
+           << "Oppgave-poeng" << ";"
+           << "Beregnet middel-tid" << ";"
+           << "Beregnet anvendt-tid" << ";"
+           << "Beregnet avveket-tid" << ";"
+           << "Beregnet tids-poeng" << ";"
+           << "Beregnet total-poeng" << ";\n";
+
+    struct GDPL_tid middel_tid;
+    if (GDPL_par_beregn_middel_tid(&middel_tid)>0)
+        return FEILKODE_FEIL;
+
     for (int i=1; i<=antall_par; i++) {
         GDPL_par_data_node *data = 0;
-        if( GDPL_par_hent_i_rekke(i, &data)>0)
+        if( GDPL_par_hent_i_rekke(i, &data)>0) {
+            myfile.close();
+            return 1;
+        }
+
+        GDPL_person_data_node *hperson = 0;
+        if (GDPL_person_hent(data->herre_person_id, &hperson)>0)
             return 1;
 
-        //TODO: skriv til fil.
-        std::cout << "id=" << data->id << "poeng=" << (data->tids_poeng + data->oppgave_poeng) << std::endl;
+        GDPL_person_data_node *dperson = 0;
+        if (GDPL_person_hent(data->dame_person_id, &dperson)>0)
+            return 1;
 
+        struct GDPL_tid avveket_tid;
+        if (GDPL_par_beregn_avvik(&avveket_tid, middel_tid, data->anvendt_tid)>0)
+            return 1;
+
+        myfile << i << ";"
+               << data->start_nr << ";"
+               << hperson->fnavn << " "
+               << hperson->enavn << ";"
+               << dperson->fnavn << " "
+               << dperson->enavn << ";"
+               << data->start_tid.timer << ":" << data->start_tid.minutt << ":" << data->start_tid.sekund << ";"
+               << data->maal_tid.timer << ":" << data->maal_tid.minutt << ":" << data->maal_tid.sekund << ";"
+               << data->oppgave_poeng << ";"
+               << middel_tid.timer << ":" << middel_tid.minutt << ":" << middel_tid.sekund << ";"
+               << data->anvendt_tid.timer << ":" << data->anvendt_tid.minutt << ":" << data->anvendt_tid.sekund << ";"
+               << avveket_tid.timer << ":" << avveket_tid.minutt << ":" << avveket_tid.sekund << ";"
+               << data->tids_poeng << ";"
+               << (data->tids_poeng + data->oppgave_poeng) << ";\n";
 
     }
 
+    myfile.close();
     return 0;
 
+}
 
-    /*
+
+int main(int argc, char **argv)
+{  
+
+    if (argc > 1) {
+        if (strcmp(argv[1],"-v")==0) {
+            const char *navn = GDPL_kontroller_gdplib_navn();
+            const char *ver =  GDPL_kontroller_gdplib_versjon();
+            std::cout << "'Gubberenn Dataprogram' er basert paa " << navn << " " << ver << std::endl;
+            return 0;
+        }
+        if (strcmp(argv[1],"-i")==0 && argc == 3) {
+            const char *filnavn = argv[2];
+            return filversjon(filnavn);
+        }
+    }
+
+
+
+
     QApplication app(argc, argv);
     GDPMainWindows* appWin = new GDPMainWindows();
     appWin->show();
     appWin->setFocus();
     int r = app.exec();
     return r;
-    */
+
 }
 
 

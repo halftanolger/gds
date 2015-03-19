@@ -1,13 +1,32 @@
+/*
+** This file is part of the GDPLib project.
+**
+** Copyright (C) Halftan Sætherskar (halftan@saetherskar.no)
+**
+** This program is free software; you can redistribute it and/or
+** modify it under the terms of the GNU General Public License
+** as published by the Free Software Foundation; either version 2
+** of the License, or (at your option) any later version.
+**
+** This program is distributed in the hope that it will be useful,
+** but WITHOUT ANY WARRANTY; without even the implied warranty of
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+** GNU General Public License for more details.
+**
+** You should have received a copy of the GNU General Public License
+** along with this program; if not, write to the Free Software
+** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+******************************************************************************
+*/
 
 #include <string.h>
 #include <stdlib.h>
 #include "modell.h"
-#include "diverse.h"
+#include "log.h"
 #include "kontroller.h"
 #include "konkurranse.h"
 #include "person.h"
 #include "par.h"
-
 
 /* Variabel-definisjoner */
 
@@ -83,7 +102,7 @@ int GDPL_modell_les_data()
 
     }
 
-    /* Nå skal vi ha ei ok data fil å lese fra. */
+    /* Nå skal vi ha ei ok data-fil å lese fra. */
 
     if (GDPL_modell_privat_les_inn_fra_eksisterende_fil() > 0) {
         return FEILKODE_FEIL;
@@ -132,10 +151,6 @@ int GDPL_modell_skriv_data()
 }
 
 
-
-/* Private funksjons-definisjoner */
-
-
 int GDPL_modell_privat_opprett_ny_fil()
 {
     const char* signatur = "GDPL_modell_privat_opprett_ny_fil()";
@@ -162,6 +177,8 @@ int GDPL_modell_privat_opprett_ny_fil()
 
     gdpl_modell_konkurranseliste_root_ptr = root_konkurranse_data_node;
     gdpl_modell_konkurranseliste_valgt_ptr = 0;
+
+    /* Opprett tilhørende datafil */
 
     if (GDPL_modell_skriv_data() > 0) {
         return FEILKODE_FEIL;
@@ -567,10 +584,12 @@ int GDPL_modell_nullstill()
         int status = 0;
         status = remove(gdpl_modell_datafilnavn);
         if (status != 0) {
-            GDPL_log(GDPL_ERROR, signatur, "klarte ikke å slette %s",gdpl_modell_datafilnavn);
+            GDPL_log(GDPL_ERROR, signatur, "klarte ikke å slette fila %s",gdpl_modell_datafilnavn);
             return FEILKODE_FEIL;
         }
     }
+
+    /* Dette vil opprette den nye nullstilte modellen. */
 
     if (GDPL_modell_les_data() > 0)
         return FEILKODE_FEIL;

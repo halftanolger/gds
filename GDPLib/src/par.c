@@ -21,9 +21,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include "par.h"
-#include "diverse.h"
+#include "log.h"
 #include "kontroller.h"
-
 
 int GDPL_par_opprett_node(GDPL_par_data_node **new_node)
 {
@@ -116,7 +115,7 @@ int GDPL_par_legg_til(GDPL_par_data_node *data)
 
     if (id_eksisterer != 0) {
         int feilkode = FEILKODE_ID_EKSISTERER;
-        GDPL_log(GDPL_DEBUG, signatur, gdpl_kontroller_feilkoder[feilkode]);
+        GDPL_log(GDPL_ERROR, signatur, gdpl_kontroller_feilkoder[feilkode]);
         return feilkode;
     }
     
@@ -330,7 +329,7 @@ int GDPL_par_antall_i_liste(int *antall)
     /* Litt inputparameter-sjekking. */
 
     if (antall == 0) {
-        GDPL_log(GDPL_DEBUG, signatur, "antall == 0, I'm out of here ...");
+        GDPL_log(GDPL_ERROR, signatur, "antall == 0");
         return FEILKODE_FEIL;
     }
     
@@ -537,6 +536,39 @@ int GDPL_par_beregn_middel_tid(struct GDPL_tid *middel_tid)
     GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
 
     return 0;
+}
+
+
+int GDPL_par_beregn_avvik(struct GDPL_tid *avvik, struct GDPL_tid a, struct GDPL_tid b)
+{
+    const char* signatur = "GDPL_par_beregn_anvendt_tid(GDPL_par_data_node*)";
+
+    GDPL_log(GDPL_DEBUG, signatur, "Start funksjon.");
+
+    if (avvik == 0) {
+        GDPL_log(GDPL_ERROR, signatur, "avvik == 0");
+        return FEILKODE_FEIL;
+    }
+
+    if (GDPL_par_valider_tid(a)>0)
+        return FEILKODE_FEIL;
+
+    if (GDPL_par_valider_tid(b)>0)
+        return FEILKODE_FEIL;
+
+    int s1 = a.sekund + a.minutt*60 + a.timer*60*60;
+    int s2 = b.sekund + b.minutt*60 + b.timer*60*60;
+    int s3 = abs(s1-s2);
+
+    avvik->timer = s3 / (60*60);
+    int _s3 = s3 % (60*60);
+    avvik->minutt = _s3 / 60;
+    avvik->sekund = _s3 % 60;
+
+    GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
+
+    return 0;
+
 }
 
 

@@ -25,7 +25,7 @@
 #include <assert.h>
 
 #include "test_modell.h"
-#include "diverse.h"
+#include "log.h"
 #include "modell.h"
 #include "konkurranse.h"
 #include "person.h"

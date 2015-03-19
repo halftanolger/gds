@@ -46,24 +46,13 @@ extern "C" {
 #define FEILKODE_DATAFIL_UKJENT_MN           14
 #define FEILKODE_KAN_IKKE_ALLOKERE_MINNE_S   15
 
-#define GDPL_MAX_PERSONNAVN_LENGDE           128
-#define GDPL_MIN_PERSONNAVN_LENGDE           1
-#define GDPL_MAX_FILNAVN_LENGDE              516
-#define GDPL_MIN_FILNAVN_LENGDE              1
-#define GDPL_MAX_ANTALL_PAR                  200
-
 // Enums
 
 enum GDPL_log_type_enum {GDPL_DEBUG, GDPL_INFO, GDPL_WARNING, GDPL_ERROR};
 
-
-
 // Typedefs
 
 typedef enum GDPL_log_type_enum GDPL_log_type;
-
-
-
 
 // Variabler
 
@@ -71,14 +60,11 @@ extern GDPL_log_type gdpl_log_nivaa;
 
 extern FILE * gdpl_log_stream;
 
-
 // Funksjoner
 
 void GDPL_log(GDPL_log_type, const char*, const char*, ...);
 
-int GDPL_init_log(GDPL_log_type nivaa, FILE * stream);
-
-
+int GDPL_log_init(GDPL_log_type nivaa, FILE * stream);
 
 #ifdef __cplusplus
 }

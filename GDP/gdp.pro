@@ -13,7 +13,6 @@ QMAKE_CXXFLAGS += -std=c++11 -g
 # GDPLib
 #
 SOURCES += \
-    ../GDPLib/src/diverse.c \
     ../GDPLib/src/modell.c \
     ../GDPLib/src/konkurranse.c \
     ../GDPLib/src/kontroller.c \
@@ -24,19 +23,20 @@ SOURCES += \
     ../GDPLib/src/test_kontroller.c \
     ../GDPLib/src/test_par.c \
     ../GDPLib/src/test_modell.c \
-    src/fil_versjon/gdpfilversjon.cpp
+    src/fil_versjon/gdpfilversjon.cpp \
+    ../GDPLib/src/log.c
 
 
 HEADERS += \
     ../GDPLib/src/gdpl.h \
-    ../GDPLib/src/diverse.h \
     ../GDPLib/src/modell.h \
     ../GDPLib/src/person.h \
     ../GDPLib/src/par.h \
     ../GDPLib/src/kontroller.h \
     ../GDPLib/src/konkurranse.h \
     ../GDPLib/src/test_modell.h \
-    src/fil_versjon/gdpfilversjon.h
+    src/fil_versjon/gdpfilversjon.h \
+    ../GDPLib/src/log.h
 
 DEPENDPATH += \
     ../GDPLib/src/ \

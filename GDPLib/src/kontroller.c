@@ -25,10 +25,13 @@
 #include <locale.h>
 #include <time.h>  
 #include <assert.h>  
-#include "gdpl.h"
 #include "kontroller.h"
+#include "log.h"
+#include "par.h"
+#include "modell.h"
 #include "konkurranse.h"
 
+/* Variabel definisjoner */
 
 const char* gdpl_kontroller_gdplib_navn = "GDPLib";
 
@@ -55,6 +58,8 @@ const char *gdpl_kontroller_feilkoder[] = {
 
 int gdpl_kontroller_max_antall_par = -1;
 
+
+/* Funksjons definisjoner */
 
 
 /* ----------------------------------------------------------------------------

@@ -26,9 +26,11 @@
 extern "C" {
 #endif
 
-#include "diverse.h"
-
-/* Variabel-deklareringer */
+#define GDPL_MAX_PERSONNAVN_LENGDE           128
+#define GDPL_MIN_PERSONNAVN_LENGDE           1
+#define GDPL_MAX_FILNAVN_LENGDE              516
+#define GDPL_MIN_FILNAVN_LENGDE              1
+#define GDPL_MAX_ANTALL_PAR                  200
 
 struct GDPL_tid {
     int timer;
@@ -77,9 +79,7 @@ extern GDPL_konkurranse_data_node *gdpl_modell_konkurranseliste_root_ptr;
 
 extern GDPL_konkurranse_data_node *gdpl_modell_konkurranseliste_valgt_ptr;
 
-
 /* Funksjons-deklareringer */
-
 
 int GDPL_modell_angi_filnavn(const char *filnavn);
 

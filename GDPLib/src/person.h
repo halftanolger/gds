@@ -26,14 +26,7 @@
 extern "C" {
 #endif
 
-#include "diverse.h"
 #include "modell.h"
-
-
-/* Variabel-deklareringer */
-
-
-/* Funksjons-deklareringer */
 
 int GDPL_person_opprett_node(GDPL_person_data_node **new_node);
 
@@ -46,10 +39,6 @@ int GDPL_person_hent(int id, GDPL_person_data_node **data);
 int GDPL_person_antall_i_liste(int *antall);
 
 int GDPL_person_finn_neste_ledige_id(int *id);
-
-/* 'Private' funksjons-deklareringer */
-
-
 
 #ifdef __cplusplus
 }
