@@ -1,11 +1,10 @@
 
-QT += widgets
-
-CONFIG += qt \
-     warn_on \
-     link_prl \
+CONFIG +=  \
+     warn_on \     
      c++11 \
-     verbose
+     verbose \
+     console \
+
 
 QMAKE_CXXFLAGS += -std=c++11 -g
 
@@ -22,8 +21,7 @@ SOURCES += \
     ../GDPLib/src/test_konkurranse.c \
     ../GDPLib/src/test_kontroller.c \
     ../GDPLib/src/test_par.c \
-    ../GDPLib/src/test_modell.c \
-    src/fil_versjon/gdpfilversjon.cpp \
+    ../GDPLib/src/test_modell.c \    
     ../GDPLib/src/log.c
 
 
@@ -34,8 +32,7 @@ HEADERS += \
     ../GDPLib/src/par.h \
     ../GDPLib/src/kontroller.h \
     ../GDPLib/src/konkurranse.h \
-    ../GDPLib/src/test_modell.h \
-    src/fil_versjon/gdpfilversjon.h \
+    ../GDPLib/src/test_modell.h \    
     ../GDPLib/src/log.h
 
 DEPENDPATH += \
@@ -49,8 +46,7 @@ INCLUDEPATH += \
 
 
 SOURCES += \
-    src/main.cpp \
-    src/gdpmainwindows.cpp \
+    src/main.cpp \    
 
 HEADERS += \
-    src/gdpmainwindows.h \
+

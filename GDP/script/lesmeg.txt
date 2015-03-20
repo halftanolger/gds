@@ -1,0 +1,15 @@
++-----------------------------------------------------------------------------+
+  Les meg.txt
+  
++-----------------------------------------------------------------------------+
+
+  nsiscript.nsi     - input fil til NSIS (Nullsoft Scriptable Install System)
+  run.bat           - hjelpfil for å starte makensis.exe
+  testinput.csv     - eksempel input-datafil til Gubberenn Dataprogram.
+  GubberennDataprogramInstaller.exe - slutt resultatet :-)
+  
+  For mer info, se:
+  http://nsis.sourceforge.net
+  
+  
+  -theEnd-

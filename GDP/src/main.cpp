@@ -18,43 +18,127 @@
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 ******************************************************************************/
 
-#include <QtWidgets>
-#include <QDebug>
+#include <locale>
 #include <stdio.h>
 #include <fstream>
 #include <iostream>
 #include <sstream>
 #include <vector>
 #include <string>
-#include "gdpmainwindows.h"
+#include <cstring>
 #include "gdpl.h"
 
 std::vector<std::string> getNextLineAndSplitIntoTokens(std::istream& str);
 std::vector<std::string> &split(const std::string &s, char delim, std::vector<std::string> &elems);
 std::vector<std::string> split(const std::string &s, char delim);
-int filversjon(const char* filnavn);
+int filversjon(const char* filnavn, int loglevel);
 
 int main(int argc, char **argv)
 {
+    std::setlocale(LC_ALL,"");
+
     if (argc > 1) {
         if (strcmp(argv[1],"-v")==0) {
             const char *navn = GDPL_kontroller_gdplib_navn();
             const char *ver =  GDPL_kontroller_gdplib_versjon();
-            std::cout << "'Gubberenn dataprogram' er basert paa " << navn << " " << ver << std::endl;
+            std::wcout << L"\nGubberenn Dataprogram er basert på " << navn << " " << ver << "\n" << std::endl;
             return 0;
         }
-        if (strcmp(argv[1],"-i")==0 && argc == 3) {
-            const char *filnavn = argv[2];
-            return filversjon(filnavn);
+        if (strcmp(argv[1],"-h")==0) {
+            std::wcout << L"                                            " << std::endl;
+            std::wcout << L"                                            " << std::endl;
+            std::wcout << L"   -x- Gubberenn Dataprogram ver. 1.0 -x-   " << std::endl;
+            std::wcout << L"                                            " << std::endl;
+            std::wcout << L"Gubberenn  Dataprogram  er  et  hjelpemiddel" << std::endl;
+            std::wcout << L"som kan benyttes i forbindelse med avvikling" << std::endl;
+            std::wcout << L"av et Gubberenn. Et Gubberenn er et  skirenn" << std::endl;
+            std::wcout << L"som arrangeres hver  skjaertorsdag i  påske-" << std::endl;
+            std::wcout << L"uken av Bjørkebakken & Omegn Grendelag.     " << std::endl;
+            std::wcout << L"                                            " << std::endl;
+            std::wcout << L"Når man  arrangerer  dette  rennet,  må  man" << std::endl;
+            std::wcout << L"regne ut noen tider og poengsummer.         " << std::endl;
+            std::wcout << L"                                            " << std::endl;
+            std::wcout << L"Gubberenn Dataprogram beregner; anvendt tid," << std::endl;
+            std::wcout << L"gjennomsnittstid, avvik mellom  anvendt tid " << std::endl;
+            std::wcout << L"og gjennomsnittstid,  tidspoeng  og  totalt " << std::endl;
+            std::wcout << L"antall poeng, dvs summen av oppgavepoeng og " << std::endl;
+            std::wcout << L"tidspoeng.                                  " << std::endl;
+            std::wcout << L"                                            " << std::endl;
+            std::wcout << L"                                            " << std::endl;
+            std::wcout << L"             tidspoeng = 60 - x             " << std::endl;
+            std::wcout << L"                                            " << std::endl;
+            std::wcout << L"  x er ant. minutt avvik fra middeltiden    " << std::endl;
+            std::wcout << L"                                            " << std::endl;
+            std::wcout << L"                                            " << std::endl;
+            std::wcout << L"                                            " << std::endl;
+            std::wcout << L"Input  til programmet er et regneark, f.eks " << std::endl;
+            std::wcout << L"et Excel-regneark, lagret  som  ei  csv-fil." << std::endl;
+            std::wcout << L"                                            " << std::endl;
+            std::wcout << L"Eksempel på et regneark  som  kan  benyttes:" << std::endl;
+            std::wcout << L"                                            " << std::endl;
+            std::wcout << L"Startnummer;Herre-fornavn;Herre-etternavn;Dame-fornavn;Dame-etternavn;Start-tid;Slutt-tid;Oppgave-poeng" << std::endl;
+            std::wcout << L"100;Ola1;Nordmann1;Kari1;Nordkvinne1;12:00:00;14:32:00;20" << std::endl;
+            std::wcout << L"101;Ola2;Nordmann2;Kari2;Nordkvinne2;12:01:00;14:00:00;21" << std::endl;
+            std::wcout << L"102;Ola3;Nordmann3;Kari3;Nordkvinne3;12:02:00;14:36:00;22" << std::endl;
+            std::wcout << L"103;Ola4;Nordmann4;Kari4;Nordkvinne4;12:03:00;14:38:00;23" << std::endl;
+            std::wcout << L"104;Ola5;Nordmann5;Kari5;Nordkvinne5;12:04:00;14:50:00;24" << std::endl;
+            std::wcout << L"105;Ola6;Nordmann6;Kari6;Nordkvinne6;12:05:00;14:42:00;25" << std::endl;
+            std::wcout << L"106;Ola7;Nordmann7;Kari7;Nordkvinne7;12:06:00;14:44:00;26" << std::endl;
+            std::wcout << L"107;Ola8;Nordmann8;Kari8;Nordkvinne8;12:07:00;14:46:00;27" << std::endl;
+            std::wcout << L"108;Ola9;Nordmann9;Kari9;Nordkvinne9;12:08:00;14:14:00;28" << std::endl;
+            std::wcout << L"109;Ola10;Nordmann10;Kari10;Nordkvinne10;12:09:00;15:00:00;29" << std::endl;
+            std::wcout << L"110;Ola11;Nordmann11;Kari11;Nordkvinne11;12:10:00;15:02:00;30" << std::endl;
+            std::wcout << L"                                            " << std::endl;
+            std::wcout << L"                                            " << std::endl;
+            std::wcout << L"Dette regnearket gir man til programmet, som" << std::endl;
+            std::wcout << L"vist nedenfor:                              " << std::endl;
+            std::wcout << L"                                            " << std::endl;
+            std::wcout << L"    gdp.exe -i testinput.csv                " << std::endl;
+            std::wcout << L"                                            " << std::endl;
+            std::wcout << L"Programmet  oppretter da et  nytt  regneark," << std::endl;
+            std::wcout << L"som inneholder  de kolonnene som  'mangler':" << std::endl;
+            std::wcout << L"                                            " << std::endl;
+            std::wcout << L"                                            " << std::endl;
+            std::wcout << L"Plassering;Startnummer;Herre-navn;Dame-navn;Start-tid;Slutt-tid;Oppgave-poeng;Beregnet middel-tid;Beregnet anvendt-tid;Beregnet avveket-tid;Beregnet tids-poeng;Beregnet total-poeng;" << std::endl;
+            std::wcout << L"1;102;Ola3 Nordmann3;Kari3 Nordkvinne3;12:2:0;14:36:0;22;2:33:32;2:34:0;0:0:28;60;82;" << std::endl;
+            std::wcout << L"2;103;Ola4 Nordmann4;Kari4 Nordkvinne4;12:3:0;14:38:0;23;2:33:32;2:35:0;0:1:28;59;82;" << std::endl;
+            std::wcout << L"3;105;Ola6 Nordmann6;Kari6 Nordkvinne6;12:5:0;14:42:0;25;2:33:32;2:37:0;0:3:28;57;82;" << std::endl;
+            std::wcout << L"4;106;Ola7 Nordmann7;Kari7 Nordkvinne7;12:6:0;14:44:0;26;2:33:32;2:38:0;0:4:28;56;82;" << std::endl;
+            std::wcout << L"5;107;Ola8 Nordmann8;Kari8 Nordkvinne8;12:7:0;14:46:0;27;2:33:32;2:39:0;0:5:28;55;82;" << std::endl;
+            std::wcout << L"6;100;Ola1 Nordmann1;Kari1 Nordkvinne1;12:0:0;14:32:0;20;2:33:32;2:32:0;0:1:32;59;79;" << std::endl;
+            std::wcout << L"7;104;Ola5 Nordmann5;Kari5 Nordkvinne5;12:4:0;14:50:0;24;2:33:32;2:46:0;0:12:28;48;72;" << std::endl;
+            std::wcout << L"8;109;Ola10 Nordmann10;Kari10 Nordkvinne10;12:9:0;15:0:0;29;2:33:32;2:51:0;0:17:28;43;72;" << std::endl;
+            std::wcout << L"9;110;Ola11 Nordmann11;Kari11 Nordkvinne11;12:10:0;15:2:0;30;2:33:32;2:52:0;0:18:28;42;72;" << std::endl;
+            std::wcout << L"10;108;Ola9 Nordmann9;Kari9 Nordkvinne9;12:8:0;14:14:0;28;2:33:32;2:6:0;0:27:32;33;61;" << std::endl;
+            std::wcout << L"11;101;Ola2 Nordmann2;Kari2 Nordkvinne2;12:1:0;14:0:0;21;2:33:32;1:59:0;0:34:32;26;47;" << std::endl;
+            std::wcout << L"                                            " << std::endl;
+            std::wcout << L"                                            " << std::endl;
+            std::wcout << L"  https://github.com/halftanolger/gds.git   " << std::endl;
+            std::wcout << L"                                            " << std::endl;
+            std::wcout << L"               God Påske                    " << std::endl;
+            std::wcout << L"                                            " << std::endl;
+            std::wcout << L"                                            " << std::endl;
+            return 0;
         }
-    }
 
-    QApplication app(argc, argv);
-    GDPMainWindows* appWin = new GDPMainWindows();
-    appWin->show();
-    appWin->setFocus();
-    int r = app.exec();
-    return r;
+        if (strcmp(argv[1],"-i")==0 && argc >= 3) {
+
+            int loglevel = 0;
+            if (argc == 5 && strcmp(argv[3],"-l")==0 && strcmp(argv[4],"debug")==0) {
+                loglevel = 1;
+            }
+
+            const char *filnavn = argv[2];
+            return filversjon(filnavn,loglevel);
+        }
+    }    
+
+    std::wcout << L"\nGubberenn Dataprogram ver. 1.0 " << std::endl;
+    std::wcout << L"\nFeil: mangler input.\n\nEksempel på bruk:\n" << std::endl;
+    std::wcout << "  " << argv[0] << L" -i inputfil.cvs\n" << std::endl;
+    std::wcout << "  " << argv[0] << L" -v \n" << std::endl;
+    std::wcout << "  " << argv[0] << L" -h \n" << std::endl;
+    return 0;
 }
 
 std::vector<std::string> getNextLineAndSplitIntoTokens(std::istream& str)
@@ -90,10 +174,13 @@ std::vector<std::string> split(const std::string &s, char delim)
     return elems;
 }
 
-int filversjon(const char* filnavn)
+int filversjon(const char* filnavn, int loglevel)
 {
     const char* signatur = "filversjon";
-    GDPL_log_init(GDPL_INFO, stdout);
+    if (loglevel == 0)
+        GDPL_log_init(GDPL_ERROR, stdout);
+    else
+        GDPL_log_init(GDPL_DEBUG, stdout);
 
     const char *navn = GDPL_kontroller_gdplib_navn();
     const char *ver =  GDPL_kontroller_gdplib_versjon();
@@ -169,10 +256,10 @@ int filversjon(const char* filnavn)
 
             int antall = v.size();
 
-            /* Antall kolonner skal være 7 */
+            /* Antall kolonner skal være 8 */
 
-            if (antall != 7) {
-                GDPL_log(GDPL_ERROR, signatur, "Feil antall kolonner i cvs-input-fil.");
+            if (antall != 8) {
+                GDPL_log(GDPL_ERROR, signatur, "Feil antall kolonner i cvs-input-fil. Er %d, skal være 8.",antall);
             }
 
             std::string  start_nr_str = v.at(0);
