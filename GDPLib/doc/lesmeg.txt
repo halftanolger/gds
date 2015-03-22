@@ -1,5 +1,8 @@
 ﻿
-lesmseg.txt
+DETTE DOKUMENTET ER IKKE FERDIG.
+TODO:
+      - delkapittel 3 er feilaktig/mangelfull
+
 
 
 +-----------------------------------------------------------------------------+
@@ -29,50 +32,53 @@ være et hjelpemiddel ifm arrangeringen av 'Gubberennet'.
 'Gubberennet' har følgende regler:
 
 $1
-    Deltakerne skal gå skirennet i par, som i utgangspunktet består av
+    Deltakerne skal gå skirennet i par, som i utgangspunktet skal består av
     en dame og en mann.
 
 $2
     Parene skal settes sammen tilfeldig. Det betyr at deltakerne ikke får
-    velge selv, hvem de skal gå i lag med.
+    velge selv hvem de skal gå i lag med, eller hvilket parnummer de skal få.
 
 $3
-    Løpet arrangeres med intervallstart, pr par.
+    Løpet arrangeres med intervallstart.
 
 $4
     Parene får med seg et oppgaveark ut i løypa. Dette oppgavearket, samt
     eventuelt andre praktiske oppgaver, skal løses underveis. Tilsamme kan
-    disse oppgavene resultere i maksimalt 40 poeng.
+    disse oppgavene resultere i maksimalt 40 av totalt 100 poeng.
 
 $5
-    Alle parene blir klokket inn på ei mål-tid. Ut fra alle parene, beregnes
-    det ei gjennomsnittstid, også kjent som 'idealtiden'. For hvert minutt
-    et par avviker fra denne 'ideltiden', trekkes det ett poeng fra en
-    maksimal poengsum på 60. Det betyr f.eks at om man har et avvik på mer enn
-    en time, får man 0 tids-poeng.
-
-
+    Alle parene blir klokket inn på ei mål-tid. Ut fra alle mål-tidene beregnes
+    det et gjennomsnitt av anvendt tid, aka 'idealtid'. For hvert minutt et par
+    avviker fra denne 'idealtiden', trekkes det ett poeng fra en maksimal
+    poengsum på 60 poeng. Det betyr at om man har et avvik på mer enn en time,
+    får man 0 tids-poeng. Det betyr også at om man går på idealtiden, samt
+    svarer korrekt på oppgavearket, som gir 40 poeng, kan man få maksimalt
+    100 poeng.
 
 
 2. Kravspesifisering og design
 -------------------------------------------------------------------------------
 
-Jeg har to ønsker med dette biblioteket; primært å lage en enkel kode i ANSI C
-som kan overleve noen ti-år. Deretter å lage noe som kan brukes som et utgangs-
-punkt for personser som ønsker å lære seg å programmere en datamaskin.
+Biblioteket skal implementeres i ANSI C, siden dette språket har størst sjanse
+for å overleve noen ti-år frem i tiden, empiriskt sett, våren 2015 :-)
 
-(Jeg er av den oppfatningen, at for de som ønsker å lære seg å programmere, så
-er ANSI C et godt valgt. På samme måte som om at 'tallteori' er viktig å se på,
-om du øsnker å forstå mer mattematikk, så er ANSI C viktig å forstå, om du
-ønsker å skjønne hvordan en datamaskin egentlig fungerer.)
+Et annet argument for å bruke/kreve ANSI C, er at siden problemstillingen er så
+pass enkel, så kan koden til dette biblioteket benyttes som "studieobjekt" for
+de som måtte ønske å lære seg å programmere.
 
-Jeg har delt 'problemet' opp i følgende deler.
+Et overordna designvalg med hensyn til C -programmering, er hvordan man velger
+å dele opp problemstillingen i stadig mindre deler. De største delene putter
+man gjerne i egne filer.
+
+
+Jeg har valgt å dele problemstillingen opp i følgende hoveddeler:
+
 
     log.h / log.c
 
     Vi må kunne logge litt hva som skjer rund omkring i koden. Spesielt når noe
-    feiler, må man 'si i fra' på en eller annen måte.
-
+    feiler, må man kunne 'si i fra' på en eller annen måte.
 
     konkurranse.h / konkurranse.c
 
@@ -140,6 +146,8 @@ src -+
      |
      +- log.h / log.c
      |
+     +- main.h / main.c
+     |
      +- modell.h / modell.c
      |
      +- par.h / par.c
@@ -160,18 +168,18 @@ grensesnitt. En normal kronologisk bruk av biblioteket kan være som følger:
 3.1.1)
 Initier biblioteket mht lognivå og loggmedium.
 
-int GDPL_init(GDPL_log_type nivaa, FILE * stream); 
+int GDPL_log_init(GDPL_log_type nivaa, FILE * stream);
 
 3.1.2)
 Angi hvilken datafil som skal benyttes. Om man her angir en nullpeker, 
 vil biblioteket benytte ei default datafil.
 
-int GDPL_kontroller_angi_filnavn(const char *filnavn);
+int GDPL_modell_angi_filnavn(const char *filnavn);
 
 3.1.3)
 Les data fra datafil. 
 
-int GDPL_kontroller_les_fra_fil();
+int GDPL_modell_les_data();
 
 
 3.2 Registrering av deltakere og par
