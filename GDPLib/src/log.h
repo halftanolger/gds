@@ -54,12 +54,6 @@ enum GDPL_log_type_enum {GDPL_DEBUG, GDPL_INFO, GDPL_WARNING, GDPL_ERROR};
 
 typedef enum GDPL_log_type_enum GDPL_log_type;
 
-// Variabler
-
-extern GDPL_log_type gdpl_log_nivaa;
-
-extern FILE * gdpl_log_stream;
-
 // Funksjoner
 
 void GDPL_log(GDPL_log_type, const char*, const char*, ...);
@@ -70,5 +64,5 @@ int GDPL_log_init(GDPL_log_type nivaa, FILE * stream);
 }
 #endif
 
-#endif // DIVERSE_H
+#endif // LOG_H
 

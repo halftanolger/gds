@@ -132,17 +132,17 @@ int GDPL_konkurranse_legg_til(GDPL_konkurranse_data_node *data)
   return 0;
 }
 
-int GDPL_konkurranse_fjern_fra(GDPL_konkurranse_data_node* data, GDPL_konkurranse_data_node *root)
+int GDPL_konkurranse_fjern_fra(GDPL_konkurranse_data_node* data)
 {
   const char* signatur = "GDPL_konkurranse_fjern_fra(GDPL_konkurranse_data_node,GDPL_konkurranse_data_node*)";
 
   GDPL_log(GDPL_DEBUG, signatur, "Start funksjon.");
   
-  /* Litt inputparameter-sjekking. */
-  
+  GDPL_konkurranse_data_node *root = gdpl_modell_konkurranseliste_root_ptr;
+
   if (root == 0) {
-    GDPL_log(GDPL_ERROR, signatur, "root == 0");
-    return FEILKODE_FEIL;  
+    GDPL_log(GDPL_ERROR, signatur, "gdpl_modell_konkurranseliste_root_ptr er null");
+    return FEILKODE_FEIL;
   }
 
   if (data->id == 0) {

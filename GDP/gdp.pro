@@ -17,11 +17,6 @@ SOURCES += \
     ../GDPLib/src/kontroller.c \
     ../GDPLib/src/par.c \
     ../GDPLib/src/person.c \
-    ../GDPLib/src/test.c \
-    ../GDPLib/src/test_konkurranse.c \
-    ../GDPLib/src/test_kontroller.c \
-    ../GDPLib/src/test_par.c \
-    ../GDPLib/src/test_modell.c \    
     ../GDPLib/src/log.c
 
 
@@ -32,7 +27,6 @@ HEADERS += \
     ../GDPLib/src/par.h \
     ../GDPLib/src/kontroller.h \
     ../GDPLib/src/konkurranse.h \
-    ../GDPLib/src/test_modell.h \    
     ../GDPLib/src/log.h
 
 DEPENDPATH += \

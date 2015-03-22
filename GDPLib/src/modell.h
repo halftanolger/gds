@@ -73,7 +73,6 @@ typedef struct GDPL_konkurranse_data_node_struct  GDPL_konkurranse_data_node;
 
 /* Variabler */
 
-extern char gdpl_modell_datafilnavn[GDPL_MAX_FILNAVN_LENGDE];
 
 extern GDPL_konkurranse_data_node *gdpl_modell_konkurranseliste_root_ptr;
 

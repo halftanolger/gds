@@ -20,20 +20,42 @@
 
 #include <stdio.h>
 #include "gdpl.h"
-
-extern const char* gdpl_kontroller_gdplib_navn;
-extern const char* gdpl_kontroller_gdplib_versjon;
+#include "main.h"
 
 int main (int argc, char *argv[]) 
+{           
+    if (argc > 1) {
+        if (strcmp(argv[1],"-v")==0) {
+            const char *navn = GDPL_kontroller_gdplib_navn();
+            const char *ver =  GDPL_kontroller_gdplib_versjon();
+            printf("\nGubberenn Dataprogram er basert på %s %s\n", navn, ver);
+            return 0;
+        }
+        if (strcmp(argv[1],"-h")==0) {
+            printf("%s",info);
+            return 0;
+        }
+
+        if (strcmp(argv[1],"-i")==0 && argc >= 3) {
+
+            int loglevel = 0;
+            if (argc == 5 && strcmp(argv[3],"-l")==0 && strcmp(argv[4],"debug")==0) {
+                loglevel = 1;
+            }
+
+            const char *filnavn = argv[2];
+            return filversjon(filnavn,loglevel);
+        }
+    }
+    printf("\n");
+    printf("\nFeil: mangler input.\n\nEksempel på bruk:\n");
+    printf(" -i inputfil.cvs\n");
+    printf(" -v \n");
+    printf(" -h \n");
+    return 0;
+}
+
+int filversjon(char* inputfil, int loglevel)
 {
-  const char* signatur = "main(int,char)";
-
-  GDPL_init(DEBUG, stdout);
-
-  GDPL_log(DEBUG, signatur, "Hello world - %s %s", gdpl_kontroller_gdplib_navn, gdpl_kontroller_gdplib_versjon);
-
-  GDPL_test();
-
-  return 0;
-
+    return 0;
 }
