@@ -1,5 +1,5 @@
 ﻿
-lesmseg.txt (under construction)
+lesmseg.txt
 
 
 +-----------------------------------------------------------------------------+
@@ -12,7 +12,7 @@ lesmseg.txt (under construction)
 
 
 Innhold
--------
+-------------------------------------------------------------------------------
 
 1. Introduksjon
 2. Kravspesifisering og design
@@ -20,48 +20,132 @@ Innhold
 
 
 1. Introduksjon
----------------
+-------------------------------------------------------------------------------
 
-Dette er et C -bibliotek som implementerer kjernefunksjonaliteten 
-til et 'Gubberenn Dataprogram'. Dette er slikt som:
+Dette er et C -bibliotek som implementerer kjernefunksjonaliteten til et
+'Gubberenn Dataprogram'. Et 'Gubberenn Dataprogram' er et dataprogram som kan
+være et hjelpemiddel ifm arrangeringen av 'Gubberennet'.
 
- * CRUD (Create, read, update, delete) konkurransen(e). 
- 
- * CRUD (Create, read, update, delete) persondata.
- 
- * CRUD (Create, read, update, delete) par-data.
+'Gubberennet' har følgende regler:
 
- * tilfeldig par-nummer-trekking ifm påmelding.
-  
- * generering av startliste med starttider.
+$1
+    Deltakerne skal gå skirennet i par, som i utgangspunktet består av
+    en dame og en mann.
 
- * registrering av slutt-tid pr par.
+$2
+    Parene skal settes sammen tilfeldig. Det betyr at deltakerne ikke får
+    velge selv, hvem de skal gå i lag med.
 
- * beregning av tidspoeng pr par.
+$3
+    Løpet arrangeres med intervallstart, pr par.
 
- * registrering av oppgavepoeng pr par.
+$4
+    Parene får med seg et oppgaveark ut i løypa. Dette oppgavearket, samt
+    eventuelt andre praktiske oppgaver, skal løses underveis. Tilsamme kan
+    disse oppgavene resultere i maksimalt 40 poeng.
 
- * generering av resultatliste for en konkurranse.
+$5
+    Alle parene blir klokket inn på ei mål-tid. Ut fra alle parene, beregnes
+    det ei gjennomsnittstid, også kjent som 'idealtiden'. For hvert minutt
+    et par avviker fra denne 'ideltiden', trekkes det ett poeng fra en
+    maksimal poengsum på 60. Det betyr f.eks at om man har et avvik på mer enn
+    en time, får man 0 tids-poeng.
+
+
 
 
 2. Kravspesifisering og design
-------------------------------
+-------------------------------------------------------------------------------
+
+Jeg har to ønsker med dette biblioteket; primært å lage en enkel kode i ANSI C
+som kan overleve noen ti-år. Deretter å lage noe som kan brukes som et utgangs-
+punkt for personser som ønsker å lære seg å programmere en datamaskin.
+
+(Jeg er av den oppfatningen, at for de som ønsker å lære seg å programmere, så
+er ANSI C et godt valgt. På samme måte som om at 'tallteori' er viktig å se på,
+om du øsnker å forstå mer mattematikk, så er ANSI C viktig å forstå, om du
+ønsker å skjønne hvordan en datamaskin egentlig fungerer.)
+
+Jeg har delt 'problemet' opp i følgende deler.
+
+    log.h / log.c
+
+    Vi må kunne logge litt hva som skjer rund omkring i koden. Spesielt når noe
+    feiler, må man 'si i fra' på en eller annen måte.
+
+
+    konkurranse.h / konkurranse.c
+
+    Vi snakker om et skirenn. Det er en konkurranse. Den avholdes hvert år, det
+    betyr at systemet bør støtte flere konkurranser. Kanskje bør systemet
+    støtte et arkiv av konkurranser?
+
+
+    par.h / par.c
+
+    I konkurransen er det par som konkurerer mot hverandre. Disse parene har
+    ei starttid, ei måltid, ei anvendt tid, tidspoeng og oppgavepoeng. Og til
+    syvende og sist ei plassering i konkurransen.
+
+
+    person.h / par.c
+
+    Parene består av to personer. Disse har et fornavn og et etternavn.
+
+
+    kontroller.h / kontroller.c
+
+    Parene skal settes tilfeldig sammen. Det betyr at det hadde vært kjekt om
+    programmet kunne levert funksjonalitet rundt dette; dvs trekke et tilfeldig
+    par-nummer.
+
+
+    modell.h / modell.c
+
+    Data som registreres bør helst dukke opp igjen, etter at datamaskinen har
+    vært slått av. Det er selvfølgelig et fancy ord for dette; data må være
+    persistent (vedvarende). På godt norsk; data må lagres til fil, og kunne
+    hentes fra fil, om man ønsker det.
+
+
+    main.h / main.c
+
+    Denne delen skal inneholde en enkel test-klient som tar som input et
+    filnavn til ei csv-data-fil, og returnerer ei ny datafil som innehoder
+    samme data, pluss de beregede verdiene.
+    Eksempel på inputfil:
+
+Startnummer;Herre-fornavn;Herre-etternavn;Dame-fornavn;Dame-etternavn;Start-tid;Slutt-tid;Oppgave-poeng
+100;Ola1;Nordmann1;Kari1;Nordkvinne1;12:00:00;14:32:00;20
+101;Ola2;Nordmann2;Kari2;Nordkvinne2;12:01:00;14:00:00;21
+
+    Eksempel på outputfil:
+
+Plassering;Startnummer;Herre-navn;Dame-navn;Start-tid;Slutt-tid;Oppgave-poeng;Beregnet middel-tid;Beregnet anvendt-tid;Beregnet avveket-tid;Beregnet tids-poeng;Beregnet total-poeng;
+1;102;Ola3 Nordmann3;Kari3 Nordkvinne3;12:2:0;14:36:0;22;2:33:32;2:34:0;0:0:28;60;82;
+2;103;Ola4 Nordmann4;Kari4 Nordkvinne4;12:3:0;14:38:0;23;2:33:32;2:35:0;0:1:28;59;82;
+
+
+Og sist, men ikke minst. Siden det sikkert er en god ide`, og ikke minst høres
+ufattelig coolt ut, så skal 'SEL-94-003' i størst mulig grad etterleves :-)
+
 
 src -+
      |
      +- gdpl.h
      |
-     +- person.c
+     +- konkuranse.h / konkuranse.c
      |
-     +- par.c
+     +- kontroller.h / kontroller.c
      |
-     +- konkuranse.c
+     +- log.h / log.c
      |
-     +- kontroller.c     
+     +- modell.h / modell.c
      |
-     +- test.c
+     +- par.h / par.c
+     |
+     +- person.h / person.c
 
-Interfacet til biblioteket er definert i fila gdpl.h	 
 	 
      
 3. Bruksanvisning
