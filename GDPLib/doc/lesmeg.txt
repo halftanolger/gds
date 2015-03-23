@@ -68,10 +68,12 @@ $5
 3. Kravspesifisering og design
 -------------------------------------------------------------------------------
 
-Biblioteket skal implementeres i ANSI C. Dette språket har antageligvis størst 
+Biblioteket skal implementeres i C. Dette språket har antageligvis størst 
 sjanse for å overleve noen ti-år frem i tiden, empiriskt sett, våren 2015 :-)
+De mest grunnleggende og viktige delene til GNU Linux er f.eks basert på C,
+ref. http://www.gnu.org/software/libc/manual/ 
 
-Et annet argument for å bruke ANSI C, er at problemstillingen som biblioteket
+Et annet argument for å bruke C, er at problemstillingen som biblioteket
 løser, egner seg veldig godt som et studieobjekt for de som ønsker å lære seg å
 programmere. Kanskje kan man etterhvert lage en 'tutorial'-serie rundt denne 
 koden?
@@ -139,11 +141,6 @@ Plassering;Startnummer;Herre-navn;Dame-navn;Start-tid;Slutt-tid;Oppgave-poeng;Be
 1;102;Ola3 Nordmann3;Kari3 Nordkvinne3;12:2:0;14:36:0;22;2:33:32;2:34:0;0:0:28;60;82;
 2;103;Ola4 Nordmann4;Kari4 Nordkvinne4;12:3:0;14:38:0;23;2:33:32;2:35:0;0:1:28;59;82;
 
-
-Og sist, men ikke minst. Siden det sikkert er en god ide`, og ikke minst høres
-ufattelig coolt ut, så skal 'SEL-94-003' i størst mulig grad etterleves :-)
-
-
 src -+
      |
      +- gdpl.h
@@ -161,7 +158,6 @@ src -+
      +- par.h / par.c
      |
      +- person.h / person.c
-
 	 
      
 4. Bruksanvisning
