@@ -1,9 +1,4 @@
 ﻿
-DETTE DOKUMENTET ER IKKE FERDIG.
-TODO:
-      - delkapittel 3 er feilaktig/mangelfull
-
-
 
 +-----------------------------------------------------------------------------+
 |                                                                             |
@@ -18,8 +13,10 @@ Innhold
 -------------------------------------------------------------------------------
 
 1. Introduksjon
-2. Kravspesifisering og design
-3. Bruksanvisning
+2. Gjenstående arbeid, aka todo's.
+3. Kravspesifisering og design
+4. Bruksanvisning
+5. Grafiskt brukergrensesnitt
 
 
 1. Introduksjon
@@ -27,7 +24,8 @@ Innhold
 
 Dette er et C -bibliotek som implementerer kjernefunksjonaliteten til et
 'Gubberenn Dataprogram'. Et 'Gubberenn Dataprogram' er et dataprogram som kan
-være et hjelpemiddel ifm arrangeringen av 'Gubberennet'.
+være et hjelpemiddel ifm arrangeringen av 'Gubberennet', som avvikles hver 
+skjærtorsdag i Bjørkebakken, av Bjørkebakken & Omegn Grendelag.
 
 'Gubberennet' har følgende regler:
 
@@ -57,33 +55,42 @@ $5
     100 poeng.
 
 
-2. Kravspesifisering og design
+2. Gjenstående arbeid, aka todo's
+-------------------------------------------------------------------------------
+    
+    - alt i denne lesmeg.txt fila etter punkt 3 (dvs punkt 4 og 5 er todo's)
+    - csv-basert testklient, implementert i C
+    - doxygen-dokumentasjon av all kode
+    - autoconf / make byggeskript
+    - finne skrivefeil rundt omkring ... 
+    
+    
+3. Kravspesifisering og design
 -------------------------------------------------------------------------------
 
-Biblioteket skal implementeres i ANSI C, siden dette språket har størst sjanse
-for å overleve noen ti-år frem i tiden, empiriskt sett, våren 2015 :-)
+Biblioteket skal implementeres i ANSI C. Dette språket har antageligvis størst 
+sjanse for å overleve noen ti-år frem i tiden, empiriskt sett, våren 2015 :-)
 
-Et annet argument for å bruke/kreve ANSI C, er at siden problemstillingen er så
-pass enkel, så kan koden til dette biblioteket benyttes som "studieobjekt" for
-de som måtte ønske å lære seg å programmere.
+Et annet argument for å bruke ANSI C, er at problemstillingen som biblioteket
+løser, egner seg veldig godt som et studieobjekt for de som ønsker å lære seg å
+programmere. Kanskje kan man etterhvert lage en 'tutorial'-serie rundt denne 
+koden?
 
 Et overordna designvalg med hensyn til C -programmering, er hvordan man velger
 å dele opp problemstillingen i stadig mindre deler. De største delene putter
 man gjerne i egne filer.
 
-
 Jeg har valgt å dele problemstillingen opp i følgende hoveddeler:
-
 
     log.h / log.c
 
     Vi må kunne logge litt hva som skjer rund omkring i koden. Spesielt når noe
-    feiler, må man kunne 'si i fra' på en eller annen måte.
+    feiler må man kunne 'si i fra' på en eller annen måte.
 
     konkurranse.h / konkurranse.c
 
-    Vi snakker om et skirenn. Det er en konkurranse. Den avholdes hvert år, det
-    betyr at systemet bør støtte flere konkurranser. Kanskje bør systemet
+    Vi snakker om et skirenn. Det er en konkurranse. Den avholdes hvert år.
+    Det betyr at systemet bør støtte flere konkurranser. Kanskje bør systemet
     støtte et arkiv av konkurranser?
 
 
@@ -103,12 +110,12 @@ Jeg har valgt å dele problemstillingen opp i følgende hoveddeler:
 
     Parene skal settes tilfeldig sammen. Det betyr at det hadde vært kjekt om
     programmet kunne levert funksjonalitet rundt dette; dvs trekke et tilfeldig
-    par-nummer.
+    ledig par-nummer.
 
 
     modell.h / modell.c
 
-    Data som registreres bør helst dukke opp igjen, etter at datamaskinen har
+    Data som registreres bør helst dukke opp igjen etter at datamaskinen har
     vært slått av. Det er selvfølgelig et fancy ord for dette; data må være
     persistent (vedvarende). På godt norsk; data må lagres til fil, og kunne
     hentes fra fil, om man ønsker det.
@@ -118,7 +125,8 @@ Jeg har valgt å dele problemstillingen opp i følgende hoveddeler:
 
     Denne delen skal inneholde en enkel test-klient som tar som input et
     filnavn til ei csv-data-fil, og returnerer ei ny datafil som innehoder
-    samme data, pluss de beregede verdiene.
+    samme data, pluss de beregnede verdiene.
+    
     Eksempel på inputfil:
 
 Startnummer;Herre-fornavn;Herre-etternavn;Dame-fornavn;Dame-etternavn;Start-tid;Slutt-tid;Oppgave-poeng
@@ -156,52 +164,52 @@ src -+
 
 	 
      
-3. Bruksanvisning
+4. Bruksanvisning
 -----------------
 
 Brukeren av biblioteket vil være et program som implementerer et bruker-
 grensesnitt. En normal kronologisk bruk av biblioteket kan være som følger:
 
-3.1 Initiering
+4.1 Initiering
 --------------
 
-3.1.1)
+4.1.1)
 Initier biblioteket mht lognivå og loggmedium.
 
 int GDPL_log_init(GDPL_log_type nivaa, FILE * stream);
 
-3.1.2)
+4.1.2)
 Angi hvilken datafil som skal benyttes. Om man her angir en nullpeker, 
 vil biblioteket benytte ei default datafil.
 
 int GDPL_modell_angi_filnavn(const char *filnavn);
 
-3.1.3)
+4.1.3)
 Les data fra datafil. 
 
 int GDPL_modell_les_data();
 
 
-3.2 Registrering av deltakere og par
+4.2 Registrering av deltakere og par
 ------------------------------------
 
-3.2.1)
+4.2.1)
 Siden programmet skal velge et tilfeldig par-nummer for en deltaker,
 må vi på forhand estimere hvor mange par vi tror kommmer til å delta. 
 
 int GDPL_kontroller_angi_max_antall_par(int antall)
 
-3.2.2)
+4.2.2)
 Registrer en deltaker.
 
 int GDPL_kontroller_registrer_deltaker(GDPL_person_data_node data, int type)
 
-3.2.3)
+4.2.3)
 Trekk et tilfeldig par-nummer for denne deltakeren.
 
 int GDPL_kontroller_hent_par_id(int *par_id, int type)
 
-3.2.4)
+4.2.4)
 Oppdater det aktuelle par-objektet med den aktuelle brukeren.
 
 int GDPL_kontroller_oppdater_par(int par_id, int person_id, int type)
@@ -214,45 +222,45 @@ for å få fylt opp alle parene. Somregel må et par betså av to damer eller to
 herrer.
 
 
-3.3 Generer ei startliste
+4.3 Generer ei startliste
 -------------------------
 
-3.3.1)
+4.3.1)
 Opprett ei startliste, hvor man angir når tid man skal begynne å starte, 
 samt intervallene mellom hvert par.
 
 int GDPL_kontroller_opprett_startliste( char *startid, char* intervall)
 
 
-3.4 Registrer resultater
+4.4 Registrer resultater
 ------------------------
 
-3.4.1)
+4.4.1)
 Registrer innkomst tid. Programmet beregner anvendt tid per par, samt middel-
 tiden totalt i konkurransen. Tidspoeng beregnes utfra avvik fra middeltid.
 
 int GDPL_kontroller_registrer_tid( int par_id, char *tid)
 
 
-3.4.2)
+4.4.2)
 Registrer oppgavepoeng.
 
 int GDPL_kontroller_registrer_oppgavepoeng( int par_id, double poeng)
 
 
-3.4 Generer resultatliste
+4.4 Generer resultatliste
 -------------------------
 
 int GDPL_kontroller_opprett_resultatliste()
 
 
-4. Brukergrensesnitt Qt
------------------------
+5. Grafiskt brukergrensesnitt 
+-------------------------------------------------------------------------------
 
-Brukergrensesnittet i Qt utgave, er definert som en single document application
-hvor en tabell over alle par'ene er den sentrale widget'en. Ulike andre view er
-definert som drop views rundt denne.
-
+Det grafiske brukergrensesnittet vil være sentrert rundt en tre-struktur, hvor
+topp noden heter 'Arkiv'. Under arkivet kommer de ulike konkurranse-objektene.
+En konkurranse består av par, som har sitt unike startnummer. Hvert par består
+av to personer.
 
 
 
