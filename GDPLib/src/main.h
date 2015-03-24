@@ -28,8 +28,6 @@ extern "C" {
 
 const char* info = "\n"
         "\n"
-        "Gubberenn Dataprogram\n"
-        "\n"
         "Dette er en enkel testklient for GDPLib. Programmet tar et regneark\n"
         "som input, og beregner \n"
         "\n"

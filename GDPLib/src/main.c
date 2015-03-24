@@ -18,6 +18,7 @@
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 ******************************************************************************/
 
+
 #include <stdio.h>  /* printf */
 #include <string.h> /* strcmp */
 
@@ -28,12 +29,11 @@ int main (int argc, char *argv[])
 {           
     if (argc > 1) {
         if (strcmp(argv[1],"-v")==0) {
-            const char *navn = GDPL_kontroller_gdplib_navn();
-            const char *ver =  GDPL_kontroller_gdplib_versjon();
-            printf("\nGubberenn Dataprogram er basert på %s %s\n", navn, ver);
+            print_intro();
             return 0;
         }
         if (strcmp(argv[1],"-h")==0) {
+            print_intro();
             printf("%s",info);
             return 0;
         }
@@ -46,15 +46,23 @@ int main (int argc, char *argv[])
             }
 
             char *filnavn = argv[2];
-            return filversjon(filnavn,loglevel);
-        }
-    }
-    printf("\n");
-    printf("\nFeil: mangler input.\n\nEksempel på bruk:\n");
-    printf(" -i inputfil.cvs\n");
-    printf(" -v \n");
-    printf(" -h \n");
+            int r = filversjon(filnavn,loglevel);
+            return r;
+        }        
+    }    
+    print_intro();
+    printf("Feil: mangler input.\n\nEksempel på bruk:\n\n");
+    printf(" %s -i inputfil.cvs\n",argv[0]);
+    printf(" %s -v \n",argv[0]);
+    printf(" %s -h \n",argv[0]);
     return 0;
+}
+
+void print_intro()
+{
+    const char *navn = GDPL_kontroller_gdplib_navn();
+    const char *ver =  GDPL_kontroller_gdplib_versjon();
+    printf("Gubberenn Dataprogram, %s %s\n", navn, ver);
 }
 
 int filversjon(char* inputfil, int loglevel)

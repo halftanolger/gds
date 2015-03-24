@@ -4,10 +4,9 @@
 
 
 CONFIG +=  \
-     warn_on \     
+     warn_on \
      c++11 \
-     verbose \
-     console \
+     verbose
 
 
 QMAKE_CXXFLAGS += -std=c++11 -g
