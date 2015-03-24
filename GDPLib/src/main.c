@@ -19,8 +19,10 @@
 ******************************************************************************/
 
 
-#include <stdio.h>  /* printf */
-#include <string.h> /* strcmp */
+#include <errno.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
 
 #include "gdpl.h"
 #include "main.h"
@@ -48,11 +50,12 @@ int main (int argc, char *argv[])
             char *filnavn = argv[2];
             int r = filversjon(filnavn,loglevel);
             return r;
-        }        
-    }    
+        }
+    }
     print_intro();
-    printf("Feil: mangler input.\n\nEksempel på bruk:\n\n");
+    printf("\nFeil: mangler input.\n\nEksempel på bruk:\n\n");
     printf(" %s -i inputfil.cvs\n",argv[0]);
+    printf(" %s -i inputfil.cvs -l debug\n",argv[0]);
     printf(" %s -v \n",argv[0]);
     printf(" %s -h \n",argv[0]);
     return 0;
@@ -69,9 +72,9 @@ int filversjon(char* inputfil, int loglevel)
 {
     const char* signatur = "filversjon";
     if (loglevel == 0)
-        GDPL_log_init(GDPL_ERROR, stdout);
+        GDPL_log_init(GDPL_ERROR, stderr);
     else
-        GDPL_log_init(GDPL_DEBUG, stdout);
+        GDPL_log_init(GDPL_DEBUG, stderr);
 
     const char *navn = GDPL_kontroller_gdplib_navn();
     const char *ver =  GDPL_kontroller_gdplib_versjon();
@@ -126,15 +129,41 @@ int filversjon(char* inputfil, int loglevel)
 
     /* Last inn data fra cvs-fil. */
 
-    FILE *file = fopen(inputfil,"r");
+    errno = 0;
+    FILE *fp = fopen(inputfil,"r");
+    if (fp == 0) {
+        fprintf (stderr, "%s: Klarte ikke å åpne input-fila %s; %s\n",
+                 program_invocation_short_name, inputfil, strerror (errno));
+        exit (EXIT_FAILURE);
+    }
 
-    if (file == 0) {
-        GDPL_log(GDPL_ERROR,"Klarer ikke å åpne fila %s", inputfil);
-        return FEILKODE_FEIL;
+    printf("TODO: les inn data fra csv.fil\n");
+
+    char *line = NULL;
+    size_t len = 0;
+    unsigned int lineno = 0;
+
+    size_t n = getline(&line,&len,fp);
+
+    printf("%s",line);
+
+    /*
+    while (getline(&line,&len,fp) > 0)
+    {
+        ++lineno;
+
+        printf("%s",line);
+
     }
 
 
-    printf("TODO: les inn data fra csv.fil");
+
+    printf("lineno=%d",lineno);
+*/
+
+
+
+
 
     /* Første linje er bare kolonnenavn. */
 

@@ -72,6 +72,8 @@ const char* info = "\n"
         "\n"
         "\n";
 
+void print_intro();
+
 int filversjon(char* inputfil, int loglevel);
 
 #ifdef __cplusplus
