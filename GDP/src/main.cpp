@@ -290,7 +290,16 @@ int filversjon(const char* filnavn, int loglevel)
             int maal_tid_s = atoi(maal_tid_elementer.at(2).c_str());
 
             std::string oppgave_poeng_str = v.at(7);
-            int oppgave_poeng = atoi(oppgave_poeng_str.c_str());
+
+            const char *str = oppgave_poeng_str.c_str();
+            double d;
+            sscanf(str, "%lf", &d);
+            d *= 100;
+            d = ((int)(d * 1 + .5) / 1.0);
+            int oppgave_poeng = (int)d;
+
+            std::cout << oppgave_poeng << std::endl;
+
 
             /* Legg til herre-person */
 
@@ -412,12 +421,12 @@ int filversjon(const char* filnavn, int loglevel)
                << dperson->enavn << ";"
                << data->start_tid.timer << ":" << data->start_tid.minutt << ":" << data->start_tid.sekund << ";"
                << data->maal_tid.timer << ":" << data->maal_tid.minutt << ":" << data->maal_tid.sekund << ";"
-               << data->oppgave_poeng << ";"
+               <<  ( (double)data->oppgave_poeng / 100.0 )  << ";"
                << middel_tid.timer << ":" << middel_tid.minutt << ":" << middel_tid.sekund << ";"
                << data->anvendt_tid.timer << ":" << data->anvendt_tid.minutt << ":" << data->anvendt_tid.sekund << ";"
                << avveket_tid.timer << ":" << avveket_tid.minutt << ":" << avveket_tid.sekund << ";"
-               << data->tids_poeng << ";"
-               << (data->tids_poeng + data->oppgave_poeng) << ";\n";
+               << ( (double)data->tids_poeng / 100.0 ) << ";"
+               << ( ( (double)data->tids_poeng / 100.0 ) + (double)data->oppgave_poeng / 100.0) << ";\n";
 
     }
 

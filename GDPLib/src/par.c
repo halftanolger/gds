@@ -596,9 +596,13 @@ int GDPL_par_beregn_tids_poeng(GDPL_par_data_node *data, struct GDPL_tid middel_
     int s1 = data->anvendt_tid.sekund + data->anvendt_tid.minutt*60 + data->anvendt_tid.timer*60*60;
     int s2 = middel_tid.sekund + middel_tid.minutt*60 + middel_tid.timer*60*60;
 
-    int d = abs(s1-s2);
+    double d = (double)abs(s1-s2);
 
-    data->tids_poeng = 60 - (d/60);
+    double p = 60.0 - (d/60.0);
+
+    p = ((int)(p * 100 + .5) / 100.0); /* Rund av til to desimaler. */
+
+    data->tids_poeng = (int)(p * 100); /* 23.78 = 2378 */
 
     GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
 
