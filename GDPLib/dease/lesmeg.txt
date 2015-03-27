@@ -13,7 +13,11 @@ dog 'in business' fra ca 1981, og pr våren 2015 ser det ut som om de fortsatt
 er det ...)
 
 Dette 'ur-Gubberenn-Dataprogrammet' kan forsatt benyttes, derfor legger jeg
-binærkoden her i, som ei tar-fil. Koden kan kjøres vha Windows95/98 eller 
-WindowsXP emulator. (TODO: Test ut og lag ei bruks-anvisning.)
+binærkodefilene her som ei tar-fil. Koden kan kjøres vha Windows95/98 eller 
+WindowsXP emulator. 
+
+NB. Dette er 16-bits Win95 stuff.
+
+(TODO: Test ut og lag ei bruks-anvisning.)
 
 
