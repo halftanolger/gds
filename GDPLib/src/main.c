@@ -137,140 +137,121 @@ int filversjon(char* inputfil, int loglevel)
         exit (EXIT_FAILURE);
     }
 
-    printf("TODO: les inn data fra csv.fil\n");
+    int index = 0;
+    int linjeteller = -1;
+    char *pch;
+    char *items[8];
+    char line[512];
+    while ( fgets( line, sizeof(line), fp ) ) {
+        index = 0;
+        pch = strtok(line, ";");
+        while(pch != NULL) {
+            items[index++]=pch;
+            pch = strtok(NULL, ";");
+        }
 
-    char *line = NULL;
-    size_t len = 0;
-    unsigned int lineno = 0;
+        linjeteller++;
+        if (linjeteller == 0) {
+            continue;
+        }
 
-    size_t n = getline(&line,&len,fp);
+        int start_nr = atoi(items[0]);
 
-    printf("%s",line);
+        char hfnavn[128];
+        strcpy(hfnavn,items[1]);
 
-    /*
-    while (getline(&line,&len,fp) > 0)
-    {
-        ++lineno;
+        //char *hfnavn = items[1];
+        char *henavn = items[2];
+        char *dfnavn = items[3];
+        char *denavn = items[4];
+        float oppgavepoeng = atof(items[7]);
 
-        printf("%s",line);
+        char *st;
+        st = strtok(items[5],":");
+        int start_tid_t = atoi(st);
+        st = strtok(NULL,":");
+        int start_tid_m = atoi(st);
+        st = strtok(NULL,":");
+        int start_tid_s = atoi(st);
+
+        st = strtok(items[6],":");
+        int maal_tid_t = atoi(st);
+        st = strtok(NULL,":");
+        int maal_tid_m = atoi(st);
+        st = strtok(NULL,":");
+        int maal_tid_s = atoi(st);
+
+
+        /* TODO: skriv dette ut vha GDPL_log og sscan stuff ... */
+
+        printf("\n-Input linje %d-------------------------\n",linjeteller);
+        printf("startnr=%d\n",start_nr);
+        printf("hfnavn=%s\n",hfnavn);
+        printf("henavn=%s\n",henavn);
+        printf("dfnavn=%s\n",dfnavn);
+        printf("denavn=%s\n",denavn);
+        printf("starttid=%02d:%02d:%02d\n",start_tid_t,start_tid_m,start_tid_s);
+        printf("måltid=%02d:%02d:%02d\n",maal_tid_t,maal_tid_m,maal_tid_s);
+        printf("oppgavepoeng=%2.2f\n",oppgavepoeng);
+
+
+        /* Legg til herre-person */
+
+        GDPL_person_data_node *person = 0;
+        if(GDPL_person_opprett_node(&person)>0)
+            return 1;
+
+        int ny_id_h = 0;
+        if(GDPL_person_finn_neste_ledige_id(&ny_id_h)>0)
+            return 1;
+
+        person->id = ny_id_h;
+        strcpy(person->fnavn,hfnavn);
+        strcpy(person->enavn,henavn);
+        if (GDPL_person_legg_til(person) > 0)
+            return 1;
+
+        /* Legg til dame-person */
+
+        person = 0;
+        GDPL_person_opprett_node(&person);
+        int ny_id_d = 0;
+        if(GDPL_person_finn_neste_ledige_id(&ny_id_d)>0)
+            return 1;
+
+        person->id = ny_id_d;
+        strcpy(person->fnavn,dfnavn);
+        strcpy(person->enavn,denavn);
+        if (GDPL_person_legg_til(person) > 0)
+            return 1;
+
+        /* Opprett par */
+
+        GDPL_par_data_node *par = 0;
+        GDPL_par_opprett_node(&par);
+        int ny_id = 0;
+        if(GDPL_par_finn_neste_ledige_id(&ny_id)>0)
+            return 1;
+
+        par->id = ny_id;
+        par->herre_person_id = ny_id_h;
+        par->dame_person_id = ny_id_d;
+        par->start_nr=start_nr;
+        par->start_tid.timer = start_tid_t;
+        par->start_tid.minutt = start_tid_m;
+        par->start_tid.sekund = start_tid_s;
+        par->maal_tid.timer = maal_tid_t;
+        par->maal_tid.minutt = maal_tid_m;
+        par->maal_tid.sekund = maal_tid_s;
+        par->oppgave_poeng = oppgavepoeng;
+
+        if (GDPL_par_legg_til(par) > 0)
+            return 1;
 
     }
 
+    fclose(fp);
 
-
-    printf("lineno=%d",lineno);
-*/
-
-
-
-
-
-    /* Første linje er bare kolonnenavn. */
-
-    /*
-    std::vector<std::string> v = getNextLineAndSplitIntoTokens(file);
-
-    bool loop = true;
-    do {
-
-        v = getNextLineAndSplitIntoTokens(file);
-        if (v.size() == 0) {
-            loop = false;
-        } else {
-
-            int antall = v.size();
-
-            // Antall kolonner skal være 8 /
-
-            if (antall != 8) {
-                GDPL_log(GDPL_ERROR, signatur, "Feil antall kolonner i cvs-input-fil. Er %d, skal være 8.",antall);
-            }
-
-            std::string  start_nr_str = v.at(0);
-            int start_nr = atoi(start_nr_str.c_str());
-
-            std::string hfnavn_str = v.at(1);
-            const char *hfnavn = hfnavn_str.c_str();
-
-            std::string henavn_str = v.at(2);
-            const char *henavn = henavn_str.c_str();
-
-            std::string dfnavn_str = v.at(3);
-            const char *dfnavn = dfnavn_str.c_str();
-
-            std::string denavn_str = v.at(4);
-            const char *denavn = denavn_str.c_str();
-
-            std::string start_tid_str = v.at(5);
-            std::vector<std::string> start_tid_elementer = split(start_tid_str, ':');
-            int start_tid_t = atoi(start_tid_elementer.at(0).c_str());
-            int start_tid_m = atoi(start_tid_elementer.at(1).c_str());
-            int start_tid_s = atoi(start_tid_elementer.at(2).c_str());
-
-            std::string maal_tid_str = v.at(6);
-            std::vector<std::string> maal_tid_elementer = split(maal_tid_str, ':');
-            int maal_tid_t = atoi(maal_tid_elementer.at(0).c_str());
-            int maal_tid_m = atoi(maal_tid_elementer.at(1).c_str());
-            int maal_tid_s = atoi(maal_tid_elementer.at(2).c_str());
-
-            std::string oppgave_poeng_str = v.at(7);
-            int oppgave_poeng = atoi(oppgave_poeng_str.c_str());
-
-            / Legg til herre-person /
-
-            GDPL_person_data_node *person = 0;
-            if(GDPL_person_opprett_node(&person)>0)
-                return 1;
-
-            int ny_id_h = 0;
-            if(GDPL_person_finn_neste_ledige_id(&ny_id_h)>0)
-                return 1;
-
-            person->id = ny_id_h;
-            strcpy(person->fnavn,hfnavn);
-            strcpy(person->enavn,henavn);
-            if (GDPL_person_legg_til(person) > 0)
-                return 1;
-
-            / Legg til dame-person /
-
-            person = 0;
-            GDPL_person_opprett_node(&person);
-            int ny_id_d = 0;
-            if(GDPL_person_finn_neste_ledige_id(&ny_id_d)>0)
-                return 1;
-
-            person->id = ny_id_d;
-            strcpy(person->fnavn,dfnavn);
-            strcpy(person->enavn,denavn);
-            if (GDPL_person_legg_til(person) > 0)
-                return 1;
-
-            / Opprett par /
-
-            GDPL_par_data_node *par = 0;
-            GDPL_par_opprett_node(&par);
-            int ny_id = 0;
-            if(GDPL_par_finn_neste_ledige_id(&ny_id)>0)
-                return 1;
-
-            par->id = ny_id;
-            par->herre_person_id = ny_id_h;
-            par->dame_person_id = ny_id_d;
-            par->start_nr=start_nr;
-            par->start_tid.timer = start_tid_t;
-            par->start_tid.minutt = start_tid_m;
-            par->start_tid.sekund = start_tid_s;
-            par->maal_tid.timer = maal_tid_t;
-            par->maal_tid.minutt = maal_tid_m;
-            par->maal_tid.sekund = maal_tid_s;
-            par->oppgave_poeng = oppgave_poeng;
-
-            if (GDPL_par_legg_til(par) > 0)
-                return 1;
-        }
-
-    } while (loop);
 
     if (GDPL_par_beregn()>0)
         return 1;
@@ -281,6 +262,7 @@ int filversjon(char* inputfil, int loglevel)
     if (GDPL_par_antall_i_liste(&antall_par)>0)
         return 1;
 
+    /*
     std::string fn(filnavn);
     fn += "_output.csv";
 
@@ -305,14 +287,17 @@ int filversjon(char* inputfil, int loglevel)
            << "Beregnet tids-poeng" << ";"
            << "Beregnet total-poeng" << ";\n";
 
+           */
+
     struct GDPL_tid middel_tid;
     if (GDPL_par_beregn_middel_tid(&middel_tid)>0)
         return FEILKODE_FEIL;
 
-    for (int i=1; i<=antall_par; i++) {
+    int i;
+    for (i=1; i<=antall_par; i++) {
         GDPL_par_data_node *data = 0;
         if( GDPL_par_hent_i_rekke(i, &data)>0) {
-            myfile.close();
+            //myfile.close();
             return 1;
         }
 
@@ -328,6 +313,7 @@ int filversjon(char* inputfil, int loglevel)
         if (GDPL_par_beregn_avvik(&avveket_tid, middel_tid, data->anvendt_tid)>0)
             return 1;
 
+        /*
         myfile << i << ";"
                << data->start_nr << ";"
                << hperson->fnavn << " "
@@ -342,11 +328,26 @@ int filversjon(char* inputfil, int loglevel)
                << avveket_tid.timer << ":" << avveket_tid.minutt << ":" << avveket_tid.sekund << ";"
                << data->tids_poeng << ";"
                << (data->tids_poeng + data->oppgave_poeng) << ";\n";
+*/
+
+        printf("\n\n-- Resultat %d ------------------------------------------------------\n",i);
+        printf("Startnr     : %d\n",data->start_nr);
+        printf("Navn        : %s %s, %s %s\n",dperson->fnavn, dperson->enavn, hperson->fnavn, hperson->enavn);
+        printf("Starttid    : %02d:%02d:%02d\n",data->start_tid.timer,data->start_tid.minutt,data->start_tid.sekund);
+        printf("Måltid      : %02d:%02d:%02d\n",data->maal_tid.timer,data->maal_tid.minutt,data->maal_tid.sekund);
+        printf("Anvendt tid : %02d:%02d:%02d\n",data->anvendt_tid.timer,data->anvendt_tid.minutt,data->anvendt_tid.sekund);
+        printf("Idealtid    : %02d:%02d:%02d\n",middel_tid.timer,middel_tid.minutt,middel_tid.sekund);
+        printf("Tidspoeng   : %2.2f\n", data->tids_poeng);
+        printf("Oppgavepoeng: %2.2f\n", data->oppgave_poeng);
+
+        double t = data->tids_poeng + data->oppgave_poeng;
+        t = ((int)(t * 100 + .5) / 100.0); /* Rund av til to desimaler. */
+        printf("Totalt      : %2.2f\n", t);
 
     }
 
-    myfile.close();
+    //myfile.close();
 
-    */
+
     return 0;
 }

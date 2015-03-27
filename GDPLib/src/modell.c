@@ -671,8 +671,8 @@ int GDPL_modell_dump()
             GDPL_log(GDPL_INFO, signatur, "   par anvendt_tid.timer  :%d",par->anvendt_tid.timer);
             GDPL_log(GDPL_INFO, signatur, "   par anvendt_tid.minutt :%d",par->anvendt_tid.minutt);
             GDPL_log(GDPL_INFO, signatur, "   par anvendt_tid.sekund :%d",par->anvendt_tid.sekund);
-            GDPL_log(GDPL_INFO, signatur, "   par tids_poeng      :%d",par->tids_poeng);
-            GDPL_log(GDPL_INFO, signatur, "   par oppgave_poeng   :%d",par->oppgave_poeng);
+            GDPL_log(GDPL_INFO, signatur, "   par tids_poeng      :%f",par->tids_poeng);
+            GDPL_log(GDPL_INFO, signatur, "   par oppgave_poeng   :%f",par->oppgave_poeng);
             par = par->neste;
         } while(par!=0);
         k = k->neste;

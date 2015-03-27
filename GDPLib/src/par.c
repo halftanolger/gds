@@ -598,11 +598,9 @@ int GDPL_par_beregn_tids_poeng(GDPL_par_data_node *data, struct GDPL_tid middel_
 
     double d = (double)abs(s1-s2);
 
-    double p = 60.0 - (d/60.0);
+    double p = 60.0 - (d/60.0);    
 
-    p = ((int)(p * 100 + .5) / 100.0); /* Rund av til to desimaler. */
-
-    data->tids_poeng = (int)(p * 100); /* 23.78 = 2378 */
+    data->tids_poeng = ((int)(p * 100 + .5) / 100.0); /* Rund av til to desimaler. */
 
     GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
 
