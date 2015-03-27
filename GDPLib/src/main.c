@@ -27,6 +27,9 @@
 #include "gdpl.h"
 #include "main.h"
 
+float rund_av(float v) {return ((int)(v * 100 + .5) / 100.0);}
+
+
 int main (int argc, char *argv[])
 {           
     if (argc > 1) {
@@ -252,7 +255,6 @@ int filversjon(char* inputfil, int loglevel)
 
     fclose(fp);
 
-
     if (GDPL_par_beregn()>0)
         return 1;
 
@@ -330,19 +332,16 @@ int filversjon(char* inputfil, int loglevel)
                << (data->tids_poeng + data->oppgave_poeng) << ";\n";
 */
 
-        printf("\n\n-- Resultat %d ------------------------------------------------------\n",i);
-        printf("Startnr     : %d\n",data->start_nr);
-        printf("Navn        : %s %s, %s %s\n",dperson->fnavn, dperson->enavn, hperson->fnavn, hperson->enavn);
-        printf("Starttid    : %02d:%02d:%02d\n",data->start_tid.timer,data->start_tid.minutt,data->start_tid.sekund);
-        printf("Måltid      : %02d:%02d:%02d\n",data->maal_tid.timer,data->maal_tid.minutt,data->maal_tid.sekund);
-        printf("Anvendt tid : %02d:%02d:%02d\n",data->anvendt_tid.timer,data->anvendt_tid.minutt,data->anvendt_tid.sekund);
-        printf("Idealtid    : %02d:%02d:%02d\n",middel_tid.timer,middel_tid.minutt,middel_tid.sekund);
-        printf("Tidspoeng   : %2.2f\n", data->tids_poeng);
-        printf("Oppgavepoeng: %2.2f\n", data->oppgave_poeng);
-
-        double t = data->tids_poeng + data->oppgave_poeng;
-        t = ((int)(t * 100 + .5) / 100.0); /* Rund av til to desimaler. */
-        printf("Totalt      : %2.2f\n", t);
+        printf("\n\n===================================================================\n\n");
+        printf("               STARTNR :%.3d\n\n",data->start_nr);
+        printf("  PLASS :%.2d    %s %s\n",i,dperson->fnavn, dperson->enavn);
+        printf("               %s %s\n\n",hperson->fnavn, hperson->enavn);
+        printf("                 START TID : %02d:%02d:%02d         STARTPOENG :    60,00\n",data->start_tid.timer,data->start_tid.minutt,data->start_tid.sekund);
+        printf("                 SLUTT TID : %02d:%02d:%02d        - TIDSPOENG :    %02.02f\n",data->maal_tid.timer,data->maal_tid.minutt,data->maal_tid.sekund,data->tids_poeng);
+        printf("               ANVENDT TID : %02d:%02d:%02d        = LØPSPOENG :    %02.02f\n",data->anvendt_tid.timer,data->anvendt_tid.minutt,data->anvendt_tid.sekund, rund_av(60.0 - data->tids_poeng));
+        printf("              GJ.SNITT TID : %02d:%02d:%02d       + OPPG.POENG :    %02.02f\n",middel_tid.timer,middel_tid.minutt,middel_tid.sekund,data->oppgave_poeng);
+        printf("                             --------       = SLUTTPOENG :    %02.02f\n",rund_av((60.0 - data->tids_poeng) + data->oppgave_poeng));
+        printf("                                                           ========\n");
 
     }
 

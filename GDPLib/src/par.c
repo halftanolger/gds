@@ -598,7 +598,7 @@ int GDPL_par_beregn_tids_poeng(GDPL_par_data_node *data, struct GDPL_tid middel_
 
     double d = (double)abs(s1-s2);
 
-    double p = 60.0 - (d/60.0);    
+    double p = ( d / 60.0 );
 
     data->tids_poeng = ((int)(p * 100 + .5) / 100.0); /* Rund av til to desimaler. */
 
@@ -673,8 +673,8 @@ int GDPL_par_beregn_anvendt_tid(GDPL_par_data_node *data)
 
 int GDPL_par_sammenlign_tids_poeng_stigende(GDPL_par_data_node *a, GDPL_par_data_node *b)
 {
-    int ta = a->tids_poeng;
-    int tb = b->tids_poeng;
+    float ta = a->tids_poeng;
+    float tb = b->tids_poeng;
 
     if (ta == tb) {
         return 0;
@@ -688,8 +688,8 @@ int GDPL_par_sammenlign_tids_poeng_stigende(GDPL_par_data_node *a, GDPL_par_data
 
 int GDPL_par_sammenlign_tids_poeng_synkende(GDPL_par_data_node *a, GDPL_par_data_node *b)
 {
-    int ta = a->tids_poeng;
-    int tb = b->tids_poeng;
+    float ta = a->tids_poeng;
+    float tb = b->tids_poeng;
 
     if (ta == tb) {
         return 0;
@@ -703,8 +703,8 @@ int GDPL_par_sammenlign_tids_poeng_synkende(GDPL_par_data_node *a, GDPL_par_data
 
 int GDPL_par_sammenlign_oppgave_poeng_stigende(GDPL_par_data_node *a, GDPL_par_data_node *b)
 {
-    int ta = a->oppgave_poeng;
-    int tb = b->oppgave_poeng;
+    float ta = a->oppgave_poeng;
+    float tb = b->oppgave_poeng;
 
     if (ta == tb) {
         return 0;
@@ -718,8 +718,8 @@ int GDPL_par_sammenlign_oppgave_poeng_stigende(GDPL_par_data_node *a, GDPL_par_d
 
 int GDPL_par_sammenlign_oppgave_poeng_synkende(GDPL_par_data_node *a, GDPL_par_data_node *b)
 {
-    int ta = a->oppgave_poeng;
-    int tb = b->oppgave_poeng;
+    float ta = a->oppgave_poeng;
+    float tb = b->oppgave_poeng;
 
     if (ta == tb) {
         return 0;
@@ -733,8 +733,8 @@ int GDPL_par_sammenlign_oppgave_poeng_synkende(GDPL_par_data_node *a, GDPL_par_d
 
 int GDPL_par_sammenlign_totalt_poeng_stigende(GDPL_par_data_node *a, GDPL_par_data_node *b)
 {
-    int ta = a->oppgave_poeng + a->tids_poeng;
-    int tb = b->oppgave_poeng + b->tids_poeng;
+    float ta = a->oppgave_poeng + (60.0 - a->tids_poeng);
+    float tb = b->oppgave_poeng + (60.0 - b->tids_poeng);
 
     if (ta == tb) {
         return 0;
@@ -748,8 +748,8 @@ int GDPL_par_sammenlign_totalt_poeng_stigende(GDPL_par_data_node *a, GDPL_par_da
 
 int GDPL_par_sammenlign_totalt_poeng_synkende(GDPL_par_data_node *a, GDPL_par_data_node *b)
 {
-    int ta = a->oppgave_poeng + a->tids_poeng;
-    int tb = b->oppgave_poeng + b->tids_poeng;
+    float ta = a->oppgave_poeng + (60.0 - a->tids_poeng);
+    float tb = b->oppgave_poeng + (60.0 - b->tids_poeng);
 
     if (ta == tb) {
         return 0;
