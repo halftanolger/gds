@@ -16,7 +16,9 @@ Dette 'ur-Gubberenn-Dataprogrammet' kan forsatt benyttes, derfor legger jeg
 binærkodefilene her som ei tar-fil. Koden kan kjøres vha Windows95/98 eller 
 WindowsXP emulator. 
 
-NB. Dette er 16-bits Win95 stuff.
+NB. 1 -  Dette er 16-bits Win95 stuff.
+NB. 2 -  Legg merke til vedlagte bilde.png mht 'oppsettet' rundt parametrene
+         'kommandolinje' og 'gjeldende'.
 
 (TODO: Test ut og lag ei bruks-anvisning.)
 
