@@ -135,8 +135,8 @@ int filversjon(char* inputfil, int loglevel)
     errno = 0;
     FILE *fp = fopen(inputfil,"r");
     if (fp == 0) {
-        fprintf (stderr, "%s: Klarte ikke å åpne input-fila %s; %s\n",
-                 program_invocation_short_name, inputfil, strerror (errno));
+        fprintf (stderr, "gdp: Klarte ikke å åpne input-fila %s; %s\n",
+                  inputfil, strerror (errno));
         exit (EXIT_FAILURE);
     }
 
