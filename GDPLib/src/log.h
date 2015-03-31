@@ -28,7 +28,7 @@ extern "C" {
 
 #include <stdio.h>
 
-// Defines
+/* Defines */
 
 #define FEILKODE_DATAFILNAVN_FOR_LANGT       1
 #define FEILKODE_DATAFILNAVN_FOR_KORT        2
@@ -46,15 +46,40 @@ extern "C" {
 #define FEILKODE_DATAFIL_UKJENT_MN           14
 #define FEILKODE_KAN_IKKE_ALLOKERE_MINNE_S   15
 
-// Enums
+
+
+
+
+/* TODO alt rundt logging bør forenkles. Kun debug og error. */
+
+/* http://stackoverflow.com/questions/327836/multi-file-c-program-how-best-to-implement-optional-logging */
+
+
+#define LOG_ERR      (2)
+#define LOG_DBG      (5)
+
+#define LOG(level, ...) do {  \
+                            if (level <= gdpl_log_level) { \
+                                fprintf(gdpl_log_stream,"%s:%d:", __FILE__, __LINE__); \
+                                fprintf(gdpl_log_stream, __VA_ARGS__); \
+                                fprintf(gdpl_log_stream, "\n"); \
+                                fflush(gdpl_log_stream); \
+                            } \
+                        } while (0)
+extern FILE *gdpl_log_stream;
+extern int  gdpl_log_level;
+
+
+
+/* Enums */
 
 enum GDPL_log_type_enum {GDPL_DEBUG, GDPL_INFO, GDPL_WARNING, GDPL_ERROR};
 
-// Typedefs
+/* Typedefs */
 
 typedef enum GDPL_log_type_enum GDPL_log_type;
 
-// Funksjoner
+/* Funksjoner */
 
 void GDPL_log(GDPL_log_type, const char*, const char*, ...);
 
@@ -64,5 +89,5 @@ int GDPL_log_init(GDPL_log_type nivaa, FILE * stream);
 }
 #endif
 
-#endif // LOG_H
+#endif /* LOG_H */
 

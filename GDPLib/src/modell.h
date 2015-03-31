@@ -168,4 +168,4 @@ int GDPL_modell_nullstill();
 }
 #endif
 
-#endif // MODELL_H
+#endif /* MODELL_H */

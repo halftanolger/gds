@@ -27,9 +27,8 @@ extern "C" {
 #endif
 
 const char* info = "\n"
-        "\n"
-        "Dette er en enkel testklient for GDPLib. Programmet tar et regneark\n"
-        "som input, og beregner \n"
+        "Dette er en testklient for GDPLib. Programmet tar et regneark som input,\n"
+        "og beregner \n"
         "\n"
         "   - anvendt tid pr par\n"
         "   - gjennomsnittstid\n"
@@ -37,23 +36,22 @@ const char* info = "\n"
         "   - tidspoeng basert på beregnet avvik\n"
         "   - sum poeng; tidspoeng + oppgavepoeng\n"
         "\n"
-        "Porgrammet oppretter et nytt regneark, kalt 'output_'<filnavn> \n"
-        "hvor disse beregnede kolonnene er med.\n"
+        "Porgrammet oppretter et nytt regneark hvor disse kolonnene er med.\n"
         "\n"
         "Krav til inputfil:\n"
         "\n"
-        "Inputfila må være ei semikolondelt datafil. Ei slik fil kan du \n"
-        "opprette i de fleste regneark-programmene, f.eks Excel.\n"
+        "Inputfila må være ei semikolondelt datafil. Ei slik fil kan du opprette i de\n"
+        "fleste regneark-programmene, f.eks Excel.\n"
         "\n"
-        "Eksempel på input: (viser hvilke kolonner som må være med) \n"
+        "Eksempel på input: (viser hvilke kolonner som må være med, samt rekkefølgen på disse) \n"
         "\n"
         "Startnummer;Herre-fornavn;Herre-etternavn;Dame-fornavn;Dame-etternavn;Start-tid;Slutt-tid;Oppgave-poeng\n"
-        "100;Ola1;Nordmann1;Kari1;Nordkvinne1;12:00:00;14:32:00;20\n"
-        "101;Ola2;Nordmann2;Kari2;Nordkvinne2;12:01:00;14:00:00;21\n"
-        "102;Ola3;Nordmann3;Kari3;Nordkvinne3;12:02:00;14:36:00;22\n"
-        "103;Ola4;Nordmann4;Kari4;Nordkvinne4;12:03:00;14:38:00;23\n"
-        "104;Ola5;Nordmann5;Kari5;Nordkvinne5;12:04:00;14:50:00;24\n"
-        "105;Ola6;Nordmann6;Kari6;Nordkvinne6;12:05:00;14:42:00;25\n"
+        "100;Ola1;Nordmann1;Kari1;Nordkvinne1;12:00:00;14:32:00;20,00\n"
+        "101;Ola2;Nordmann2;Kari2;Nordkvinne2;12:01:00;14:00:00;21,00\n"
+        "102;Ola3;Nordmann3;Kari3;Nordkvinne3;12:02:00;14:36:00;22,00\n"
+        "103;Ola4;Nordmann4;Kari4;Nordkvinne4;12:03:00;14:38:00;23,00\n"
+        "104;Ola5;Nordmann5;Kari5;Nordkvinne5;12:04:00;14:50:00;24,00\n"
+        "105;Ola6;Nordmann6;Kari6;Nordkvinne6;12:05:00;14:42:00;25,00\n"
         "\n"
         "Eksempel på output:\n"
         "\n"
@@ -66,20 +64,28 @@ const char* info = "\n"
         "\n"
         "Eksempel på bruk av programmet:\n"
         "\n"
-        "  gdp.exe -i mininputfil.csv\n"
+        "  gdp.exe -i mininputfil.csv -o minoutputfil.csv\n"
         "\n"
-        "skal resultere i fila output_mininputfil.cvs. Denne fila åpner du typisk i Excel.\n"
+        "Outputfila åpner du typisk i Excel.\n"
         "\n"
-        "\n";
+        "Programmet vil også skrive inputdata og outputdata til konsollet, aka stdout. \n"
+        "Dette kan du lagre til fil ved å starte programmet på denne måten:\n"
+        "\n"
+        "  gdp.exe -i mininputfil.csv -o minoutputfil.csv > minoutputfil.txt\n"
+        "\n"
+        "minoutputfil.txt kan du da åpne i notepad eller en annen egnet teksteditor.\n"
+        "Der vil du finne en resultatrapport som skal være 100% lik den rapporten som \n"
+        "DataEase-programmet til Jan-Eirik lager (eller ville ha laget :-)) gitt den samme input.\n\n"
+        "-theEnd-\n\n";
 
-void print_intro();
 
-int filversjon(char* inputfil, int loglevel);
+
+int filversjon(char* inputfil, char *outputfil);
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif // MAIN_H
+#endif /* MAIN_H */
 
 

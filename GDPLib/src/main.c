@@ -31,58 +31,109 @@ float rund_av(float v) {return ((int)(v * 100 + .5) / 100.0);}
 
 
 int main (int argc, char *argv[])
-{           
-    if (argc > 1) {
-        if (strcmp(argv[1],"-v")==0) {
-            print_intro();
-            return 0;
-        }
-        if (strcmp(argv[1],"-h")==0) {
-            print_intro();
-            printf("%s",info);
-            return 0;
-        }
+{               
+    int i;
+    char *inputfilnavn;
+    char *outputfilnavn;
+    const char *navn;
+    const char *ver;
+    int inputfilok;
+    int outputfilok;
+    FILE *innputfp;
+    FILE *outputfp;
 
-        if (strcmp(argv[1],"-i")==0 && argc >= 3) {
+    inputfilok = 0;
+    outputfilok = 0;
 
-            int loglevel = 0;
-            if (argc == 5 && strcmp(argv[3],"-l")==0 && strcmp(argv[4],"debug")==0) {
-                loglevel = 1;
+    gdpl_log_stream = stderr ;
+    gdpl_log_level = LOG_ERR;
+
+    for ( i = 0; i < argc; i++ ) {
+        if ( strcmp ( argv[i], "-l" ) == 0 ) {
+            if ( i+1 < argc ) {
+                if ( strcmp ( argv[i+1], "debug" ) == 0 ) {
+                    gdpl_log_level = LOG_DBG;
+                } else if ( strcmp ( argv[i+1], "error" ) == 0 ) {
+                    gdpl_log_level = LOG_ERR;
+                } else {
+                	printf ( "-l kan enten være 'debug' eller 'error'" );
+                	return 1;
+                } 
             }
-
-            char *filnavn = argv[2];
-            int r = filversjon(filnavn,loglevel);
-            return r;
         }
     }
-    print_intro();
-    printf("\nFeil: mangler input.\n\nEksempel på bruk:\n\n");
-    printf(" %s -i inputfil.cvs\n",argv[0]);
-    printf(" %s -i inputfil.cvs -l debug\n",argv[0]);
-    printf(" %s -v \n",argv[0]);
-    printf(" %s -h \n",argv[0]);
-    return 0;
+
+    navn = GDPL_kontroller_gdplib_navn();
+    ver =  GDPL_kontroller_gdplib_versjon();
+    LOG ( LOG_DBG, "%s %s", navn, ver );
+
+    if ( argc == 2 ) {
+        if ( strcmp ( argv[1], "-v" ) == 0 ) {
+            fprintf ( stdout, "Gubberenn Dataprogram, %s %s\n", navn, ver );
+            return 0;
+        }
+    }
+
+    if ( argc == 2 ) {
+        if ( strcmp ( argv[1], "-h" ) == 0 ) {
+            fprintf ( stdout, "Gubberenn Dataprogram, %s %s\n", navn, ver );
+            fprintf ( stdout, "%s\n", info);
+            return 0;
+        }
+    }
+
+    /* Vi må ha ei inputfil og ei outputfil for å komme videre. */
+
+    for ( i = 0; i < argc; i++ ) {
+        if ( strcmp ( argv[i], "-i" ) == 0 ) {
+            if ( i+1 < argc ) {
+                inputfilnavn = argv[i+1];
+                errno = 0;
+                innputfp = fopen ( inputfilnavn, "r" );
+                if ( innputfp == NULL ) {
+                    LOG(LOG_ERR, "I/O error '%s'' occured while opening file %s", strerror(errno), inputfilnavn);
+                    return 1;
+                }
+                LOG ( LOG_DBG, "Inputfil ok");
+                inputfilok = 1;
+            } else {
+                LOG ( LOG_ERR, "Oppgi et input-filnavn.");
+                return 1;
+            }
+        }
+    }
+
+    for ( i = 0; i < argc; i++ ) {
+        if ( strcmp ( argv[i], "-o" ) == 0 ) {
+            if ( i+1 < argc ) {
+                outputfilnavn = argv[i+1];
+                errno = 0;
+                outputfp = fopen ( outputfilnavn, "w" );
+                if ( outputfp == NULL ) {
+                    LOG ( LOG_ERR, "I/O error '%s'' occured while opening file %s", strerror(errno), outputfilnavn );
+                    return 1;
+                }
+                LOG ( LOG_DBG, "Outputfil ok");
+                outputfilok = 1;
+            } else {
+                LOG ( LOG_ERR, "Oppgi et output-filnavn.");
+                return 1;
+            }
+        }
+    }
+
+    if ( inputfilok == 0 || outputfilok == 0 ) {
+        printf("\n\ngds mangler input, bruk:\n\n\tgds -i <inputfilnavn> -o <outputfilnavn> [-l error|debug] [-v] [-h]\n\nhvor\n\t-i navn på inputfil\n\t-o navn på outputfil\n\t-l loggnivå, enten 'debug' eller 'error'. 'error' er default valgt.\n\n");
+    	return 1;
+    } 
+
+    return filversjon(inputfilnavn, outputfilnavn);
 }
 
-void print_intro()
-{
-    const char *navn = GDPL_kontroller_gdplib_navn();
-    const char *ver =  GDPL_kontroller_gdplib_versjon();
-    printf("Gubberenn Dataprogram, %s %s\n", navn, ver);
-}
 
-int filversjon(char* inputfil, int loglevel)
-{
-    const char* signatur = "filversjon";
-    if (loglevel == 0)
-        GDPL_log_init(GDPL_ERROR, stderr);
-    else
-        GDPL_log_init(GDPL_DEBUG, stderr);
 
-    const char *navn = GDPL_kontroller_gdplib_navn();
-    const char *ver =  GDPL_kontroller_gdplib_versjon();
-    GDPL_log(GDPL_INFO, signatur, "%s %s", navn, ver);
-
+int filversjon(char *inputfil, char *outputfil)
+{   
     if (GDPL_modell_angi_filnavn(0) > 0)
         return 1;
 
@@ -136,9 +187,11 @@ int filversjon(char* inputfil, int loglevel)
     FILE *fp = fopen(inputfil,"r");
     if (fp == 0) {
         fprintf (stderr, "gdp: Klarte ikke å åpne input-fila %s; %s\n",
-                  inputfil, strerror (errno));
+                 inputfil, strerror (errno));
         exit (EXIT_FAILURE);
     }
+
+    printf("%s %s\n", GDPL_kontroller_gdplib_navn(),GDPL_kontroller_gdplib_versjon());
 
     int index = 0;
     int linjeteller = -1;
@@ -160,10 +213,7 @@ int filversjon(char* inputfil, int loglevel)
 
         int start_nr = atoi(items[0]);
 
-        char hfnavn[128];
-        strcpy(hfnavn,items[1]);
-
-        //char *hfnavn = items[1];
+        char *hfnavn = items[1];
         char *henavn = items[2];
         char *dfnavn = items[3];
         char *denavn = items[4];
@@ -183,9 +233,6 @@ int filversjon(char* inputfil, int loglevel)
         int maal_tid_m = atoi(st);
         st = strtok(NULL,":");
         int maal_tid_s = atoi(st);
-
-
-        /* TODO: skriv dette ut vha GDPL_log og sscan stuff ... */
 
         printf("\n-Input linje %d-------------------------\n",linjeteller);
         printf("startnr=%d\n",start_nr);
@@ -250,7 +297,6 @@ int filversjon(char* inputfil, int loglevel)
 
         if (GDPL_par_legg_til(par) > 0)
             return 1;
-
     }
 
     fclose(fp);
@@ -264,42 +310,27 @@ int filversjon(char* inputfil, int loglevel)
     if (GDPL_par_antall_i_liste(&antall_par)>0)
         return 1;
 
-    /*
-    std::string fn(filnavn);
-    fn += "_output.csv";
-
-    std::ofstream myfile;
-    myfile.open(fn);
-
-    if (!myfile.is_open()) {
-        GDPL_log(GDPL_ERROR,"Klarer ikke aa aapne fila %s", fn.c_str());
-        return FEILKODE_FEIL;
+    errno = 0;
+    fp = fopen(outputfil,"w");
+    if (fp == 0) {
+        fprintf (stderr, "gdp: Klarte ikke å åpne output-fila %s; %s\n",
+                 outputfil, strerror (errno));
+        exit (EXIT_FAILURE);
     }
 
-    myfile << "Plassering" << ";"
-           << "Startnummer" << ";"
-           << "Herre-navn" << ";"
-           << "Dame-navn" << ";"
-           << "Start-tid" << ";"
-           << "Slutt-tid" << ";"
-           << "Oppgave-poeng" << ";"
-           << "Beregnet middel-tid" << ";"
-           << "Beregnet anvendt-tid" << ";"
-           << "Beregnet avveket-tid" << ";"
-           << "Beregnet tids-poeng" << ";"
-           << "Beregnet total-poeng" << ";\n";
-
-           */
+    fprintf(fp,"Plassering;Startnummer;Herre-navn;Dame-navn;Start-tid;Slutt-tid;Oppgave-poeng;Beregnet middel-tid;Beregnet anvendt-tid;Beregnet avveket-tid;Beregnet tids-poeng;Beregnet total-poeng;\n");
 
     struct GDPL_tid middel_tid;
     if (GDPL_par_beregn_middel_tid(&middel_tid)>0)
         return FEILKODE_FEIL;
 
+    printf("\n\n == DEASE look alike RESULTATLISTE == \n\n");
+
     int i;
     for (i=1; i<=antall_par; i++) {
         GDPL_par_data_node *data = 0;
         if( GDPL_par_hent_i_rekke(i, &data)>0) {
-            //myfile.close();
+            fclose(fp);
             return 1;
         }
 
@@ -315,22 +346,21 @@ int filversjon(char* inputfil, int loglevel)
         if (GDPL_par_beregn_avvik(&avveket_tid, middel_tid, data->anvendt_tid)>0)
             return 1;
 
-        /*
-        myfile << i << ";"
-               << data->start_nr << ";"
-               << hperson->fnavn << " "
-               << hperson->enavn << ";"
-               << dperson->fnavn << " "
-               << dperson->enavn << ";"
-               << data->start_tid.timer << ":" << data->start_tid.minutt << ":" << data->start_tid.sekund << ";"
-               << data->maal_tid.timer << ":" << data->maal_tid.minutt << ":" << data->maal_tid.sekund << ";"
-               << data->oppgave_poeng << ";"
-               << middel_tid.timer << ":" << middel_tid.minutt << ":" << middel_tid.sekund << ";"
-               << data->anvendt_tid.timer << ":" << data->anvendt_tid.minutt << ":" << data->anvendt_tid.sekund << ";"
-               << avveket_tid.timer << ":" << avveket_tid.minutt << ":" << avveket_tid.sekund << ";"
-               << data->tids_poeng << ";"
-               << (data->tids_poeng + data->oppgave_poeng) << ";\n";
-*/
+
+        fprintf(fp,"%d;%d;%s %s;%s %s;%02d:%02d:%02d;%02d:%02d:%02d;%02.02f;%02d:%02d:%02d;%02d:%02d:%02d;%02d:%02d:%02d;%02.02f;%02.02f;\n",
+                i,
+                data->start_nr,
+                hperson->fnavn, hperson->enavn,
+                dperson->fnavn, dperson->enavn,
+                data->start_tid.timer,data->start_tid.minutt,data->start_tid.sekund,
+                data->maal_tid.timer,data->maal_tid.minutt,data->maal_tid.sekund,
+                data->oppgave_poeng,
+                middel_tid.timer,middel_tid.minutt,middel_tid.sekund,
+                data->anvendt_tid.timer,data->anvendt_tid.minutt,data->anvendt_tid.sekund,
+                avveket_tid.timer,avveket_tid.minutt,avveket_tid.sekund,
+                rund_av(60.0 - data->tids_poeng),
+                rund_av((60.0 - data->tids_poeng) + data->oppgave_poeng));
+
 
         printf("\n\n===================================================================\n\n");
         printf("               STARTNR :%.3d\n\n",data->start_nr);
@@ -345,8 +375,8 @@ int filversjon(char* inputfil, int loglevel)
 
     }
 
-    //myfile.close();
+    printf("\n\n == TheEnd == \n\n");
 
-
+    fclose(fp);
     return 0;
 }

@@ -34,6 +34,12 @@ GDPL_log_type gdpl_log_nivaa = -1;
 
 FILE * gdpl_log_stream = 0;
 
+
+FILE *gdpl_log_stream ;
+int  gdpl_log_level;
+
+
+
 /* Funksjoner */
 
 void GDPL_log(GDPL_log_type type, const char* signatur, const char* melding, ...)
@@ -116,6 +122,8 @@ int GDPL_log_init(GDPL_log_type nivaa, FILE * stream)
     /* Sett loggnivå og loggdestinasjon ihht inputparametre. */
     gdpl_log_nivaa = nivaa;
     gdpl_log_stream = stream;
+
+
 
     GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
     return 0;

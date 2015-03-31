@@ -74,6 +74,6 @@ int GDPL_par_sorter(GDPL_par_sorter_type type);
 }
 #endif
 
-#endif // PAR_H
+#endif /* PAR_H */
 
 

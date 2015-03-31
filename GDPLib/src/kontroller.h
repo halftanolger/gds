@@ -46,4 +46,4 @@ int GDPL_kontroller_hent_par_nummer(int *par_nummer, int type);
 }
 #endif
 
-#endif // KONTROLLER_H
+#endif /* KONTROLLER_H */

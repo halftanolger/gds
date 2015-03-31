@@ -44,5 +44,5 @@ int GDPL_person_finn_neste_ledige_id(int *id);
 }
 #endif
 
-#endif // PERSON_H
+#endif /* PERSON_H */
 

@@ -37,4 +37,4 @@ extern "C" {
 }
 #endif
 
-#endif //GDPL_H
+#endif /* GDPL_H */

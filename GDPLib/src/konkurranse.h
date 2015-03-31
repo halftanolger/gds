@@ -43,4 +43,4 @@ int GDPL_konkurranse_sett_valgt_konkurranse(int id);
 #ifdef __cplusplus
 }
 #endif
-#endif // KONKURRANSE_H
+#endif /* KONKURRANSE_H */
