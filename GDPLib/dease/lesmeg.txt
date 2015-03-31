@@ -5,7 +5,7 @@
 +-----------------------------------------------------------------------------+
 
 En gang for lenge siden ble det laget et annet 'Gubberenn Dataprogram'. Vi 
-snakker om 1991, eller der omkring. Det var Jan-Erik Nordahl som programmerte 
+snakker om 1993, eller der omkring. Det var Jan-Erik Nordahl som programmerte 
 dette som en DataEase DBase-applikasjon. 
 
 DataEase er et såkalt 4. generasjons database-vertøy. Disse verktøyene var 
@@ -31,8 +31,9 @@ Pluss GuestAdditions, slik at jeg fikk kopiert DBASE-katelogen (som ligger i
 den vedlagte tar-fila) over til XP-installasjonen min.
 
 
+Se wiki til gds-prosjektet som ligger her:
+https://gihub.com/halftanolger/gds/
 
-
-(TODO: Test ut og lag ei bruks-anvisning.)
+-theEnd-
 
 

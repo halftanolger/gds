@@ -1,6 +1,9 @@
 
-GDSLib - 'Gubberenn data system' -kjernefunksjonalitet i form av et ANSI C -bibliotek.
+GDSLib - 'Gubberenn data system' -kjernefunksjonalitet i form av et  C -bibliotek.
 
-GDS    - 'Gubberenn data system' -klient i form av en C++ Qt-applikasjon.
+Ulike brukergrensesnittklienter:
+
+GDSKonsoll  (todo)
+GDSQtDesktop (todo)
 
 halftan@saetherskar.no
