@@ -6,6 +6,7 @@
   nsiscript.nsi     - input fil til NSIS (Nullsoft Scriptable Install System)
   run.bat           - hjelpfil for å starte makensis.exe
   testinput.csv     - eksempel input-datafil til Gubberenn Dataprogram.
+  manual.txt        - bruksanvisning
   GubbInstaller.exe - sluttresultatet 
   
   For mer info, se:

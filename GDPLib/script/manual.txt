@@ -19,7 +19,7 @@ Programmet tar et regneark som input, og beregner:
    - tidspoeng basert på beregnet avvik
    - sum poeng; tidspoeng + oppgavepoeng
 
-Porgrammet oppretter et nytt regneark hvor disse kolonnene 
+Programmet oppretter et nytt regneark hvor disse kolonnene 
 er med.
 
 Krav til inputfil:
@@ -27,7 +27,7 @@ Krav til inputfil:
 Inputfila må være ei semikolondelt datafil. Ei slik fil kan 
 du opprette i de fleste regneark-programmene, f.eks Excel.
 
-Eksempel på input: (viser hvilke kolonner som må være med, 
+Eksempel på inputfil: (viser hvilke kolonner som må være med, 
 samt rekkefølgen på disse) 
 
 Startnummer;Herre-fornavn;Herre-etternavn;Dame-fornavn;Dame-etternavn;Start-tid;Slutt-tid;Oppgave-poeng
@@ -38,7 +38,7 @@ Startnummer;Herre-fornavn;Herre-etternavn;Dame-fornavn;Dame-etternavn;Start-tid;
 104;Ola5;Nordmann5;Kari5;Nordkvinne5;12:04:00;14:50:00;24,00
 105;Ola6;Nordmann6;Kari6;Nordkvinne6;12:05:00;14:42:00;25,00
 
-Eksempel på output:
+Eksempel på outputfil: (denne opprettes av programmet)
 
 Plassering;Startnummer;Herre-navn;Dame-navn;Start-tid;Slutt-tid;Oppgave-poeng;Beregnet middel-tid;Beregnet anvendt-tid;Beregnet avveket-tid;Beregnet tids-poeng;Beregnet total-poeng;
 1;102;Ola3 Nordmann3;Kari3 Nordkvinne3;12:2:0;14:36:0;22;2:33:32;2:34:0;0:0:28;60;82;
