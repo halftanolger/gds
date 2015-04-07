@@ -31,7 +31,11 @@ float rund_av(float v) {return ((int)(v * 100 + .5) / 100.0);}
 
 
 int main (int argc, char *argv[])
-{           
+{          
+
+    printf("%s",parameter_info);
+    return 0;
+ 
     if (argc > 1) {
         if (strcmp(argv[1],"-v")==0) {
             print_intro();
