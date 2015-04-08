@@ -35,7 +35,7 @@ extern "C" {
 
 
 /*! \struct gubb_input_args_struct
-    \brief Dataholder for inputargumenter.   
+    \brief Dataholder for inputargumenter.
     
     Benyttes som dataholder for inputargumenter til konsollprogrammet.
     
@@ -43,10 +43,10 @@ extern "C" {
 
 struct gubb_input_args_struct {
 
-    /* -h [ --hjelp ] */    
+    /* -h [ --hjelp ] */
     int hjelp_flagg;
 
-    /* -b [ --bruksanvisning ] */    
+    /* -b [ --bruksanvisning ] */
     int bruksanvisning_flagg;
     
     /* -v [ --versjon ] */

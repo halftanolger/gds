@@ -37,32 +37,32 @@ int main ( int argc, char *argv[] )
     int returverdi;
     gubb_input_args i;
     
-    /* Bruk default lokale, bør fikse øæå-problematikk. */    
-    setlocale(LC_ALL,"");           
+    /* Bruk default lokale, bør fikse øæå-problematikk. */
+    setlocale(LC_ALL,"");
     
-    /* Pase inputargumenter til gubb-programmet. */       
+    /* Pase inputargumenter til gubb-programmet. */
     returverdi = gubb_util_parse_args ( argc, argv, &i );
     
-    if ( returverdi == 1 ) {    
+    if ( returverdi == 1 ) {
         printf( "%s", bruk_info );
-        return 1;        
+        return 1;
     }
-     
+
     if ( i.hjelp_flagg == 1 ) {
         printf( "%s", hjelp_info );
-        return 0;            
-    }    
+        return 0;
+    }
 
     if ( i.bruksanvisning_flagg == 1 ) {
         printf( "%s", bruksanvisning_info );
-        return 0;            
-    }    
+        return 0;
+    }
     
     if ( i.versjon_flagg == 1 ) {
         printf( "%s %s\n", GDPL_kontroller_gdplib_navn(), GDPL_kontroller_gdplib_versjon() );
-        return 0;            
-    }    
-  
+        return 0;
+    }
+
     /* todo: sjekk om inputfil eksisterer, og kan leses fra */
     if ( i.input_flagg == 1 ) {
         printf("inputfil %s\n",i.input_argument);
@@ -77,10 +77,10 @@ int main ( int argc, char *argv[] )
     if ( i.rapportfil_flagg == 1 ) {
         printf("rapportfil %s\n",i.rapportfil_argument);
     }
- 
+
     /* todo: inputargumenter skal nå være på plass. Do the job! */
- 
-    return 0;   
+
+    return 0;
 }
 
 
@@ -149,7 +149,7 @@ int filversjon(char* inputfil, int loglevel)
     FILE *fp = fopen(inputfil,"r");
     if (fp == 0) {
         fprintf (stderr, "gdp: Klarte ikke å åpne input-fila %s; %s\n",
-                  inputfil, strerror (errno));
+                 inputfil, strerror (errno));
         exit (EXIT_FAILURE);
     }
 
