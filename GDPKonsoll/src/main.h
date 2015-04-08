@@ -1,4 +1,4 @@
-/*
+﻿/*
 ** This file is part of the GDPLib project.
 **
 ** Copyright (C) Halftan Sætherskar (halftan@saetherskar.no)
@@ -26,12 +26,17 @@
 extern "C" {
 #endif
 
-/* Hjelpetekst, --hjelp */
 
-const char* parameter_info = "\n"
+/* 'Bruk' -tekst, skal vises når korrekt input args mangler. */
+
+const char* bruk_info = "BRUK: gubb [-i ARG] [-o ARG] [-l ARG] [-r ARG] [-f ARG] [-k ARG] [-s ARG] [-hvb] ";
+
+/* Hjelpetekst, -h [ --hjelp ] */
+
+const char* hjelp_info = "\n"
 "Dette er et hjelpemiddel ifm arrangering av det tradisjonelle Gubberennet, som arrangeres hver skjærtorsdag i Bjørkebakken.\n"
 "\n"
-"BRUK: gubb [-hv] [-l ARG] [-i ARG] [-o ARG] [-r ARG]\n"
+"BRUK: gubb [-i ARG] [-o ARG] [-l ARG] [-r ARG] [-f ARG] [-k ARG] [-s ARG] [-hvb] \n"
 "\n"
 "\n"
 "-- Beskrivelse av opsjoner --\n"
@@ -46,6 +51,7 @@ const char* parameter_info = "\n"
 "Opsjoner og argumenter:\n"
 "\n"
 " -h [ --hjelp ]              Skriver en hjelpetekst ut på konsollet\n"
+" -b [ --bruksanvisning ]     Skriver ei enkel bruksanvisning ut på konsollet\n"
 " -v [ --versjon ]            Skriver ut versjonsnummeret til GDPLib\n"
 " -l [ --logg ] nivå          Loggnivå, hvor nivå er INF eller DBG\n"
 " -i [ --inputfil ] filnavn   Input csv-datafil\n"
@@ -74,17 +80,20 @@ const char* parameter_info = "\n"
 "halftan@online.no\n"
 "\n";
 
+/* Bruksanvisningstekst, -b [ --bruksanvisning ] */
 
-const char* info = "\n"
+const char* bruksanvisning_info = "\n"
         "\n"
-        "Dette er en enkel testklient for GDPLib. Programmet tar et regneark\n"
-        "som input, og beregner \n"
+        "Hensikten med denne bruksanvisningen er å forklare hvordan man kan benytte programmet i sin aller "
+        "enkleste form. Det vil si å kun benytte programmet til å utføre de aktuelle beregningene, som er: "
         "\n"
-        "   - anvendt tid pr par\n"
-        "   - gjennomsnittstid\n"
-        "   - avvik mellom anvendt tid og gjennomsnittstid\n"
-        "   - tidspoeng basert på beregnet avvik\n"
-        "   - sum poeng; tidspoeng + oppgavepoeng\n"
+        "\n"
+        "   - beregne anvendt tid pr par\n"
+        "   - beregne gjennomsnittstiden, aka idealtiden\n"
+        "   - beregne avvik mellom anvendt tid og idealtid, pr. par\n"
+        "   - beregne tidspoeng basert på beregnet avvik\n"
+        "   - beregne sum poeng; tidspoeng + oppgavepoeng\n"
+        "\n"
         "\n"
         "Porgrammet oppretter et nytt regneark, kalt 'output_'<filnavn> \n"
         "hvor disse beregnede kolonnene er med.\n"
@@ -115,15 +124,19 @@ const char* info = "\n"
         "\n"
         "Eksempel på bruk av programmet:\n"
         "\n"
-        "  gdp.exe -i mininputfil.csv\n"
+        "  gdp.exe -i mininputfil.csv -o output_mininputfil.cvs \n"
         "\n"
-        "skal resultere i fila output_mininputfil.cvs. Denne fila åpner du typisk i Excel.\n"
+        "skal resultere i at fila output_mininputfil.cvs blir opprettet. Denne fila åpner du typisk i Excel "
+        "for videre behandling.\n"
+        "\n"
+        "-TheEnd-\n"
         "\n"
         "\n";
 
-void print_intro();
 
 int filversjon(char* inputfil, int loglevel);
+
+
 
 #ifdef __cplusplus
 }

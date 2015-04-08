@@ -23,57 +23,66 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <locale.h> /* setlocale, LC_ALL */
 
 #include "gdpl.h"
 #include "main.h"
+#include "util.h"
 
 float rund_av(float v) {return ((int)(v * 100 + .5) / 100.0);}
 
-
-int main (int argc, char *argv[])
+int main ( int argc, char *argv[] )
 {          
 
-    printf("%s",parameter_info);
-    return 0;
- 
-    if (argc > 1) {
-        if (strcmp(argv[1],"-v")==0) {
-            print_intro();
-            return 0;
-        }
-        if (strcmp(argv[1],"-h")==0) {
-            print_intro();
-            printf("%s",info);
-            return 0;
-        }
-
-        if (strcmp(argv[1],"-i")==0 && argc >= 3) {
-
-            int loglevel = 0;
-            if (argc == 5 && strcmp(argv[3],"-l")==0 && strcmp(argv[4],"debug")==0) {
-                loglevel = 1;
-            }
-
-            char *filnavn = argv[2];
-            int r = filversjon(filnavn,loglevel);
-            return r;
-        }
+    int returverdi;
+    gubb_input_args i;
+    
+    /* Bruk default lokale, bør fikse øæå-problematikk. */    
+    setlocale(LC_ALL,"");           
+    
+    /* Pase inputargumenter til gubb-programmet. */       
+    returverdi = gubb_util_parse_args ( argc, argv, &i );
+    
+    if ( returverdi == 1 ) {    
+        printf( "%s", bruk_info );
+        return 1;        
     }
-    print_intro();
-    printf("\nFeil: mangler input.\n\nEksempel på bruk:\n\n");
-    printf(" %s -i inputfil.cvs\n",argv[0]);
-    printf(" %s -i inputfil.cvs -l debug\n",argv[0]);
-    printf(" %s -v \n",argv[0]);
-    printf(" %s -h \n",argv[0]);
-    return 0;
+     
+    if ( i.hjelp_flagg == 1 ) {
+        printf( "%s", hjelp_info );
+        return 0;            
+    }    
+
+    if ( i.bruksanvisning_flagg == 1 ) {
+        printf( "%s", bruksanvisning_info );
+        return 0;            
+    }    
+    
+    if ( i.versjon_flagg == 1 ) {
+        printf( "%s %s\n", GDPL_kontroller_gdplib_navn(), GDPL_kontroller_gdplib_versjon() );
+        return 0;            
+    }    
+  
+    /* todo: sjekk om inputfil eksisterer, og kan leses fra */
+    if ( i.input_flagg == 1 ) {
+        printf("inputfil %s\n",i.input_argument);
+    }
+    
+    /* todo: sjekk om outputfil kan skrives til */
+    if ( i.output_flagg == 1 ) {
+        printf("outputfil %s\n",i.output_argument);
+    }
+    
+    /* todo: sjekk om rapportfil kan skrives til */
+    if ( i.rapportfil_flagg == 1 ) {
+        printf("rapportfil %s\n",i.rapportfil_argument);
+    }
+ 
+    /* todo: inputargumenter skal nå være på plass. Do the job! */
+ 
+    return 0;   
 }
 
-void print_intro()
-{
-    const char *navn = GDPL_kontroller_gdplib_navn();
-    const char *ver =  GDPL_kontroller_gdplib_versjon();
-    printf("Gubberenn Dataprogram, %s %s\n", navn, ver);
-}
 
 int filversjon(char* inputfil, int loglevel)
 {
