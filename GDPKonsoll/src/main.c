@@ -84,6 +84,7 @@ int main ( int argc, char *argv[] )
 }
 
 
+/*
 int filversjon(char* inputfil, int loglevel)
 {
     const char* signatur = "filversjon";
@@ -112,11 +113,11 @@ int filversjon(char* inputfil, int loglevel)
         }
     }
 
-    /* Her skal vi ha 'blank' modell. */
+    * Her skal vi ha 'blank' modell. *
 
     GDPL_modell_dump();
 
-    /* Legg til en ny konkurranse. */
+    * Legg til en ny konkurranse. *
 
     GDPL_konkurranse_data_node *k = 0;
     if (GDPL_konkurranse_opprett_node(&k)>0)
@@ -138,12 +139,12 @@ int filversjon(char* inputfil, int loglevel)
     if (GDPL_konkurranse_legg_til(k) > 0)
         return FEILKODE_FEIL;
 
-    /* Velg denne konkurransen */
+    * Velg denne konkurransen *
 
     if (GDPL_konkurranse_sett_valgt_konkurranse(1)>0)
         return FEILKODE_FEIL;
 
-    /* Last inn data fra cvs-fil. */
+    * Last inn data fra cvs-fil. *
 
     errno = 0;
     FILE *fp = fopen(inputfil,"r");
@@ -198,7 +199,7 @@ int filversjon(char* inputfil, int loglevel)
         int maal_tid_s = atoi(st);
 
 
-        /* TODO: skriv dette ut vha GDPL_log og sscan stuff ... */
+        * TODO: skriv dette ut vha GDPL_log og sscan stuff ... *
 
         printf("\n-Input linje %d-------------------------\n",linjeteller);
         printf("startnr=%d\n",start_nr);
@@ -211,7 +212,7 @@ int filversjon(char* inputfil, int loglevel)
         printf("oppgavepoeng=%2.2f\n",oppgavepoeng);
 
 
-        /* Legg til herre-person */
+        * Legg til herre-person *
 
         GDPL_person_data_node *person = 0;
         if(GDPL_person_opprett_node(&person)>0)
@@ -227,7 +228,7 @@ int filversjon(char* inputfil, int loglevel)
         if (GDPL_person_legg_til(person) > 0)
             return 1;
 
-        /* Legg til dame-person */
+        * Legg til dame-person *
 
         person = 0;
         GDPL_person_opprett_node(&person);
@@ -241,7 +242,7 @@ int filversjon(char* inputfil, int loglevel)
         if (GDPL_person_legg_til(person) > 0)
             return 1;
 
-        /* Opprett par */
+        * Opprett par *
 
         GDPL_par_data_node *par = 0;
         GDPL_par_opprett_node(&par);
@@ -277,7 +278,7 @@ int filversjon(char* inputfil, int loglevel)
     if (GDPL_par_antall_i_liste(&antall_par)>0)
         return 1;
 
-    /*
+    *
     std::string fn(filnavn);
     fn += "_output.csv";
 
@@ -302,7 +303,7 @@ int filversjon(char* inputfil, int loglevel)
            << "Beregnet tids-poeng" << ";"
            << "Beregnet total-poeng" << ";\n";
 
-           */
+           *
 
     struct GDPL_tid middel_tid;
     if (GDPL_par_beregn_middel_tid(&middel_tid)>0)
@@ -328,7 +329,7 @@ int filversjon(char* inputfil, int loglevel)
         if (GDPL_par_beregn_avvik(&avveket_tid, middel_tid, data->anvendt_tid)>0)
             return 1;
 
-        /*
+        *
         myfile << i << ";"
                << data->start_nr << ";"
                << hperson->fnavn << " "
@@ -343,7 +344,7 @@ int filversjon(char* inputfil, int loglevel)
                << avveket_tid.timer << ":" << avveket_tid.minutt << ":" << avveket_tid.sekund << ";"
                << data->tids_poeng << ";"
                << (data->tids_poeng + data->oppgave_poeng) << ";\n";
-*/
+*
 
         printf("\n\n===================================================================\n\n");
         printf("               STARTNR :%.3d\n\n",data->start_nr);
@@ -363,3 +364,4 @@ int filversjon(char* inputfil, int loglevel)
 
     return 0;
 }
+*/
