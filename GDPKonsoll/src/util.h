@@ -56,6 +56,10 @@ struct gubb_input_args_struct {
     int logg_flagg;
     char logg_argument[64];
     
+    /* -m [ --loggfil ] argument */
+    int loggfil_flagg;
+    char loggfil_argument[512];
+
     /* -i [ --inputfil] argument */
     int input_flagg;
     char input_argument[512];

@@ -50,23 +50,9 @@ extern "C" {
 
 
 
-/* TODO alt rundt logging bør forenkles. Kun debug og error. */
 
-/* http://stackoverflow.com/questions/327836/multi-file-c-program-how-best-to-implement-optional-logging */
-
-
-#define LOG_ERR      (2)
-#define LOG_DBG      (5)
-
-#define LOG(level, ...) do {  \
-                            if (level <= gdpl_log_level) { \
-                                fprintf(gdpl_log_stream,"%s:%d:", __FILE__, __LINE__); \
-                                fprintf(gdpl_log_stream, __VA_ARGS__); \
-                                fprintf(gdpl_log_stream, "\n"); \
-                                fflush(gdpl_log_stream); \
-                            } \
-                        } while (0)
 extern FILE *gdpl_log_stream;
+
 extern int  gdpl_log_level;
 
 

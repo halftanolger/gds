@@ -32,12 +32,7 @@
 
 GDPL_log_type gdpl_log_nivaa = -1;
 
-FILE * gdpl_log_stream = 0;
-
-
 FILE *gdpl_log_stream ;
-int  gdpl_log_level;
-
 
 
 /* Funksjoner */
@@ -112,18 +107,9 @@ int GDPL_log_init(GDPL_log_type nivaa, FILE * stream)
 {
     const char* signatur = "GDPL_init";
 
-    /* Sett locale til 'norsk bokmål',
-     noe som bør fikse øæå -problematikk. */
-    char* locale;
-    locale = setlocale(LC_ALL,"");
-
-    GDPL_log(GDPL_DEBUG, signatur, "locale=%s",locale);
-
     /* Sett loggnivå og loggdestinasjon ihht inputparametre. */
     gdpl_log_nivaa = nivaa;
     gdpl_log_stream = stream;
-
-
 
     GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
     return 0;

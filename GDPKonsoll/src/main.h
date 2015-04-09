@@ -26,6 +26,7 @@
 extern "C" {
 #endif
 
+#include "util.h"
 
 /* 'Bruk' -tekst, skal vises når korrekt input args mangler. */
 
@@ -36,7 +37,7 @@ const char* bruk_info = "BRUK: gubb [-i ARG] [-o ARG] [-l ARG] [-r ARG] [-f ARG]
 const char* hjelp_info = "\n"
         "Dette er et hjelpemiddel ifm arrangering av det tradisjonelle Gubberennet. Gubberennet er et skirenn som arrangeres hver skjærtorsdag i Bjørkebakken.\n"
         "\n"
-        "BRUK: gubb [-i ARG] [-o ARG] [-l ARG] [-r ARG] [-f ARG] [-k ARG] [-s ARG] [-hvb] \n"
+        "BRUK: gubb [-i ARG] [-o ARG] [-l ARG] [-m ARG] [-r ARG] [-f ARG] [-k ARG] [-s ARG] [-hvb] \n"
         "\n"
         "\n"
         "-- Beskrivelse av opsjoner --\n"
@@ -54,6 +55,7 @@ const char* hjelp_info = "\n"
         " -b [ --bruksanvisning ]     Skriver ei enkel bruksanvisning ut på konsollet\n"
         " -v [ --versjon ]            Skriver ut versjonsnummeret til GDPLib\n"
         " -l [ --logg ] nivå          Loggnivå, hvor nivå er INF eller DBG\n"
+        " -m [ --loggfil ] filnavn    Navn på loggfil, stdout er default\n"
         " -i [ --inputfil ] filnavn   Input csv-datafil\n"
         " -o [ --outputfil ] filnavn  Output csv-datafil\n"
         " -r [ --rapport ] type       Rapport, type er START, RES1 og RES2\n"
@@ -134,9 +136,23 @@ const char* bruksanvisning_info = "\n"
         "\n";
 
 
-int filversjon(char* inputfil, int loglevel);
+/*! \fn float rund_av(float v) {return ((int)(v * 100 + .5) / 100.0);}
+    \brief Rund av en float til 2 desimaler.
+    \param v float
+*/
+float rund_av(float v) {return ((int)(v * 100 + .5) / 100.0);}
 
+/*! \fn int filversjon(gubb_input_args *input)
+    \brief Oppretter et nytt regneark med de beregnede verdiene, basert på input-regnearket.
+    \param input Struktur hvor de ulike inputparametrene er lagret.
 
+    Dette er hovedfunksjonen til konsoll-programmet. Den lager i utgangspunktet
+    kun ei ny csv-fil, basert på input-csv-fila, men kan også lage ulike tekst-
+    filer som innholder rapporter av den typen som DataEase-programmet til
+    Jan-Eirik lager. Alt dette styres vha input-parametrene.
+
+*/
+int filversjon(gubb_input_args *input);
 
 #ifdef __cplusplus
 }

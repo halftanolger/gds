@@ -35,23 +35,25 @@ int gubb_util_parse_args(int argc, char *argv[], gubb_input_args *data)
     i = 0;
     heltall = 0;
     bruk_flagg = 1;
-    data->logg_flagg = 0;
+    data->logg_flagg = 0;   
     data->hjelp_flagg = 0;
-    data->input_flagg = 0;
+    data->input_flagg = 0;    
     data->klient_flagg = 0;
     data->server_flagg = 0;
     data->output_flagg = 0;
+    data->loggfil_flagg = 0;
     data->rapport_flagg = 0;
     data->versjon_flagg = 0;
     data->rapportfil_flagg = 0;
     data->bruksanvisning_flagg = 0;
     strcpy( heltallstr, "nop" );
-    strcpy( data->logg_argument, "nop" );
+    strcpy( data->logg_argument, "nop" );    
     strcpy( data->input_argument, "nop" );
     strcpy( data->klient_argument, "nop" );
     strcpy( data->server_argument, "nop" );
     strcpy( data->output_argument, "nop" );
     strcpy( data->rapport_argument, "nop" );
+    strcpy( data->loggfil_argument, "nop" );
     strcpy( data->rapportfil_argument, "nop" );
 
     for ( i = 1; i < argc; i++ ) {
@@ -112,7 +114,25 @@ int gubb_util_parse_args(int argc, char *argv[], gubb_input_args *data)
                 exit ( 1 );
             }
         }
-        
+
+        if ( ( strcmp ( argv[i], "-m") == 0 ||
+               strcmp ( argv[i], "--loggfil") == 0 ) ) {
+            if ( argc > ( i + 1 ) ) {
+                i++;
+                if ( strlen( argv[i] ) < 512 ) {
+                    data->loggfil_flagg = 1;
+                    strcpy( data->loggfil_argument, argv[i] );
+                    continue;
+                } else {
+                    fprintf ( stderr, "Argumentet til -m [ --loggfil ] er for langt.\n" );
+                    exit ( 1 );
+                }
+            } else {
+                fprintf ( stderr, "Argumentet til -m [ --loggfil ] mangler.\n" );
+                exit ( 1 );
+            }
+        }
+
         if ( ( strcmp ( argv[i], "-l") == 0 ||
                strcmp ( argv[i], "--logg") == 0 ) ) {
             if ( argc > ( i + 1 ) ) {
