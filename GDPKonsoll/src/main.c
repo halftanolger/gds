@@ -44,17 +44,17 @@ int main ( int argc, char *argv[] )
     returverdi = gubb_util_parse_args ( argc, argv, &i );
     
     if ( returverdi == 1 ) {
-        printf( "%s", bruk_info );
+        printf( "%s\n", bruk_info );
         return 1;
     }
 
     if ( i.hjelp_flagg == 1 ) {
-        printf( "%s", hjelp_info );
+        printf( "%s\n", hjelp_info );
         return 0;
     }
 
     if ( i.bruksanvisning_flagg == 1 ) {
-        printf( "%s", bruksanvisning_info );
+        printf( "%s\n", bruksanvisning_info );
         return 0;
     }
     
