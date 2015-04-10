@@ -25,14 +25,12 @@
     Inneholder ulike hjelpemetoder med tilhørende datastrukturer.
 */    
 
-
 #ifndef UTIL_H
 #define UTIL_H
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 
 /*! \struct gubb_input_args_struct
     \brief Dataholder for inputargumenter.
