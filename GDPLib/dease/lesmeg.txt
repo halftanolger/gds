@@ -6,7 +6,7 @@
 
 En gang for lenge siden ble det laget et annet 'Gubberenn Dataprogram'. Vi 
 snakker om 1993, eller der omkring. Det var Jan-Erik Nordahl som programmerte 
-dette som en DataEase DBase-applikasjon. 
+dette, i form av en DataEase DBase-applikasjon. 
 
 DataEase er et såkalt 4. generasjons database-vertøy. Disse verktøyene var 
 ganske populære på slutten av 1980- og starten av 1990-tallet. DataEase er
@@ -20,7 +20,7 @@ derfor legger jeg, i samråd med Jan-Erik, binærkodefilene ved her som ei
 tar-fil. Koden kan f.eks kjøres vha en virtualisert WindowsXP maskin i f.eks 
 Oracle VM VirtualBox. Bare husk på følgende:
 
- -  Dette er 16-bits Win95 stuff, egentlig. Men funker på XP.
+ -  Dette er 16-bits DOS stuff, egentlig. Men funker på XP, Servicepack 3.
  -  Legg merke til vedlagte bilde.png mht 'oppsettet' rundt parametrene
     'kommandolinje' og 'gjeldende'.
 

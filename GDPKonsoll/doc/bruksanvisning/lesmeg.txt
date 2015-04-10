@@ -1,0 +1,8 @@
++---------------------------------------------------------+
+ Bruksanvisning
++---------------------------------------------------------+
+
+Her ligger laTex-koden til bruksanvisningen. Ei pdf-fil av
+den aktuelle koden er også sjekket inn, for "easy access".
+
+-halftan-
