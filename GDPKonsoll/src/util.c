@@ -25,6 +25,8 @@
 
 #include "util.h"
 
+/* http://protocols.netlab.uky.edu/~calvert/classes/571/ */
+
 int gubb_util_parse_args(int argc, char *argv[], gubb_input_args *data) 
 {
     int i;

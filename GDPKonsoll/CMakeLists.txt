@@ -9,6 +9,6 @@ include_directories ("../GDPLib/src/")
 
 include_directories("src/")
 
-add_executable(gubb src/util.c src/main.c)
+add_executable(gubb src/util.c src/rapport.c src/main.c)
 
 target_link_libraries (gubb GDPLibFunctions)

@@ -28,16 +28,15 @@
 #include "gdpl.h"
 #include "main.h"
 #include "util.h"
+#include "rapport.h"
 
 int main ( int argc, char *argv[] )
 {          
-
     int returverdi;
     gubb_input_args i;
     GDPL_log_type log_level;
     FILE *log_stream;
 
-    
     /* Bruk default lokale, bør fikse øæå-problematikk. */
     setlocale(LC_ALL,"");
     
@@ -323,6 +322,10 @@ int filversjon(gubb_input_args *input)
     if (GDPL_par_beregn_middel_tid(&middel_tid)>0)
         return FEILKODE_FEIL;
 
+
+    gubb_rapport_type rapport_type;
+    rapport_type = GRT_START;
+
     int i;
     for (i=1; i<=antall_par; i++) {
         GDPL_par_data_node *data = 0;
@@ -342,6 +345,7 @@ int filversjon(gubb_input_args *input)
         if (GDPL_par_beregn_avvik(&avveket_tid, middel_tid, data->anvendt_tid)>0)
             return 1;
 
+        gubb_rapport_print_record ( data, rapport_type, stdout );
 
         printf("\n\n===================================================================\n\n");
         printf("               STARTNR :%.3d\n\n",data->start_nr);
