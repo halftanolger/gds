@@ -59,7 +59,7 @@ const char* hjelp_info = "\n"
         " -i [ --inputfil ] filnavn   Input csv-datafil\n"
         " -o [ --outputfil ] filnavn  Output csv-datafil\n"
         " -r [ --rapport ] type       Rapport, type er START, RES1 og RES2\n"
-        " -f [ --rapportfil ] filnavn Rapport, type er START, RES1 og RES2\n"
+        " -f [ --rapportfil ] filnavn Output rapport-datafil\n"
         " -k [ --klient ] portnr      Start gubb-klient, default port er 1234\n"
         " -s [ --klient ] portnr      Start gubb-server, default port er 1234\n"
         "\n"
@@ -135,12 +135,6 @@ const char* bruksanvisning_info = "\n"
         "\n"
         "\n";
 
-
-/*! \fn float rund_av(float v) {return ((int)(v * 100 + .5) / 100.0);}
-    \brief Rund av en float til 2 desimaler.
-    \param v float
-*/
-float rund_av(float v) {return ((int)(v * 100 + .5) / 100.0);}
 
 /*! \fn int filversjon(gubb_input_args *input)
     \brief Oppretter et nytt regneark med de beregnede verdiene, basert på input-regnearket.

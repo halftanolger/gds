@@ -35,6 +35,7 @@ extern "C" {
 #endif
 
 #include <stdio.h> /* FILE */
+#include "modell.h"
 #include "par.h"
 
 /* Enum benyttes som indeks i en funksjonstabell. */
@@ -53,6 +54,17 @@ enum gubb_rapport_type_enum { GRT_START, /* 0 */
 */
 typedef enum gubb_rapport_type_enum gubb_rapport_type;
 
+struct gubb_rapport_print_record_data_struct {
+    int *plassering;
+    GDPL_par_data_node *par;
+    GDPL_person_data_node *herre;
+    GDPL_person_data_node *dame;
+    struct GDPL_tid *middel_tid;
+};
+
+typedef struct gubb_rapport_print_record_data_struct gubb_rapport_print_record_data;
+
+
 /*! \fn int gubb_rapport_print_record ( GDPL_par_data_node *p, gubb_rapport_type type, FILE *stream )
     \brief Printer ut en record til stream ihht valgt print-type.
     \param GDPL_par_data_node par-recorden som skal printes
@@ -61,7 +73,7 @@ typedef enum gubb_rapport_type_enum gubb_rapport_type;
 
     Funksjonen printer kun ut èn record. Det betyr at sortering er ikke et tema her.
 */
-int gubb_rapport_print_record ( GDPL_par_data_node *p, gubb_rapport_type type, FILE *stream );
+int gubb_rapport_print_record ( gubb_rapport_print_record_data *d, gubb_rapport_type type, FILE *stream );
 
 #ifdef __cplusplus
 }

@@ -25,14 +25,14 @@
 
 #include "util.h"
 
-/* http://protocols.netlab.uky.edu/~calvert/classes/571/ */
-
 int gubb_util_parse_args(int argc, char *argv[], gubb_input_args *data) 
 {
     int i;
     int heltall;
     int bruk_flagg;
     char heltallstr[64];
+
+    /* Initier diverse variabler */
 
     i = 0;
     heltall = 0;
@@ -57,6 +57,8 @@ int gubb_util_parse_args(int argc, char *argv[], gubb_input_args *data)
     strcpy( data->rapport_argument, "nop" );
     strcpy( data->loggfil_argument, "nop" );
     strcpy( data->rapportfil_argument, "nop" );
+
+    /* Parse inputargumenter og legg disse i datamodellen */
 
     for ( i = 1; i < argc; i++ ) {
 
@@ -255,6 +257,7 @@ int gubb_util_parse_args(int argc, char *argv[], gubb_input_args *data)
         
     }
 
+
     if ( data->input_flagg == 1 && data->output_flagg == 1 ) {
         bruk_flagg = 0;
     }
@@ -280,4 +283,9 @@ int gubb_util_parse_args(int argc, char *argv[], gubb_input_args *data)
 
     return bruk_flagg;
     
+}
+
+
+float gubb_util_rund_av(float v) {
+    return ((int)(v * 100 + .5) / 100.0);
 }

@@ -41,6 +41,8 @@ extern "C" {
 
 struct gubb_input_args_struct {
 
+    todo: legg alt av datatyper her: fil-pekere, log-type, rapport-type etc etc. altså gjør ferdig alt av paring èn plass
+
     /* -h [ --hjelp ] */
     int hjelp_flagg;
 
@@ -93,6 +95,16 @@ typedef struct gubb_input_args_struct gubb_input_args;
     \param data Struktur hvor de parsede verdiene blir lagret.
 */
 int gubb_util_parse_args(int argc, char *argv[], gubb_input_args *data);
+
+
+/*! \fn float rund_av(float v)
+    \brief Rund av en float til 2 desimaler.
+    \param v float
+
+    Standard C-hack for å runde av en float til to desimaler: ((int)(v * 100 + .5) / 100.0)
+
+*/
+float gubb_util_rund_av(float v);
 
 #ifdef __cplusplus
 }

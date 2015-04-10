@@ -131,6 +131,61 @@ int main ( int argc, char *argv[] )
 
 int filversjon(gubb_input_args *input)
 {
+    FILE *rapport_file;
+    gubb_rapport_type rapport_type;
+    int rapport_file_resultat_flagg;
+
+    rapport_file = NULL;
+    rapport_type = 0;
+    rapport_file_resultat_flagg = 0;
+
+
+    if ( input->rapport_flagg == 1 ) {
+
+        /* stdout er default rapportfil */
+
+        if (input->rapportfil_flagg == 0 ) {
+            input->rapportfil_flagg = 1;
+            strcpy ( input->rapportfil_argument, "stdout" );
+        }
+
+        if ( strcmp ( input->rapportfil_argument, "stdout" ) == 0 ) {
+            rapport_file = stdout;
+        } else if ( strcmp ( input->rapportfil_argument, "stderr" ) == 0 ) {
+            rapport_file = stderr;
+        } else {
+            errno = 0;
+            rapport_file = fopen( input->input_argument, "w" );
+            if (rapport_file == 0) {
+                fprintf (stderr, "%s %s\n",
+                         input->input_argument, strerror (errno));
+                exit (EXIT_FAILURE);
+            }
+        }
+
+        /* RES1 og RES2 kan eventuelt opprettes i lag med csv-fila, derfor har
+         * jeg et flagg som markerer dette. */
+
+        if ( strcmp (input->rapport_argument, "START" ) == 0 ) {
+            rapport_type = GRT_START;
+        } else if ( strcmp (input->rapport_argument, "RES1" ) == 0 ) {
+            rapport_type = GRT_RES1;
+            rapport_file_resultat_flagg = 1;
+        } else if ( strcmp (input->rapport_argument, "RES2" ) == 0 ) {
+            rapport_type = GRT_RES2;
+            rapport_file_resultat_flagg = 1;
+        }
+
+    }
+
+
+
+
+
+
+
+
+
     /* Bruk default datafil. */
 
     if (GDPL_modell_angi_filnavn(0) > 0)
@@ -318,18 +373,27 @@ int filversjon(gubb_input_args *input)
     if (GDPL_par_antall_i_liste(&antall_par)>0)
         return 1;
 
+    errno = 0;
+    fp = fopen( input->output_argument, "w" );
+    if (fp == 0) {
+        fprintf (stderr, "%s %s\n",
+                 input->output_argument, strerror (errno));
+        exit (EXIT_FAILURE);
+    }
+
+    fprintf(fp,"Plassering;Startnummer;Herre-navn;Dame-navn;Start-tid;Slutt-tid;Oppgave-poeng;Beregnet middel-tid;Beregnet anvendt-tid;Beregnet avveket-tid;Beregnet tids-poeng;Beregnet total-poeng;\n");
+
     struct GDPL_tid middel_tid;
     if (GDPL_par_beregn_middel_tid(&middel_tid)>0)
         return FEILKODE_FEIL;
 
 
-    gubb_rapport_type rapport_type;
-    rapport_type = GRT_START;
+
 
     int i;
     for (i=1; i<=antall_par; i++) {
         GDPL_par_data_node *data = 0;
-        if( GDPL_par_hent_i_rekke(i, &data)>0) {            
+        if( GDPL_par_hent_i_rekke(i, &data)>0) {
             return 1;
         }
 
@@ -345,22 +409,36 @@ int filversjon(gubb_input_args *input)
         if (GDPL_par_beregn_avvik(&avveket_tid, middel_tid, data->anvendt_tid)>0)
             return 1;
 
-        gubb_rapport_print_record ( data, rapport_type, stdout );
+        fprintf ( fp, "%d;%d;%s %s;%s %s;%02d:%02d:%02d;%02d:%02d:%02d;%02.02f;%02d:%02d:%02d;%02d:%02d:%02d;%02d:%02d:%02d;%02.02f;%02.02f;\n",
+                  i,
+                  data->start_nr,
+                  hperson->fnavn, hperson->enavn,
+                  dperson->fnavn, dperson->enavn,
+                  data->start_tid.timer,data->start_tid.minutt,data->start_tid.sekund,
+                  data->maal_tid.timer,data->maal_tid.minutt,data->maal_tid.sekund,
+                  data->oppgave_poeng,
+                  middel_tid.timer,middel_tid.minutt,middel_tid.sekund,
+                  data->anvendt_tid.timer,data->anvendt_tid.minutt,data->anvendt_tid.sekund,
+                  avveket_tid.timer,avveket_tid.minutt,avveket_tid.sekund,
+                  gubb_util_rund_av ( 60.0 - data->tids_poeng ),
+                  gubb_util_rund_av ( ( 60.0 - data->tids_poeng) + data->oppgave_poeng ) );
 
-        printf("\n\n===================================================================\n\n");
-        printf("               STARTNR :%.3d\n\n",data->start_nr);
-        printf("  PLASS :%.2d    %s %s\n",i,dperson->fnavn, dperson->enavn);
-        printf("               %s %s\n\n",hperson->fnavn, hperson->enavn);
-        printf("                 START TID : %02d:%02d:%02d         STARTPOENG :    60,00\n",data->start_tid.timer,data->start_tid.minutt,data->start_tid.sekund);
-        printf("                 SLUTT TID : %02d:%02d:%02d        - TIDSPOENG :    %02.02f\n",data->maal_tid.timer,data->maal_tid.minutt,data->maal_tid.sekund,data->tids_poeng);
-        printf("               ANVENDT TID : %02d:%02d:%02d        = LØPSPOENG :    %02.02f\n",data->anvendt_tid.timer,data->anvendt_tid.minutt,data->anvendt_tid.sekund, rund_av(60.0 - data->tids_poeng));
-        printf("              GJ.SNITT TID : %02d:%02d:%02d       + OPPG.POENG :    %02.02f\n",middel_tid.timer,middel_tid.minutt,middel_tid.sekund,data->oppgave_poeng);
-        printf("                             --------       = SLUTTPOENG :    %02.02f\n",rund_av((60.0 - data->tids_poeng) + data->oppgave_poeng));
-        printf("                                                           ========\n");
+        /* DataEase look-a-like rapporter av typen resultat */
+
+        if ( rapport_file_resultat_flagg == 1 ) {
+
+            gubb_rapport_print_record_data d;
+
+            d.plassering = &i;
+            d.par = data;
+            d.dame = dperson;
+            d.herre = hperson;
+            d.middel_tid = &middel_tid;
+
+            gubb_rapport_print_record ( &d, rapport_type, rapport_file );
+        }
 
     }
-
-
 
     return 0;
 }
