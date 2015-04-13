@@ -1,5 +1,4 @@
 ﻿
-
 +-----------------------------------------------------------------------------+
 |                                                                             |
 |                                                                             |
@@ -7,7 +6,6 @@
 |                                                                             |
 |                                                                             |
 +-----------------------------------------------------------------------------+
-
 
 Innhold
 -------------------------------------------------------------------------------
@@ -59,9 +57,7 @@ $5
 -------------------------------------------------------------------------------
     
     - alt i denne lesmeg.txt fila etter punkt 3 (dvs punkt 4 og 5 er todo's)
-    - csv-basert testklient, implementert i C
     - doxygen-dokumentasjon av all kode
-    - autoconf / make byggeskript
     - finne skrivefeil rundt omkring ... 
     
     
@@ -75,7 +71,7 @@ ref. http://www.gnu.org/software/libc/manual/
 
 Et annet argument for å bruke C, er at problemstillingen som biblioteket
 løser, egner seg veldig godt som et studieobjekt for de som ønsker å lære seg å
-programmere. Kanskje kan man etterhvert lage en 'tutorial'-serie rundt denne 
+programmere. Kanskje kan man etter-hvert lage en 'tutorial'-serie rundt denne 
 koden?
 
 Et overordna designvalg med hensyn til C -programmering, er hvordan man velger
@@ -123,24 +119,6 @@ Jeg har valgt å dele problemstillingen opp i følgende hoveddeler:
     hentes fra fil, om man ønsker det.
 
 
-    main.h / main.c
-
-    Denne delen skal inneholde en enkel test-klient som tar som input et
-    filnavn til ei csv-data-fil, og returnerer ei ny datafil som innehoder
-    samme data, pluss de beregnede verdiene.
-    
-    Eksempel på inputfil:
-
-Startnummer;Herre-fornavn;Herre-etternavn;Dame-fornavn;Dame-etternavn;Start-tid;Slutt-tid;Oppgave-poeng
-100;Ola1;Nordmann1;Kari1;Nordkvinne1;12:00:00;14:32:00;20
-101;Ola2;Nordmann2;Kari2;Nordkvinne2;12:01:00;14:00:00;21
-
-    Eksempel på outputfil:
-
-Plassering;Startnummer;Herre-navn;Dame-navn;Start-tid;Slutt-tid;Oppgave-poeng;Beregnet middel-tid;Beregnet anvendt-tid;Beregnet avveket-tid;Beregnet tids-poeng;Beregnet total-poeng;
-1;102;Ola3 Nordmann3;Kari3 Nordkvinne3;12:2:0;14:36:0;22;2:33:32;2:34:0;0:0:28;60;82;
-2;103;Ola4 Nordmann4;Kari4 Nordkvinne4;12:3:0;14:38:0;23;2:33:32;2:35:0;0:1:28;59;82;
-
 src -+
      |
      +- gdpl.h
@@ -150,8 +128,6 @@ src -+
      +- kontroller.h / kontroller.c
      |
      +- log.h / log.c
-     |
-     +- main.h / main.c
      |
      +- modell.h / modell.c
      |
@@ -250,72 +226,12 @@ int GDPL_kontroller_registrer_oppgavepoeng( int par_id, double poeng)
 int GDPL_kontroller_opprett_resultatliste()
 
 
-5. Grafiskt brukergrensesnitt 
+5. Klienter, brukergrensesnitt 
 -------------------------------------------------------------------------------
 
-Det grafiske brukergrensesnittet vil være sentrert rundt en tre-struktur, hvor
-topp noden heter 'Arkiv'. Under arkivet kommer de ulike konkurranse-objektene.
-En konkurranse består av par, som har sitt unike startnummer. Hvert par består
-av to personer.
-
-
-
-+-----------------------------------------------------------------------------+
-| Fil Oppsett Hjelp                                                           |
-+-----------------------------------------------------------------------------+
-|                                                                             |         
-|                                                                             |         
-|                                                                             |         
-|                                                                             |         
-|                                                                             |         
-|                                                                             |         
-|                                                                             |         
-|                                                                             |         
-|                                                                             |         
-|                                                                             |         
-|                                                                             |         
-|                                                                             |         
-|                                                                             |         
-|                                                                             |         
-|                                                                             |         
-|                                                                             |         
-|                                                                             |         
-|                                                                             |         
-|                                                                             |         
-|                                                                             |         
-|                                                                             |         
-+-----------------------------------------------------------------------------+
-
-
-
- Fil
-   - Ny konkurranse
-   - Åpne konkurranse
-   - Lukk konkurranse
-   - Lagre konkurranse
-   - Avslutt
-   
- Oppsett
-   - Endre instillinger (log-level etc)
-
- Hjelp
-   - Hjelp
-   - Om 
-   
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
+Det er p.t. laget to klienter til biblioteket, en konsollapplikasjon og en 
+grafisk windows/mac/linux -applikasjon vha Qt. Se hhv gds/GDPKonsoll og 
+gds/GDPQtDesktop for mer informasjon.
 
 - The End -
 
