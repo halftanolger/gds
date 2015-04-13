@@ -1,7 +1,7 @@
-/*
+ï»¿/*
 ** This file is part of the GDPLib project.
 **
-** Copyright (C) Halftan Sætherskar (halftan@saetherskar.no)
+** Copyright (C) Halftan SÃ¦therskar (halftan@saetherskar.no)
 **
 ** This program is free software; you can redistribute it and/or
 ** modify it under the terms of the GNU General Public License
@@ -19,10 +19,8 @@
 ******************************************************************************
 */
 
-TODO, i.e ting og tang som bør/må gjøres:
+TODO, i.e ting og tang som bÃ¸r/mÃ¥ gjÃ¸res:
 
-- rapportfunksjon på 'renn'-nivå, ikke bare på 'record'-nivå
-- cvs outputfil stuff
 - doxygen-kommenter koden
 - rett skrivefeil
 

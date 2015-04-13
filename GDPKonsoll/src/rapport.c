@@ -1,4 +1,4 @@
-/*
+﻿/*
 ** This file is part of the GDPLib project.
 **
 ** Copyright (C) Halftan Sætherskar (halftan@saetherskar.no)

@@ -19,6 +19,7 @@
 ******************************************************************************
 */
 
+#include <errno.h>
 #include <stdlib.h> /* exit atoi  */
 #include <stdio.h>  /* fprintf    */
 #include <string.h> /* strcmp     */
