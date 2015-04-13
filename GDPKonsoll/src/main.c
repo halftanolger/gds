@@ -34,196 +34,66 @@ int main ( int argc, char *argv[] )
 {          
     int returverdi;
     gubb_input_args i;
-    GDPL_log_type log_level;
-    FILE *log_stream;
 
     /* Bruk default lokale, bør fikse øæå-problematikk. */
     setlocale(LC_ALL,"");
     
     /* Pase inputargumenter til gubb-programmet. */
-    returverdi = gubb_util_parse_args ( argc, argv, &i );
-    
-    if ( returverdi == 1 ) {
-        printf( "%s\n", bruk_info );
-        return 1;
-    }
-
-    if ( i.hjelp_flagg == 1 ) {
-        printf( "%s\n", hjelp_info );
-        return 0;
-    }
-
-    if ( i.bruksanvisning_flagg == 1 ) {
-        printf( "%s\n", bruksanvisning_info );
-        return 0;
-    }
-    
-    if ( i.versjon_flagg == 1 ) {
-        printf( "%s %s\n", GDPL_kontroller_gdplib_navn(), GDPL_kontroller_gdplib_versjon() );
-        return 0;
-    }
-
-    /* todo: sjekk om inputfil eksisterer, og kan leses fra */
-    if ( i.input_flagg == 1 ) {
-        printf("inputfil %s\n",i.input_argument);
-    }
-    
-    /* todo: sjekk om outputfil kan skrives til */
-    if ( i.output_flagg == 1 ) {
-        printf("outputfil %s\n",i.output_argument);
-    }
-    
-    /* todo: sjekk om rapportfil kan skrives til */
-    if ( i.rapportfil_flagg == 1 ) {
-        printf("rapportfil %s\n",i.rapportfil_argument);
-    }
-
-
-
-
-    /* Initier GDPLib logging */
-
-    if ( strcmp( i.logg_argument, "DBG" ) == 0 ) {
-        log_level = GDPL_DEBUG;
-    } else if ( strcmp( i.logg_argument, "INF" ) == 0 ) {
-        log_level = GDPL_INFO;
-    } else if ( strcmp( i.logg_argument, "WRN" ) == 0 ) {
-        log_level = GDPL_WARNING;
-    } else {
-        log_level = GDPL_ERROR;
-    }
-
-    log_stream = stdout;
-
-    if ( i.loggfil_flagg == 1 ) {
-        if ( strcmp( i.loggfil_argument, "stderr" ) == 0 ) {
-            log_stream = stderr;
-        } else {
-            errno = 0;
-            log_stream = fopen( i.loggfil_argument, "w" );
-            if ( log_stream == 0 ) {
-                fprintf ( stderr, "%s %s\n", i.logg_argument, strerror ( errno ) );
-                exit ( EXIT_FAILURE );
-            }
-        }
-    }
-
-    returverdi = GDPL_log_init ( log_level, log_stream );
-    if ( returverdi > 0 ) {
-        exit ( EXIT_FAILURE );
-    }
+    gubb_util_parse_args ( argc, argv, &i );
 
     /* Do the job */
-
     returverdi = 0;
     if ( i.input_flagg == 1 && i.output_flagg == 1 ) {
-        returverdi = filversjon ( &i );
+        returverdi = gubb ( &i );
     }
 
-    if ( log_stream  != stderr || log_stream != stdout ) {
-        fclose ( log_stream );
-    }
+    /* Rydd opp */
+    gubb_util_lukk_eventuelle_aapne_filer ( &i );
 
+    /* TheEnd */
     return returverdi;
 }
 
 
-
-int filversjon(gubb_input_args *input)
-{
-    FILE *rapport_file;
-    gubb_rapport_type rapport_type;
-    int rapport_file_resultat_flagg;
-
-    rapport_file = NULL;
-    rapport_type = 0;
-    rapport_file_resultat_flagg = 0;
-
-
-    if ( input->rapport_flagg == 1 ) {
-
-        /* stdout er default rapportfil */
-
-        if (input->rapportfil_flagg == 0 ) {
-            input->rapportfil_flagg = 1;
-            strcpy ( input->rapportfil_argument, "stdout" );
-        }
-
-        if ( strcmp ( input->rapportfil_argument, "stdout" ) == 0 ) {
-            rapport_file = stdout;
-        } else if ( strcmp ( input->rapportfil_argument, "stderr" ) == 0 ) {
-            rapport_file = stderr;
-        } else {
-            errno = 0;
-            rapport_file = fopen( input->input_argument, "w" );
-            if (rapport_file == 0) {
-                fprintf (stderr, "%s %s\n",
-                         input->input_argument, strerror (errno));
-                exit (EXIT_FAILURE);
-            }
-        }
-
-        /* RES1 og RES2 kan eventuelt opprettes i lag med csv-fila, derfor har
-         * jeg et flagg som markerer dette. */
-
-        if ( strcmp (input->rapport_argument, "START" ) == 0 ) {
-            rapport_type = GRT_START;
-        } else if ( strcmp (input->rapport_argument, "RES1" ) == 0 ) {
-            rapport_type = GRT_RES1;
-            rapport_file_resultat_flagg = 1;
-        } else if ( strcmp (input->rapport_argument, "RES2" ) == 0 ) {
-            rapport_type = GRT_RES2;
-            rapport_file_resultat_flagg = 1;
-        }
-
-    }
-
-
-
-
-
-
-
-
+int gubb(gubb_input_args *input)
+{   
+    /* Benyttes av log-funksjon */
+    char* signatur;
+    signatur = "gubb";
 
     /* Bruk default datafil. */
-
-    if (GDPL_modell_angi_filnavn(0) > 0)
+    if ( GDPL_modell_angi_filnavn ( 0 ) > 0 )
         return 1;
 
     /* Initier datamodell */
-
-    if (GDPL_modell_les_data() > 0)
+    if ( GDPL_modell_les_data () > 0 )
         return 1;
 
     /* Om den defaulte datafila inneholder data, skal denne nullstilles */
-
     int antall = 0;
-    if (GDPL_konkurranse_antall_i_liste(&antall) > 0)
+    if ( GDPL_konkurranse_antall_i_liste(&antall) > 0 )
         return 1;
 
-    if (antall > 0) {
-        if (GDPL_modell_nullstill()>0) {
+    if ( antall > 0 ) {
+        if ( GDPL_modell_nullstill() > 0 ) {
             return 1;
         }
     }
 
     /* Her skal vi ha 'blank' modell. */
-
     GDPL_modell_dump();
 
     /* Legg til en ny konkurranse. */
-
     GDPL_konkurranse_data_node *k = 0;
-    if (GDPL_konkurranse_opprett_node(&k)>0)
+    if ( GDPL_konkurranse_opprett_node ( &k ) > 0 )
         return FEILKODE_FEIL;
 
     GDPL_person_data_node* person = 0;
-    if (GDPL_person_opprett_node(&person)>0)
+    if ( GDPL_person_opprett_node ( &person ) > 0 )
         return FEILKODE_FEIL;
 
     GDPL_par_data_node* par = 0;
-    if (GDPL_par_opprett_node(&par)>0)
+    if ( GDPL_par_opprett_node ( &par ) > 0 )
         return FEILKODE_FEIL;
 
     k->id = 1;
@@ -231,118 +101,101 @@ int filversjon(gubb_input_args *input)
     k->person_liste_root_ptr = person;
     k->par_liste_root_ptr = par;
 
-    if (GDPL_konkurranse_legg_til(k) > 0)
+    if ( GDPL_konkurranse_legg_til ( k ) > 0 )
         return FEILKODE_FEIL;
 
     /* Velg denne konkurransen */
-
-    if (GDPL_konkurranse_sett_valgt_konkurranse(1)>0)
+    if ( GDPL_konkurranse_sett_valgt_konkurranse ( 1 ) > 0 )
         return FEILKODE_FEIL;
 
     /* Last inn data fra cvs-fil. */
-
-    errno = 0;
-    FILE *fp = fopen( input->input_argument, "r" );
-    if (fp == 0) {
-        fprintf (stderr, "%s %s\n",
-                 input->input_argument, strerror (errno));
-        exit (EXIT_FAILURE);
-    }
-
     int index = 0;
     int linjeteller = -1;
     char *pch;
     char *items[8];
     char line[512];
-    while ( fgets( line, sizeof(line), fp ) ) {
+    while ( fgets( line, sizeof ( line ), input->input_stream ) ) {
         index = 0;
-        pch = strtok(line, ";");
-        while(pch != NULL) {
-            items[index++]=pch;
-            pch = strtok(NULL, ";");
+        pch = strtok ( line, ";" );
+        while( pch != NULL ) {
+            items[index++] = pch;
+            pch = strtok ( NULL, ";" );
         }
 
         linjeteller++;
-        if (linjeteller == 0) {
+        if ( linjeteller == 0 ) {
             continue;
         }
 
-        int start_nr = atoi(items[0]);
+        int start_nr = atoi ( items[0] );
 
-        char hfnavn[128];
-        strcpy(hfnavn,items[1]);
-
-        //char *hfnavn = items[1];
+        char *hfnavn = items[1];
         char *henavn = items[2];
         char *dfnavn = items[3];
         char *denavn = items[4];
-        float oppgavepoeng = atof(items[7]);
+        float oppgavepoeng = atof ( items[7] );
 
         char *st;
-        st = strtok(items[5],":");
-        int start_tid_t = atoi(st);
-        st = strtok(NULL,":");
-        int start_tid_m = atoi(st);
-        st = strtok(NULL,":");
-        int start_tid_s = atoi(st);
+        st = strtok( items[5], ":" );
+        int start_tid_t = atoi ( st );
+        st = strtok( NULL, ":" );
+        int start_tid_m = atoi ( st );
+        st = strtok( NULL, ":" );
+        int start_tid_s = atoi ( st );
 
-        st = strtok(items[6],":");
-        int maal_tid_t = atoi(st);
-        st = strtok(NULL,":");
-        int maal_tid_m = atoi(st);
-        st = strtok(NULL,":");
-        int maal_tid_s = atoi(st);
+        st = strtok( items[6], ":" );
+        int maal_tid_t = atoi ( st );
+        st = strtok ( NULL, ":" );
+        int maal_tid_m = atoi ( st );
+        st = strtok ( NULL, ":" );
+        int maal_tid_s = atoi ( st );
 
-
-        /* TODO: skriv dette ut vha GDPL_log og sscan stuff ... */
-
-        printf("\n-Input linje %d-------------------------\n",linjeteller);
-        printf("startnr=%d\n",start_nr);
-        printf("hfnavn=%s\n",hfnavn);
-        printf("henavn=%s\n",henavn);
-        printf("dfnavn=%s\n",dfnavn);
-        printf("denavn=%s\n",denavn);
-        printf("starttid=%02d:%02d:%02d\n",start_tid_t,start_tid_m,start_tid_s);
-        printf("måltid=%02d:%02d:%02d\n",maal_tid_t,maal_tid_m,maal_tid_s);
-        printf("oppgavepoeng=%2.2f\n",oppgavepoeng);
-
+        GDPL_log ( GDPL_INFO, signatur , "--Inputfil linje %d--", linjeteller );
+        GDPL_log ( GDPL_INFO, signatur , "startnr=%d", start_nr );
+        GDPL_log ( GDPL_INFO, signatur , "hfnavn=%s", hfnavn );
+        GDPL_log ( GDPL_INFO, signatur , "henavn=%s", henavn );
+        GDPL_log ( GDPL_INFO, signatur , "dfnavn=%s", dfnavn );
+        GDPL_log ( GDPL_INFO, signatur , "denavn=%s", denavn );
+        GDPL_log ( GDPL_INFO, signatur , "starttid=%d:%d:%d", start_tid_t, start_tid_m, start_tid_s );
+        GDPL_log ( GDPL_INFO, signatur , "måltid=%d:%d:%d", maal_tid_t, maal_tid_m, maal_tid_s );
+        GDPL_log ( GDPL_INFO, signatur , "oppgavepoeng=%f", oppgavepoeng );
 
         /* Legg til herre-person */
 
         GDPL_person_data_node *person = 0;
-        if(GDPL_person_opprett_node(&person)>0)
+        if ( GDPL_person_opprett_node ( &person ) > 0 )
             return 1;
 
         int ny_id_h = 0;
-        if(GDPL_person_finn_neste_ledige_id(&ny_id_h)>0)
+        if ( GDPL_person_finn_neste_ledige_id ( &ny_id_h ) > 0 )
             return 1;
 
         person->id = ny_id_h;
-        strcpy(person->fnavn,hfnavn);
-        strcpy(person->enavn,henavn);
-        if (GDPL_person_legg_til(person) > 0)
+        strcpy ( person->fnavn, hfnavn );
+        strcpy ( person->enavn, henavn );
+        if ( GDPL_person_legg_til ( person ) > 0 )
             return 1;
 
         /* Legg til dame-person */
 
         person = 0;
-        GDPL_person_opprett_node(&person);
+        GDPL_person_opprett_node ( &person );
         int ny_id_d = 0;
-        if(GDPL_person_finn_neste_ledige_id(&ny_id_d)>0)
+        if ( GDPL_person_finn_neste_ledige_id ( &ny_id_d ) > 0 )
             return 1;
 
         person->id = ny_id_d;
-        strcpy(person->fnavn,dfnavn);
-        strcpy(person->enavn,denavn);
-        if (GDPL_person_legg_til(person) > 0)
+        strcpy ( person->fnavn, dfnavn );
+        strcpy ( person->enavn, denavn );
+        if ( GDPL_person_legg_til ( person ) > 0 )
             return 1;
 
         /* Opprett par */
 
         GDPL_par_data_node *par = 0;
-        GDPL_par_opprett_node(&par);
+        GDPL_par_opprett_node ( &par );
         int ny_id = 0;
-        if(GDPL_par_finn_neste_ledige_id(&ny_id)>0)
+        if ( GDPL_par_finn_neste_ledige_id ( &ny_id ) > 0 )
             return 1;
 
         par->id = ny_id;
@@ -357,43 +210,35 @@ int filversjon(gubb_input_args *input)
         par->maal_tid.sekund = maal_tid_s;
         par->oppgave_poeng = oppgavepoeng;
 
-        if (GDPL_par_legg_til(par) > 0)
+        if ( GDPL_par_legg_til ( par ) > 0 )
             return 1;
-
     }
 
-    fclose(fp);
+    /* Utfør beregningene og opprett output-fil */
 
-    if (GDPL_par_beregn()>0)
+    if ( GDPL_par_beregn ( ) > 0 )
         return 1;
 
-    GDPL_modell_dump();
+    GDPL_modell_dump ( );
 
     int antall_par = 0;
-    if (GDPL_par_antall_i_liste(&antall_par)>0)
+    if (GDPL_par_antall_i_liste ( &antall_par ) > 0 )
         return 1;
 
-    errno = 0;
-    fp = fopen( input->output_argument, "w" );
-    if (fp == 0) {
-        fprintf (stderr, "%s %s\n",
-                 input->output_argument, strerror (errno));
-        exit (EXIT_FAILURE);
-    }
 
-    fprintf(fp,"Plassering;Startnummer;Herre-navn;Dame-navn;Start-tid;Slutt-tid;Oppgave-poeng;Beregnet middel-tid;Beregnet anvendt-tid;Beregnet avveket-tid;Beregnet tids-poeng;Beregnet total-poeng;\n");
+    /* Skriv ut data til output-fil */
+
+    fprintf( input->output_stream, "Plassering;Startnummer;Herre-navn;Dame-navn;Start-tid;Slutt-tid;Oppgave-poeng;Beregnet middel-tid;Beregnet anvendt-tid;Beregnet avveket-tid;Beregnet tids-poeng;Beregnet total-poeng;\n" );
 
     struct GDPL_tid middel_tid;
-    if (GDPL_par_beregn_middel_tid(&middel_tid)>0)
+    if ( GDPL_par_beregn_middel_tid ( &middel_tid ) > 0 )
         return FEILKODE_FEIL;
 
-
-
-
     int i;
-    for (i=1; i<=antall_par; i++) {
+    for ( i=1; i <= antall_par; i++ ) {
+
         GDPL_par_data_node *data = 0;
-        if( GDPL_par_hent_i_rekke(i, &data)>0) {
+        if( GDPL_par_hent_i_rekke ( i, &data ) > 0 ) {
             return 1;
         }
 
@@ -409,7 +254,9 @@ int filversjon(gubb_input_args *input)
         if (GDPL_par_beregn_avvik(&avveket_tid, middel_tid, data->anvendt_tid)>0)
             return 1;
 
-        fprintf ( fp, "%d;%d;%s %s;%s %s;%02d:%02d:%02d;%02d:%02d:%02d;%02.02f;%02d:%02d:%02d;%02d:%02d:%02d;%02d:%02d:%02d;%02.02f;%02.02f;\n",
+        /* Skriv ut data til output-fil */
+
+        fprintf ( input->output_stream, "%d;%d;%s %s;%s %s;%02d:%02d:%02d;%02d:%02d:%02d;%02.02f;%02d:%02d:%02d;%02d:%02d:%02d;%02d:%02d:%02d;%02.02f;%02.02f;\n",
                   i,
                   data->start_nr,
                   hperson->fnavn, hperson->enavn,
@@ -423,9 +270,9 @@ int filversjon(gubb_input_args *input)
                   gubb_util_rund_av ( 60.0 - data->tids_poeng ),
                   gubb_util_rund_av ( ( 60.0 - data->tids_poeng) + data->oppgave_poeng ) );
 
-        /* DataEase look-a-like rapporter av typen resultat */
+        /* DataEase look-a-like rapporter av typen resultat-liste */
 
-        if ( rapport_file_resultat_flagg == 1 ) {
+        if ( input->rapport_flagg == 1 && ( input->rapport_type == GRT_RES1 ||  input->rapport_type == GRT_RES2 ) ) {
 
             gubb_rapport_print_record_data d;
 
@@ -435,11 +282,49 @@ int filversjon(gubb_input_args *input)
             d.herre = hperson;
             d.middel_tid = &middel_tid;
 
-            gubb_rapport_print_record ( &d, rapport_type, rapport_file );
+            gubb_rapport_print_record ( &d, input->rapport_type, input->rapportfil_stream );
+        }
+
+    }
+
+    /* DataEase look-a-like rapporter av typen start-liste */
+
+    if ( input->rapport_flagg == 1 && input->rapport_type == GRT_START ) {
+
+        if ( GDPL_par_sorter ( START_NR_STIGENDE ) > 0 )
+            return 1;
+
+        fprintf ( input->rapportfil_stream, "STARTLISTE FOR GUBBERENN\n" );
+        fprintf ( input->rapportfil_stream, "=======================================================\n" );
+
+        for ( i=1; i <= antall_par; i++ ) {
+
+            GDPL_par_data_node *data = 0;
+            if( GDPL_par_hent_i_rekke ( i, &data ) > 0 ) {
+                return 1;
+            }
+
+            GDPL_person_data_node *hperson = 0;
+            if (GDPL_person_hent(data->herre_person_id, &hperson)>0)
+                return 1;
+
+            GDPL_person_data_node *dperson = 0;
+            if (GDPL_person_hent(data->dame_person_id, &dperson)>0)
+                return 1;
+
+            gubb_rapport_print_record_data d;
+
+            d.par = data;
+            d.dame = dperson;
+            d.herre = hperson;
+
+            gubb_rapport_print_record ( &d, input->rapport_type, input->rapportfil_stream );
+
         }
 
     }
 
     return 0;
+
 }
 

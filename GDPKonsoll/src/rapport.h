@@ -22,9 +22,13 @@
 /*! \file rapport.h
     \brief GDPKonsoll hjelpefil relatert til rapportering.
 
-    GDPKonsoll kan opprette noen rapporter som er identiske med de rapportene
+    GDPKonsoll kan opprette noen rapporter som er nesten identiske med de rapportene
     som DataEase-programmet til Jan-Eirik lager. Denne fila definerer denne
     funksjonaliteten.
+
+    Det er snakk om ei startliste, og to resultatlister; ei komplett, og
+    ei som kun inneholder det viktigste av informasjon.
+
 */
 
 #ifndef RAPPORT_H
@@ -48,12 +52,16 @@ enum gubb_rapport_type_enum { GRT_START, /* 0 */
 /*! \var typedef enum gubb_rapport_type_enum gubb_rapport_type
     \brief Indeks inn mot en funksjonstabell
 
-    Siden enum egentlig er heltallsverdier; 1, 2, 3, ... kan de
+    Siden enum egentlig er heltallsverdier; 0, 1, 2, 3, ... kan de
     benyttes som indekser inn mot en tabell. Som i dette
     tilfellet.
 */
 typedef enum gubb_rapport_type_enum gubb_rapport_type;
 
+/*! \struct gubb_rapport_print_record_data_struct
+    \brief Dataholder for inputargumenter til funksjonen gubb_rapport_print_record
+
+*/
 struct gubb_rapport_print_record_data_struct {
     int *plassering;
     GDPL_par_data_node *par;

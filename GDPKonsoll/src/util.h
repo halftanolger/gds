@@ -32,6 +32,9 @@
 extern "C" {
 #endif
 
+#include <stdio.h> /* FILE */
+#include "rapport.h"
+
 /*! \struct gubb_input_args_struct
     \brief Dataholder for inputargumenter.
     
@@ -40,8 +43,6 @@ extern "C" {
 */
 
 struct gubb_input_args_struct {
-
-    todo: legg alt av datatyper her: fil-pekere, log-type, rapport-type etc etc. altså gjør ferdig alt av paring èn plass
 
     /* -h [ --hjelp ] */
     int hjelp_flagg;
@@ -54,27 +55,32 @@ struct gubb_input_args_struct {
     
     /* -l [ --logg ] argument */
     int logg_flagg;
-    char logg_argument[64];
+    char logg_argument[64];    
     
     /* -m [ --loggfil ] argument */
     int loggfil_flagg;
     char loggfil_argument[512];
+    FILE *loggfil_stream;
 
     /* -i [ --inputfil] argument */
     int input_flagg;
     char input_argument[512];
+    FILE *input_stream;
     
     /* -o [ --outputfil] argument */
     int output_flagg;
     char output_argument[512];
+    FILE *output_stream;
 
     /* -r [ --rapport] argument */
     int rapport_flagg;
     char rapport_argument[64];
+    gubb_rapport_type rapport_type;
 
     /* -f [ --rapportfil] argument */
     int rapportfil_flagg;
     char rapportfil_argument[512];
+    FILE *rapportfil_stream;
 
     /* -k [ --klient] argument */
     int klient_flagg;
@@ -88,13 +94,16 @@ struct gubb_input_args_struct {
 
 typedef struct gubb_input_args_struct gubb_input_args;
 
-/*! \fn int gubb_util_parse_args(int argc, char *argv[], gubb_input_args *data)
-    \brief Parser inputargumenter gitt til konsollprogrammet, og plasserer dem i en intern datastruktur.
+/*! \fn void gubb_util_parse_args(int argc, char *argv[], gubb_input_args *data)
+    \brief Parser inputargumenter gitt til konsollprogrammet, og plasser dem i en intern datastruktur.
     \param argc Antall argumenter
     \param argv Selve argumentene som kommer inn.
     \param data Struktur hvor de parsede verdiene blir lagret.
+
+    Funksjonen gjør også en rekke konsistens sjekker, samt åpner eventuelle filpeker etc.
+
 */
-int gubb_util_parse_args(int argc, char *argv[], gubb_input_args *data);
+void gubb_util_parse_args(int argc, char *argv[], gubb_input_args *data);
 
 
 /*! \fn float rund_av(float v)
@@ -105,6 +114,13 @@ int gubb_util_parse_args(int argc, char *argv[], gubb_input_args *data);
 
 */
 float gubb_util_rund_av(float v);
+
+/*! \fn void gubb_util_lukk_eventuelle_aapne_filer ( gubb_input_args *data )
+    \brief Lukker eventuelle åpne filpeker.
+    \param data Struktur hvor de aktuelle filpekerne befinner seg.
+
+*/
+void gubb_util_lukk_eventuelle_aapne_filer ( gubb_input_args *data );
 
 #ifdef __cplusplus
 }

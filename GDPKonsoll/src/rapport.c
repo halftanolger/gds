@@ -25,7 +25,18 @@
 
 int gubb_rapport_print_start ( gubb_rapport_print_record_data *d, FILE *stream ) {
 
-    fprintf ( stream, "STARTNR: %d\n", d->par->start_nr );
+    GDPL_par_data_node *par;
+    GDPL_person_data_node *hperson;
+    GDPL_person_data_node *dperson;
+
+    par = d->par;
+    hperson = d->herre;
+    dperson = d->dame;
+
+    fprintf ( stream, "STARTNR          FORNAVN            ETTERNAVN  STARTTID\n" );
+    fprintf ( stream, " %03d     %15s %20s  %02d:%02d:%02d\n", par->start_nr, dperson->fnavn, dperson->enavn,par->start_tid.timer,par->start_tid.minutt,par->start_tid.sekund );
+    fprintf ( stream, "         %15s %20s\n", hperson->fnavn, hperson->enavn  );
+    fprintf ( stream, "-------------------------------------------------------\n");
 
     return 0;
 }
@@ -59,6 +70,25 @@ int gubb_rapport_print_res1 ( gubb_rapport_print_record_data *p, FILE *stream ) 
 }
 
 int gubb_rapport_print_res2 ( gubb_rapport_print_record_data *p, FILE *stream ) {
+
+    int *plassering;
+    GDPL_par_data_node *par;
+    GDPL_person_data_node *hperson;
+    GDPL_person_data_node *dperson;
+    struct GDPL_tid *middel_tid;
+
+    plassering = p->plassering;
+    par = p->par;
+    hperson = p->herre;
+    dperson = p->dame;
+    middel_tid = p->middel_tid;
+
+    fprintf ( stream, "-------------------------------------------------------------------\n");
+    fprintf ( stream, "  PLASSERING   : %.2d    %s %s\n",*plassering,dperson->fnavn, dperson->enavn);
+    fprintf ( stream, "                       %s %s\n",hperson->fnavn, hperson->enavn);
+    fprintf ( stream, "  POENG        : %02.02f\n",gubb_util_rund_av((60.0 - par->tids_poeng) + par->oppgave_poeng));
+    fprintf ( stream, "  STARTNR      : %.3d\n",par->start_nr);
+
     return 0;
 }
 

@@ -41,7 +41,7 @@ void GDPL_log(GDPL_log_type type, const char* signatur, const char* melding, ...
 {
     time_t rawtime;
     struct tm * timeinfo;
-    va_list ap;
+    va_list argumenter;
     char *p, *sval;
     char type_str[16] = "";
     int ival;
@@ -67,14 +67,17 @@ void GDPL_log(GDPL_log_type type, const char* signatur, const char* melding, ...
         strcpy(type_str,"");
     }
 
-    time (&rawtime);
-    timeinfo = localtime (&rawtime);
+    time ( &rawtime );
+    timeinfo = localtime ( &rawtime );
     char time_str[32];
-    sprintf(time_str,"%d:%d:%d",timeinfo->tm_hour,timeinfo->tm_min,timeinfo->tm_sec);
+    sprintf ( time_str, "%d:%d:%d", timeinfo->tm_hour, timeinfo->tm_min, timeinfo->tm_sec );
 
-    fprintf(gdpl_log_stream,"%s %s %s: ",type_str, time_str, signatur);
+    fprintf ( gdpl_log_stream, "%s %s %s: ", type_str, time_str, signatur );
 
-    va_start(ap, melding);
+    /* Initialiser 'argumenter' til å inneholde alt etter 'melding' */
+    va_start ( argumenter, melding );
+
+
     for (p = (char*)melding; *p; p++) {
         if (*p != '%') {
             fputc(*p,gdpl_log_stream);
@@ -82,22 +85,23 @@ void GDPL_log(GDPL_log_type type, const char* signatur, const char* melding, ...
         }
         switch (*++p) {
         case 'd':
-            ival = va_arg(ap, int);
+            ival = va_arg(argumenter, int);
             fprintf(gdpl_log_stream,"%d", ival);
             break;
         case 'f':
-            dval = va_arg(ap, double);
+            dval = va_arg(argumenter, double);
             fprintf(gdpl_log_stream,"%f", dval);
             break;
         case 's':
-            for (sval = va_arg(ap, char *); *sval; sval++)
-                putchar(*sval);
+            for (sval = va_arg(argumenter, char *); *sval; sval++)
+                fputc(*sval,gdpl_log_stream);
             break;
         default:
             fputc(*p,gdpl_log_stream);
             break;
         }
     }
+
 
     fprintf(gdpl_log_stream, "\n");
     fflush(gdpl_log_stream);
