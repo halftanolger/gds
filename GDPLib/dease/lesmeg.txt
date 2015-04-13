@@ -3,37 +3,14 @@
  Les meg
  
 +-----------------------------------------------------------------------------+
-
-En gang for lenge siden ble det laget et annet 'Gubberenn Dataprogram'. Vi 
-snakker om 1993, eller der omkring. Det var Jan-Erik Nordahl som programmerte 
-dette, i form av en DataEase DBase-applikasjon. 
-
-DataEase er et såkalt 4. generasjons database-vertøy. Disse verktøyene var 
-ganske populære på slutten av 1980- og starten av 1990-tallet. DataEase er
-dog 'in business' forsatt (hvor fortsatt = våren 2015). Dette kommer 
-antageligvis av at en god del amerikanske varehus og lagersystmer fortsatt 
-benytter applikasjoner basert på denne teknologien. Samt det empiriske faktum
-at denne teknologien faktisk ikke er/var så dum?
  
-Dette 'ur-Gubberenn-Dataprogrammet' kan følgelig altså forsatt benyttes, 
-derfor legger jeg, i samråd med Jan-Erik, binærkodefilene ved her som ei 
-tar-fil. Koden kan f.eks kjøres vha en virtualisert WindowsXP maskin i f.eks 
+Dette er 'ur-Gubberenn-Dataprogrammet', laget av Jan-Erik.
+
+Koden kan f.eks kjøres vha en virtualisert WindowsXP maskin i f.eks 
 Oracle VM VirtualBox. Bare husk på følgende:
 
  -  Dette er 16-bits DOS stuff, egentlig. Men funker på XP, Servicepack 3.
  -  Legg merke til vedlagte bilde.png mht 'oppsettet' rundt parametrene
     'kommandolinje' og 'gjeldende'.
-
-Som en 'proof of concept' -øvelse, har jeg installert en Oracle VM VirtualBox
-på min Linux Ubuntu -maskin. Deretter installerte jeg en Windows XP på denne.
-
-Pluss GuestAdditions, slik at jeg fikk kopiert DBASE-katelogen (som ligger i 
-den vedlagte tar-fila) over til XP-installasjonen min.
-
-
-Se wiki til gds-prosjektet som ligger her:
-https://gihub.com/halftanolger/gds/
-
--theEnd-
 
 
