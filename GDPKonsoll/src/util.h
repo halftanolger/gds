@@ -47,6 +47,9 @@ struct gubb_input_args_struct {
     /* -h [ --hjelp ] */
     int hjelp_flagg;
 
+    /* -t [ --test ] */
+    int test_flagg;
+
     /* -b [ --bruksanvisning ] */
     int bruksanvisning_flagg;
     

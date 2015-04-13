@@ -39,7 +39,7 @@ const char* gubb_util_bruk_info = "BRUK: gubb [-i ARG] [-o ARG] [-l ARG] [-r ARG
 const char* gubb_util_hjelp_info = "\n"
         "Dette er et hjelpemiddel ifm arrangering av det tradisjonelle Gubberennet. Gubberennet er et skirenn som arrangeres hver skjærtorsdag i Bjørkebakken.\n"
         "\n"
-        "BRUK: gubb [-i ARG] [-o ARG] [-l ARG] [-m ARG] [-r ARG] [-f ARG] [-k ARG] [-s ARG] [-hvb] \n"
+        "BRUK: gubb [-i ARG] [-o ARG] [-l ARG] [-m ARG] [-r ARG] [-f ARG] [-k ARG] [-s ARG] [-hvbt] \n"
         "\n"
         "\n"
         "-- Beskrivelse av opsjoner --\n"
@@ -64,6 +64,7 @@ const char* gubb_util_hjelp_info = "\n"
         " -f [ --rapportfil ] filnavn Output rapport-datafil\n"
         " -k [ --klient ] portnr      Start gubb-klient, default port er 1234\n"
         " -s [ --klient ] portnr      Start gubb-server, default port er 1234\n"
+        " -t [ --test ]               Kjør en rekke enhetstester.\n"
         "\n"
         "\n"
         "Eksempler på bruk:\n"
@@ -221,6 +222,9 @@ void gubb_util_nullstill_input_args ( gubb_input_args *data ) {
     /* -h [ --hjelp ] */
     data->hjelp_flagg = 0;
 
+    /* -t [ --test ] */
+    data->test_flagg = 0;
+
     /* -b [ --bruksanvisning ] */
     data->bruksanvisning_flagg = 0;
 
@@ -305,6 +309,13 @@ void gubb_util_parse_args(int argc, char *argv[], gubb_input_args *data)
         if ( strcmp ( argv[i], "-h" ) == 0 ||
              strcmp ( argv[i], "--hjelp" ) == 0 ) {
             data->hjelp_flagg = 1;
+            bruk_flagg = 0;
+            continue;
+        }
+
+        if ( strcmp ( argv[i], "-t" ) == 0 ||
+             strcmp ( argv[i], "--test" ) == 0 ) {
+            data->test_flagg = 1;
             bruk_flagg = 0;
             continue;
         }
