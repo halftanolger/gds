@@ -1,9 +1,10 @@
 
 GDSLib - 'Gubberenn data system' -kjernefunksjonalitet i form av et  C -bibliotek.
 
-Ulike brukergrensesnittklienter:
+Ulike brukergrensesnitt-klienter:
 
-GDSKonsoll  (todo)
+GDSKonsoll
+
 GDSQtDesktop (todo)
 
 halftan@saetherskar.no
