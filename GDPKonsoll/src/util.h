@@ -103,7 +103,8 @@ typedef struct gubb_input_args_struct gubb_input_args;
     \param argv Selve argumentene som kommer inn.
     \param data Struktur hvor de parsede verdiene blir lagret.
 
-    Funksjonen gjør også en rekke konsistens sjekker, samt åpner eventuelle filpeker etc.
+    Funksjonen gjør også en rekke konsistens-sjekker, samt åpner eventuelle filpeker etc. Om noe feiler, eller ikke
+    er korrekt, termineres programmet med ei feilmelding til stderr etterfulgt av exit ( 1 ).
 
 */
 void gubb_util_parse_args(int argc, char *argv[], gubb_input_args *data);

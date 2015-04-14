@@ -35,40 +35,49 @@ int main ( int argc, char *argv[] )
     gubb_input_args i;
 
     /* Bruk default lokale, bør fikse øæå-problematikk. */
+
     setlocale(LC_ALL,"");
     
     /* Pase inputargumenter til gubb-programmet. */
+
     gubb_util_parse_args ( argc, argv, &i );
 
     /* Do the job */
+
     returverdi = 0;
     if ( i.input_flagg == 1 && i.output_flagg == 1 ) {
         returverdi = gubb ( &i );
     }
 
     /* Rydd opp */
+
     gubb_util_lukk_eventuelle_aapne_filer ( &i );
 
     /* TheEnd */
+
     return returverdi;
 }
 
 
 int gubb(gubb_input_args *input)
 {   
-    /* Benyttes av log-funksjon */
+    /* Funksjons-signaturen benyttes av log-funksjonen. */
+
     char* signatur;
     signatur = "gubb";
 
-    /* Bruk default datafil. */
+    /* Bruk default datafil. I.e. GDPLib oppretter defalt datafil. */
+
     if ( GDPL_modell_angi_filnavn ( 0 ) > 0 )
         return 1;
 
-    /* Initier datamodell */
+    /* Initier datamodellen. */
+
     if ( GDPL_modell_les_data () > 0 )
         return 1;
 
-    /* Om den defaulte datafila inneholder data, skal denne nullstilles */
+    /* Om den defaulte datafila inneholder data, skal denne nullstilles. */
+
     int antall = 0;
     if ( GDPL_konkurranse_antall_i_liste(&antall) > 0 )
         return 1;
@@ -80,9 +89,12 @@ int gubb(gubb_input_args *input)
     }
 
     /* Her skal vi ha 'blank' modell. */
+
     GDPL_modell_dump();
 
-    /* Legg til en ny konkurranse. */
+    /* Legg til en ny konkurranse, i.e. opprett konkurranse-root-node
+     * med tilhørende person- og par-root-noder. */
+
     GDPL_konkurranse_data_node *k = 0;
     if ( GDPL_konkurranse_opprett_node ( &k ) > 0 )
         return FEILKODE_FEIL;
@@ -103,19 +115,24 @@ int gubb(gubb_input_args *input)
     if ( GDPL_konkurranse_legg_til ( k ) > 0 )
         return FEILKODE_FEIL;
 
-    /* Velg denne konkurransen */
+    /* Velg denne konkurransen. */
+
     if ( GDPL_konkurranse_sett_valgt_konkurranse ( 1 ) > 0 )
         return FEILKODE_FEIL;
 
     /* Last inn data fra cvs-fil. */
+
     int index = 0;
     int linjeteller = -1;
     char *pch;
     char *items[8];
     char line[512];
+
     while ( fgets( line, sizeof ( line ), input->input_stream ) ) {
+
         index = 0;
         pch = strtok ( line, ";" );
+
         while( pch != NULL ) {
             items[index++] = pch;
             pch = strtok ( NULL, ";" );
@@ -123,11 +140,13 @@ int gubb(gubb_input_args *input)
 
         linjeteller++;
         if ( linjeteller == 0 ) {
+
+            /* Hopper over 'header'-linja. */
+
             continue;
         }
 
         int start_nr = atoi ( items[0] );
-
         char *hfnavn = items[1];
         char *henavn = items[2];
         char *dfnavn = items[3];
@@ -213,7 +232,9 @@ int gubb(gubb_input_args *input)
             return 1;
     }
 
-    /* Utfør beregningene og opprett output-fil */
+    /* All input er nå lest inn. */
+
+    /* Utfør beregningene. Denne funksjonen vil også sortere par-lista basert på totalpoeng. */
 
     if ( GDPL_par_beregn ( ) > 0 )
         return 1;
@@ -224,8 +245,7 @@ int gubb(gubb_input_args *input)
     if (GDPL_par_antall_i_liste ( &antall_par ) > 0 )
         return 1;
 
-
-    /* Skriv ut data til output-fil */
+    /* Skriv ut data til output-fil, først 'header' -linja i regnearket. */
 
     fprintf( input->output_stream, "Plassering;Startnummer;Herre-navn;Dame-navn;Start-tid;Slutt-tid;Oppgave-poeng;Beregnet middel-tid;Beregnet anvendt-tid;Beregnet avveket-tid;Beregnet tids-poeng;Beregnet total-poeng;\n" );
 

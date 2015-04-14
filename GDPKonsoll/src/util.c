@@ -32,7 +32,7 @@
 
 /* 'Bruk' -tekst, skal vises når korrekt input args mangler. */
 
-const char* gubb_util_bruk_info = "BRUK: gubb [-i ARG] [-o ARG] [-l ARG] [-r ARG] [-f ARG] [-k ARG] [-s ARG] [-hvb] ";
+const char* gubb_util_bruk_info = "BRUK: gubb [-i ARG] [-o ARG] [-l ARG] [-m ARG] [-r ARG] [-f ARG] [-k ARG] [-s ARG] [-hvbt] ";
 
 /* Hjelpetekst, -h [ --hjelp ] */
 
@@ -82,6 +82,7 @@ const char* gubb_util_hjelp_info = "\n"
         "\n"
         "\n"
         "For mer info, se ulike hjelpefiler som følger med programmet.\n"
+        "\n"
         "halftan@online.no\n"
         "\n";
 
@@ -89,7 +90,7 @@ const char* gubb_util_hjelp_info = "\n"
 
 const char* gubb_util_bruksanvisning_info = "\n"
         "\n"
-        "Dette programmet utfører aktuelle utregninger ifm Gubberennet, basert på ei inputfil. "
+        "Dette programmet utfører aktuelle utregninger ifm Gubberennet, basert på ei csv-inputfil. "
         "Inputfila må være ei semikolon-delt-datafil. Ei slik fil kan du opprette i de fleste "
         "regneark-programmene, for eksempel i Microsoft Office Excel.\n"
         "\n"
@@ -109,7 +110,7 @@ const char* gubb_util_bruksanvisning_info = "\n"
         "Ut fra denne inputfila oppretter programmet ei output-fil hvor disse verdiene er beregnet:\n"
         "\n"
         "   - beregnet anvendt tid pr par\n"
-        "   - beregnet gjennomsnittstiden, aka idealtiden\n"
+        "   - beregnet gjennomsnittstid, aka idealtiden\n"
         "   - beregnet avvik mellom anvendt tid og idealtid, pr. par\n"
         "   - beregnet tidspoeng basert på beregnet avvik\n"
         "   - beregnet sum poeng; tidspoeng + oppgavepoeng\n"
@@ -128,7 +129,8 @@ const char* gubb_util_bruksanvisning_info = "\n"
         "\n"
         "  gubb.exe -i mininputfil.csv -o output_mininputfil.cvs \n"
         "\n"
-        "Outputfila kan du for eksempel åpne i Microsoft Office Excel, for videre behandling.\n"
+        "Outputfila kan du for eksempel åpne i Microsoft Office Excel, for videre behandling. (Ps. Du angir navnet til outputfila, men \n"
+        "programmet tar selv å oppretter denne fila.) \n"
         "\n"
         "-TheEnd-\n"
         "\n"
@@ -574,6 +576,10 @@ void gubb_util_parse_args(int argc, char *argv[], gubb_input_args *data)
             fprintf ( stderr, "%s %s\n", data->output_argument, strerror ( errno ) );
             exit ( 1 );
         }
+    }
+
+    if ( data->test_flagg == 1 ) {
+        fprintf ( stdout, "GDPTest utført. Antall feil %d\n", gdp_test_run() );
     }
 
 }

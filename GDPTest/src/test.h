@@ -1,4 +1,4 @@
-﻿/*
+/*
 ** This file is part of the GDPLib project.
 **
 ** Copyright (C) Halftan Sætherskar (halftan@saetherskar.no)
@@ -19,31 +19,34 @@
 ******************************************************************************
 */
 
-#ifndef MAIN_H
-#define MAIN_H
+/*! \file test.h
+    \brief GDPTest Hovedfil for enhetstestene.
+
+    Herfra kjøres alle enhetstestene til GDPLib. En grei måte å lære seg hvordan et
+    bibliotek fungerer, er å se på enhetstestene og hvordan de er bygd opp.
+
+*/
+
+#ifndef TEST_H
+#define TEST_H
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#include "util.h"
+/*! \fn int gdp_test_run()
+    \brief Kjører alle enhetstestene som er definert. Returnerer antallet som feilet.
 
-/*! \fn int gubb(gubb_input_args *input)
-    \brief Oppretter et nytt regneark med de beregnede verdiene, basert på input-regnearket.
-    \param input Struktur hvor de ulike inputparametrene til programmet er lagret.
-
-    Dette er hovedfunksjonen til konsoll-programmet. Den lager i utgangspunktet
-    kun ei ny csv-fil, basert på input-csv-fila, men kan også lage ulike tekst-
-    filer som innholder rapporter av den typen som DataEase-programmet til
-    Jan-Eirik lager. Alt dette styres vha input-parametrene.
-
+    Funksjonen bruker GDPLib log-funksjon, slik at denne bør være initiert til ønsket
+    loggnivå og loggmedium.
 */
-int gubb(gubb_input_args *input);
+int gdp_test_run();
+
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif // MAIN_H
+#endif // TEST_H
 
 

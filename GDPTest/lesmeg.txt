@@ -1,0 +1,1 @@
+Her ligger en del enhetstester rettet mot GDPLib

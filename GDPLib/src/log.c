@@ -30,9 +30,9 @@
 
 /* Variabler */
 
-GDPL_log_type gdpl_log_nivaa = -1;
+GDPL_log_type gdpl_log_nivaa = GDPL_ERROR;
 
-FILE *gdpl_log_stream ;
+FILE *gdpl_log_stream = NULL;
 
 
 /* Funksjoner */
@@ -49,6 +49,9 @@ void GDPL_log(GDPL_log_type type, const char* signatur, const char* melding, ...
 
     if (gdpl_log_nivaa > type)
         return;
+
+    if ( gdpl_log_stream == NULL )
+        gdpl_log_stream = stderr;
 
     switch (type) {
     case GDPL_DEBUG:
