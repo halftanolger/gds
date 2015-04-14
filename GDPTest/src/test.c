@@ -20,6 +20,38 @@
 */
 
 #include <stdio.h>
+#include "log.h"
+
+int gdp_test_opprett_datafil_a() {
+
+    const char* signatur = "gdp_test_opprett_datafil_a()";
+
+    GDPL_log(GDPL_DEBUG, signatur, "Start funksjon.");
+
+    //TODO: beskriv test-case
+    // Om man oppgir en null-peker som filnavn, skal GDPLib
+    // opprette ei default datafil, kalt gdp.dat
+
+    GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
+
+    return 0;
+}
+
+int gdp_test_opprett_datafil_b() {
+
+    const char* signatur = "gdp_test_opprett_datafil_b()";
+
+    GDPL_log(GDPL_DEBUG, signatur, "Start funksjon.");
+
+    //TODO: beskriv test-case
+    // Om man oppgir et filnavn, skal GDPLib
+    // opprette ei datafil med det oppgitte navnet.
+
+    GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
+
+    return 0;
+}
+
 
 int gdp_test_run() {
 
@@ -28,8 +60,26 @@ int gdp_test_run() {
      * returnere 0 eller 1, for henholdsvis 'ok' eller 'ikke ok'.
      */
 
-    fprintf ( stderr, "Hello world from gdp_test_run()\n" );
+    int i;
+    int antall_feil;
+    int antall_tester;
 
-    return 0;
+    i = 0;
+    antall_feil = 0;
+    antall_tester = 0;
+
+    int (*gdp_test_function_ptr_array[]) ( ) = {
+            gdp_test_opprett_datafil_a,
+            gdp_test_opprett_datafil_b
+    };
+
+    antall_tester = 2;
+
+    for ( i = 0; i < antall_tester; i++ ) {
+        if ( gdp_test_function_ptr_array[i]() > 0 )
+            antall_feil++;
+    }
+
+    return antall_feil;
 
 }
