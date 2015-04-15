@@ -1,10 +1,14 @@
 
-GDSLib - 'Gubberenn data system' -kjernefunksjonalitet i form av et  C -bibliotek.
+GDPLib - 'Gubberenn dataprogram' -kjernefunksjonalitet i form av et  C -bibliotek.
 
 Ulike brukergrensesnitt-klienter:
 
-GDSKonsoll
+GDPKonsoll (konsollapplikasjon, programmert i C)
 
-GDSQtDesktop (todo)
+GDPQtDesktop (gui-applikasjon, programmert i C++ vha Qt)
 
-halftan@saetherskar.no
+GDPTest (enhetstester mot GDPLib, programmert i C)
+
+
+
+
