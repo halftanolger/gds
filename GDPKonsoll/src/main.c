@@ -38,7 +38,7 @@ int main ( int argc, char *argv[] )
 
     setlocale(LC_ALL,"");
     
-    /* Pase inputargumenter til gubb-programmet. */
+    /* Parse inputargumenter til gubb-programmet. */
 
     gubb_util_parse_args ( argc, argv, &i );
 
