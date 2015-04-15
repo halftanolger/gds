@@ -4,19 +4,13 @@
 \usepackage[norsk]{babel} 
 \usepackage[utf8]{inputenc}
 \usepackage{graphicx}
-
 \usepackage{keystroke}
 \usepackage{alltt}
 \usepackage{fancyhdr}
 \pagestyle{fancy}
 \graphicspath{ {img/} }
 
-
-
 \begin{document}
-
-
-
 
 \clearpage
 
@@ -53,13 +47,21 @@ Bjørkebakk og Omegn Grendelag
 
 \chapter{Bruksanvisning}
 
-Hensikten med dette dokumentet er å forklare i detalj hvordan man kan bruke 'gubb-konsoll' -programmet på en Windows-plattform ala Windows 7 eller lignende. Programmet utfører de nødvendige beregningene i forbindelse med arrangeringen av Gubberennet. Beregningene er basert på ei input-fil som du oppretter ved hjelp av f.eks Microsoft Office Excel,  LibreOffice Calc eller et annet egnet regneark-program.  (Egentlig er det bare installeringen av 'gubb-konsoll' -programmet som er spesielt for Windows, bruken er den samme uavhengig av hvilken type datamaskin du har; Linux, Mac etc.)
+Hensikten med dette dokumentet er å forklare hvordan man kan bruke programmet 'gubb.exe' som et hjelpemiddel for å utføre relevante beregninger i forbindelse med arrangeringen av Gubberennet.
+
+Beregningene er basert på ei input-fil (et regneark) som du oppretter ved hjelp av f.eks Microsoft Office Excel. Programmet vil opprette et nytt regneark som innholder de samme feltene som inputfila, pluss felter som inneholder de beregnede verdiene.
+
+Programmet kan også opprette de samme rapportene som Jan-Erik's DataEase-programm; startliste, enkel resultatliste og komplett resultatliste.
 
 \newpage
 
 \section{Installasjon}
 
-Aller først må du installere programmet. Dette gjør du ved å kjøre et program som heter GubbKonsollInstaller.exe Jeg forutsetter at du har fått tak i dette programmet, og at det ligger i en katalog som heter 'tmp' på en harddiskstasjon som heter 'C'. Siden GDPKonsoll er en konsollapplikasjon, skal du bare starte opp et kommandovindu først som sist. Dette gjør du ved å kjøre programmet 'cmd.exe'; klikk på Start-knappen, og skriv inn kommandoen i 'søk-feltet':
+Aller først må du installere programmet. Dette gjør du ved å kjøre et program som heter GubbKonsollInstaller.exe 
+
+Jeg forutsetter at du har fått tak i dette programmet, og at det ligger i en katalog som heter 'tmp' på en harddiskstasjon som heter 'C'. 
+
+Siden 'gubb.exe' er en konsoll-applikasjon, må du åpne et kommandovindu. Dette gjør du ved å kjøre programmet 'cmd.exe'.
 
 \begin{alltt}
 \texttt{ cmd.exe  {\Return} }
@@ -86,7 +88,7 @@ Om du har en 'norsk' Windows-installasjon må du kanskje skrive noe slikt som de
 \end{alltt}
 
 
-Selve programmet heter gubb.exe Om du prøver å kjøre dette uten noen parametre, vil du få en oversikt over mulige kommandoer.
+Programmet heter som nevnt 'gubb.exe'. Om du prøver å kjøre dette, uten noen parametre, vil du få opp en oversikt over mulige inputparametre.
 
 \begin{alltt}
 \texttt{gubb.exe  {\Return} }
@@ -94,7 +96,12 @@ Selve programmet heter gubb.exe Om du prøver å kjøre dette uten noen parametr
 \texttt{BRUK: gubb [-i ARG] [-o ARG] [-l ARG] [-m ARG] [-r ARG] [-f ARG] [-hvbt]  }
 \end{alltt}
 
-De viktigste parametrene er '-i' og '-o'. Disse brukes til å angi ei inputfil, og ei outputfil. Inputfila må eksistere, mens outputfila opprettes av programmet.
+De viktigste parametrene er '-i' og '-o'. Disse brukes til å angi ei inputfil, og ei outputfil. Inputfila må eksistere, mens outputfila opprettes av programmet. For å få frem en hjelpetekst som forklarer de ulike parametrene i detalj, oppgir du parameteren '-h'
+
+\begin{alltt}
+\texttt{gubb.exe -h{\Return} }
+\end{alltt}
+
 
 
 \newpage
