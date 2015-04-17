@@ -73,13 +73,13 @@ int gdp_test_modell_opprett_datafil_a() {
     GDPL_log ( GDPL_DEBUG, signatur, "Start funksjon." );
 
     int r;
-    int ok;    
+    int feil;
     char *n;
     char cwd[1024];
     char bak[1024];
 
     r = 0;
-    ok = 0;    
+    feil = 0;
     n = NULL;
     strcpy ( bak, "nop" );
 
@@ -105,7 +105,7 @@ int gdp_test_modell_opprett_datafil_a() {
 
     if ( r == 0 ) {
        GDPL_log ( GDPL_DEBUG, signatur, "gdp.dat ble opprettet her %s", cwd );
-       ok = 0;
+       feil = 0;
 
        /* Rydd opp, i.e fjern den fila vi opprettet */
        errno = 0;
@@ -126,11 +126,14 @@ int gdp_test_modell_opprett_datafil_a() {
        }
     } else {
        GDPL_log ( GDPL_ERROR, signatur, "gdp.dat eksisterer ikke" );
-       ok = 1;
+       feil = 1;
     }
 
-    GDPL_log ( GDPL_DEBUG, signatur, "Slutt funksjon." );
-    return ok;
+    if ( feil == 1) {
+        GDPL_log ( GDPL_ERROR, signatur, "Testen feilet!" );
+    }
+    GDPL_log ( GDPL_DEBUG, signatur, "Slutt funksjon. feil=%d", feil );
+    return feil;
 }
 
 int gdp_test_modell_opprett_datafil_b() {
@@ -144,14 +147,14 @@ int gdp_test_modell_opprett_datafil_b() {
     GDPL_log ( GDPL_DEBUG, signatur, "Start funksjon." );
 
     int r;
-    int ok;
+    int feil;
     char *n;
     char cwd[1024];
     char bak[1024];
     char fn[1024];
 
     r = 0;
-    ok = 0;
+    feil = 0;
     n = NULL;
     strcpy ( bak, "nop" );
     strcpy ( fn, "mingubbdatafil.dat" );
@@ -179,7 +182,7 @@ int gdp_test_modell_opprett_datafil_b() {
 
     if ( r == 0 ) {
        GDPL_log ( GDPL_DEBUG, signatur, "%s ble opprettet her %s", fn, cwd );
-       ok = 0;
+       feil = 0;
 
        /* Rydd opp, i.e fjern den fila vi opprettet */
        errno = 0;
@@ -200,11 +203,14 @@ int gdp_test_modell_opprett_datafil_b() {
        }
     } else {
        GDPL_log ( GDPL_ERROR, signatur, "%s eksisterer ikke", fn );
-       ok = 1;
+       feil = 1;
     }
 
-    GDPL_log ( GDPL_DEBUG, signatur, "Slutt funksjon." );
-    return ok;
+    if ( feil == 1) {
+        GDPL_log ( GDPL_ERROR, signatur, "Testen feilet!" );
+    }
+    GDPL_log ( GDPL_DEBUG, signatur, "Slutt funksjon. feil=%d", feil );
+    return feil;
 }
 
 
@@ -216,33 +222,36 @@ int gdp_test_modell_opprett_datafil_c() {
     const char* signatur = "gdp_test_modell_opprett_datafil_c()";
     GDPL_log ( GDPL_DEBUG, signatur, "Start funksjon." );
 
-    int ok;
+    int feil;
     char fn[GDPL_MAX_FILNAVN_LENGDE + 8];
 
-    ok = 0;
+    feil = 0;
 
     memset ( fn, 'a', GDPL_MAX_FILNAVN_LENGDE + 2 );
     fn[GDPL_MAX_FILNAVN_LENGDE + 3] = '\0';
 
     if ( GDPL_modell_angi_filnavn ( fn ) ==  FEILKODE_DATAFILNAVN_FOR_LANGT ) {
         GDPL_log ( GDPL_DEBUG, signatur, "ok, GDPL_modell_angi_filnavn () skal feile her." );
-        ok = 0;
+        feil = 0;
     } else {
-        ok = 1;
+        feil = 1;
     }
 
     strcpy ( fn, "etokfilnavn.dat" );
     if ( strlen( fn ) < GDPL_MAX_FILNAVN_LENGDE ) {
         if ( GDPL_modell_angi_filnavn ( fn ) > 0 ) {
             GDPL_log ( GDPL_DEBUG, signatur, "ikke ok, GDPL_modell_angi_filnavn () skal ikke feile her." );
-            ok = 1;
+            feil = 1;
         } else {
-            ok = 0;
+            feil = 0;
         }
     }
 
-    GDPL_log ( GDPL_DEBUG, signatur, "Slutt funksjon." );
-    return ok;
+    if ( feil == 1) {
+        GDPL_log ( GDPL_ERROR, signatur, "Testen feilet!" );
+    }
+    GDPL_log ( GDPL_DEBUG, signatur, "Slutt funksjon. feil=%d", feil );
+    return feil;
 }
 
 
@@ -254,10 +263,10 @@ int gdp_test_modell_opprett_datafil_d() {
     const char* signatur = "gdp_test_modell_opprett_datafil_d()";
     GDPL_log ( GDPL_DEBUG, signatur, "Start funksjon." );
 
-    int ok;
+    int feil;
     char fn[GDPL_MAX_FILNAVN_LENGDE];
 
-    ok = 0;
+    feil = 0;
 
     if ( GDPL_MIN_FILNAVN_LENGDE > GDPL_MAX_FILNAVN_LENGDE ) {
         GDPL_log ( GDPL_ERROR, signatur, "GDPL_MIN_FILNAVN_LENGDE > GDPL_MAX_FILNAVN_LENGDE" );
@@ -269,11 +278,14 @@ int gdp_test_modell_opprett_datafil_d() {
 
     if ( GDPL_modell_angi_filnavn ( fn ) == FEILKODE_DATAFILNAVN_FOR_KORT ) {
         GDPL_log ( GDPL_DEBUG, signatur, "ok, GDPL_modell_angi_filnavn () skal feile her." );
-        ok = 0;
+        feil = 0;
     } else {
-        ok = 1;
+        feil = 1;
     }
 
-    GDPL_log ( GDPL_DEBUG, signatur, "Slutt funksjon. ok=%d", ok );
-    return ok;
+    if ( feil == 1) {
+        GDPL_log ( GDPL_ERROR, signatur, "Testen feilet!" );
+    }
+    GDPL_log ( GDPL_DEBUG, signatur, "Slutt funksjon. feil=%d", feil );
+    return feil;
 }
