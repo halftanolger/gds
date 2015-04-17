@@ -43,6 +43,7 @@ void GDPL_log(GDPL_log_type type, const char* signatur, const char* melding, ...
     struct tm * timeinfo;
     va_list argumenter;
     char *p, *sval;
+    char nivaa_str[16] = "";
     char type_str[16] = "";
     int ival;
     double dval;
@@ -52,6 +53,23 @@ void GDPL_log(GDPL_log_type type, const char* signatur, const char* melding, ...
 
     if ( gdpl_log_stream == NULL )
         gdpl_log_stream = stderr;
+
+    switch (gdpl_log_nivaa) {
+    case GDPL_DEBUG:
+        strcpy(nivaa_str,"DEBUG");
+        break;
+    case GDPL_INFO:
+        strcpy(nivaa_str,"INFO");
+        break;
+    case GDPL_WARNING:
+        strcpy(nivaa_str,"WARNING");
+        break;
+    case GDPL_ERROR:
+        strcpy(nivaa_str,"ERROR");
+        break;
+    default:
+        strcpy(nivaa_str,"?");
+    }
 
     switch (type) {
     case GDPL_DEBUG:
@@ -75,7 +93,7 @@ void GDPL_log(GDPL_log_type type, const char* signatur, const char* melding, ...
     char time_str[32];
     sprintf ( time_str, "%d:%d:%d", timeinfo->tm_hour, timeinfo->tm_min, timeinfo->tm_sec );
 
-    fprintf ( gdpl_log_stream, "%s %s %s: ", type_str, time_str, signatur );
+    fprintf ( gdpl_log_stream, "%s %s %s %s: ", nivaa_str, type_str, time_str, signatur );
 
     /* Initialiser 'argumenter' til å inneholde alt etter 'melding' */
     va_start ( argumenter, melding );

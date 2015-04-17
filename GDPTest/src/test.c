@@ -1,4 +1,4 @@
-/*
+﻿/*
 ** This file is part of the GDPLib project.
 **
 ** Copyright (C) Halftan Sætherskar (halftan@saetherskar.no)
@@ -22,36 +22,7 @@
 #include <stdio.h>
 #include "log.h"
 
-int gdp_test_opprett_datafil_a() {
-
-    const char* signatur = "gdp_test_opprett_datafil_a()";
-
-    GDPL_log(GDPL_DEBUG, signatur, "Start funksjon.");
-
-    //TODO: beskriv test-case
-    // Om man oppgir en null-peker som filnavn, skal GDPLib
-    // opprette ei default datafil, kalt gdp.dat
-
-    GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
-
-    return 0;
-}
-
-int gdp_test_opprett_datafil_b() {
-
-    const char* signatur = "gdp_test_opprett_datafil_b()";
-
-    GDPL_log(GDPL_DEBUG, signatur, "Start funksjon.");
-
-    //TODO: beskriv test-case
-    // Om man oppgir et filnavn, skal GDPLib
-    // opprette ei datafil med det oppgitte navnet.
-
-    GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
-
-    return 0;
-}
-
+#include "test_modell.h"
 
 int gdp_test_run() {
 
@@ -59,6 +30,9 @@ int gdp_test_run() {
      * det vil si at den skal ikke ha noen knytning mot andre tester. Den skal kun
      * returnere 0 eller 1, for henholdsvis 'ok' eller 'ikke ok'.
      */
+
+    const char* signatur = "gdp_test_run()";
+    GDPL_log(GDPL_DEBUG, signatur, "Start funksjon.");
 
     int i;
     int antall_feil;
@@ -69,17 +43,23 @@ int gdp_test_run() {
     antall_tester = 0;
 
     int (*gdp_test_function_ptr_array[]) ( ) = {
-            gdp_test_opprett_datafil_a,
-            gdp_test_opprett_datafil_b
+            gdp_test_modell_opprett_datafil_a,
+            gdp_test_modell_opprett_datafil_b,
+            gdp_test_modell_opprett_datafil_c,
+            gdp_test_modell_opprett_datafil_d
+
     };
 
-    antall_tester = 2;
+    antall_tester = 4;
 
     for ( i = 0; i < antall_tester; i++ ) {
         if ( gdp_test_function_ptr_array[i]() > 0 )
             antall_feil++;
     }
 
+    GDPL_log ( GDPL_INFO, signatur, "Antall tester %d, antall ok %d, antall feil %d", antall_tester, antall_tester - antall_feil, antall_feil );
+
+    GDPL_log ( GDPL_DEBUG, signatur, "Slutt funksjon." );
     return antall_feil;
 
 }

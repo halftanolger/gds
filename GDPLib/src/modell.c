@@ -58,24 +58,25 @@ int GDPL_modell_privat_slett_alt();
 int GDPL_modell_angi_filnavn(const char *filnavn)
 {   
     const char* signatur = "GDPL_modell_angi_filnavn()";
+    GDPL_log ( GDPL_DEBUG, signatur, "Start funksjon." );
 
-    GDPL_log(GDPL_DEBUG, signatur, "Start funksjon.");
+    int r;
+    r = 0;
 
-    if (filnavn == 0) {
+    if ( filnavn == 0 ) {
         /* Angi default datafilnavn. */
-        strcpy(gdpl_modell_datafilnavn, "gdp.dat");
+        strcpy ( gdpl_modell_datafilnavn, "gdp.dat" );
     } else {
-        if (GDPL_modell_privat_sjekk_filnavn(filnavn) > 0) {
-            return FEILKODE_FEIL;
+        r = GDPL_modell_privat_sjekk_filnavn ( filnavn );
+        if ( r > 0 ) {
+            return r;
         }
-        strcpy(gdpl_modell_datafilnavn, filnavn);
+        strcpy ( gdpl_modell_datafilnavn, filnavn );
     }
 
-    GDPL_log(GDPL_DEBUG, signatur, "gdpl_modell_datafilnavn=%s",gdpl_modell_datafilnavn);
-
-    GDPL_log(GDPL_DEBUG, signatur, "Slutt funksjon.");
-
-    return 0;
+    GDPL_log ( GDPL_DEBUG, signatur, "gdpl_modell_datafilnavn=%s", gdpl_modell_datafilnavn );
+    GDPL_log ( GDPL_DEBUG, signatur, "Slutt funksjon." );
+    return r;
 }
 
 

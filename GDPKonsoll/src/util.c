@@ -393,9 +393,10 @@ void gubb_util_parse_args(int argc, char *argv[], gubb_input_args *data)
                 if ( strlen ( argv[i] ) < 64 ) {
                     data->logg_flagg = 1;
                     strcpy ( data->logg_argument, argv[i] );
-                    if ( strcmp ( data->logg_argument, "INF" ) != 0 &&
+                    if ( strcmp ( data->logg_argument, "WRN" ) != 0 &&
+                         strcmp ( data->logg_argument, "INF" ) != 0 &&
                          strcmp ( data->logg_argument, "DBG" ) != 0 ) {
-                        fprintf ( stderr, "Argumentet til -l [ --logg ] kan kun være INF eller DGB, for hhv 'info' eller 'debug'.\n" );
+                        fprintf ( stderr, "Argumentet til -l [ --logg ] kan kun være INF, WRN eller DGB, for hhv 'info', 'warning' eller 'debug'.\n" );
                         exit ( 1 );
                     }
                     continue;

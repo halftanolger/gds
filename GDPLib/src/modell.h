@@ -30,7 +30,7 @@ extern "C" {
     
     Med tegn menes her 'unsigned int'. Et UTF-8 encoded tegn kan være opp til fire slike 'tegn'.
 */
-#define GDPL_MAX_FILNAVN_LENGDE              516
+#define GDPL_MAX_FILNAVN_LENGDE              512
 /*! \def GDPL_MIN_FILNAVN_LENGDE
     \brief Minimum antall tegn en person-navn må være.
 */
